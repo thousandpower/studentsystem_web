@@ -15,7 +15,6 @@ export default new Router({
       path: '/',
       name: 'Home',
       component: Home,
-      redirect:"/deptMaintain",
       children: [
         {path: '/deptMaintain', component: DeptEvaluatorManagement},
        /* {path: '/studentManagement', component: Login},

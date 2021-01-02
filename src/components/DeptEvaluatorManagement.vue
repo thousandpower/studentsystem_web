@@ -62,7 +62,7 @@
           <el-table-column
             prop="deptname"
             label="部门名称"
-            width="260"
+            width="330"
             align="center"
             header-align="center"
           >
@@ -74,13 +74,13 @@
           <el-table-column
             prop="describe"
             label="部门描述"
-            width="430"
+            width="600"
             align="center">
           </el-table-column>
 
 
           <el-table-column
-            fixed="right"
+
             label="操作"
             width="170" align="center">
             <template slot-scope="scope">
@@ -125,10 +125,10 @@
         tableData: [],
         page: {
           currentPage: 1,//当前页码
-          sizes: [9, 15, 25]
+          sizes: [3, 5, 6]
         },
         listQuery: {//初始查询条件
-          limit: 9,
+          limit: 3,
           page: 1,
           filter: ""  //查询条件
         },
@@ -144,10 +144,9 @@
         dialogFormVisible: false,
         //定义表单数据
         form: {
+          deptno:"",
           deptname: "",
           describe:""
-
-
         },
         /*显示文本默认显示宽度*/
         formLabelWidth: "80px",
@@ -172,7 +171,7 @@
         //用于获取全部的部门信息
 
         axios.post("/getDepts", this.listQuery).then(res => {
-
+          debugger
           //res.data返回的是对象数组
           this.tableData = res.data.depts;
           this.total = res.data.total;
@@ -183,36 +182,31 @@
       queryDepts: function () {
 
         //设置传递到后台的代码为1
-        this.listQuery.page = 1;
+
         this.getDepts();
         this.page.currentPage = 1; //默认显示第一页
       },
-      handleSizeChange: function (abc) {
+
+      handleSizeChange: function (val) {
+        debugger
         //当每页显示条数发生变化时，触发该事件
         //需要根据当前参数重新去后台查询数据
 
-        this.listQuery.limit = abc;
-        this.listQuery.page = 1; //从第一页开始查询
-        this.page.currentPage = 1; //默认显示在第一页
+        this.listQuery.limit = val;
         this.getDepts();
 
       },
-      handleCurrentChange: function (abc) {
+      handleCurrentChange: function (val) {
+        debugger
         //当前页码发生变化时，触发该事件
         //获取当前页码，赋值给this.listQuery.page，调用getDept方法
         //val代表当前页码
-        this.listQuery.page = abc;
+        this.listQuery.page = val;
         this.getDepts();
 
 
       },
-      //获取全部的部门信息
-      getDepts: function () {
-        axios.get("/getDepts").then(res => {
-          this.deptList = res.data;
-        })
 
-      },
       //打开新增对话框
       showAdd: function () {
         this.form={};
@@ -257,7 +251,7 @@
 
       handleEdit:function (rowData) {
 
-        this.dialogTitle ="编辑员工";
+        this.dialogTitle ="编辑部门";
 
 
         //根据员工编号获取员工的详细信息，展示到对话框
