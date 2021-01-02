@@ -16,15 +16,16 @@
         <el-aside :width="isCollapse ?'64px': '200px'">
           <div class="toggle-button" @click="toggleCollapase">|||</div>
           <el-menu background-color="#545c64" text-color="#fff" active-text-color="#409eff" unique-opened :router="true"
-                   :collapse="isCollapse" :collapse-transition="false" :default-active="activePath" >
-            <el-submenu :index="menu.id+''" v-for="menu in menuList" :key="menu.id">
-              <template slot="title">
-                <span>{{menu.title}}</span>
-              </template>
+                   :collapse="isCollapse" :collapse-transition="false" :default-active="activePath"
+          >
+            <!--循环二级菜单-->
+            <el-menu-item :index="menu.path" v-for="menu in menuList" :key="menu.id" @click="saveNavState(menu.path)">
+              <template slot="title"><span>
+                  {{menu.title}}
+                </span> </template>
 
+            </el-menu-item>
 
-
-            </el-submenu>
           </el-menu>
         </el-aside>
         <el-main>
@@ -42,13 +43,14 @@
 <script>
   import axios from "axios"
 
+
   export default {
     name: "Home",
     data() {
       return {
         menuList: [],
         isCollapse:false,
-        activePath :"/welcome"
+        activePath :"/DeptEvaluatorManagement"
       }
     },
 
