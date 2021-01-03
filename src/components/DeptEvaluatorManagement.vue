@@ -3,29 +3,28 @@
     <el-container>
       <el-header>部门维护表</el-header>
 
-
       <el-main>
-        <div align="left" style="float: left;">
+        <div align="left" style="float: left">
           <el-input v-model="listQuery.filter" placeholeder="请输入部门姓名" style="width: 200px;"></el-input>
-          <el-button type="primary" @click="query">查询</el-button>
+          <el-button type="primary" @click="queryDepts">查询</el-button>
         </div>
 
-        <div align="right">
+        <div align="right" >
           <el-button type="primary" @click="showAdd">新增</el-button>
           <el-button type="primary" @click="delBatch">删除</el-button>
         </div>
 
         <!--新增和编辑的对话框-->
-        <el-dialog :title="dialogTitle" :visible.sync="dialogFormVisible" width="550px">
+        <el-dialog :title="dialogTitle" :visible.sync="dialogFormVisible" width="500px">
 
-          <el-form :model="form" :label-position="right" :rules="rules" ref="deptForm">
+          <el-form :model="form" :rules="rules" ref="deptForm">
 
-            <el-form-item label="部门姓名" :label-width="formLabelWidth" prop="ename">
-              <el-input v-model="form.deptname" autocomplete="off" style="width: 350px"></el-input>
+            <el-form-item label="部门姓名" :label-width="formLabelWidth" prop="deptname">
+              <el-input v-model="form.deptname" autocomplete="off" style="width: 370px"></el-input>
             </el-form-item>
 
-            <el-form-item label="部门描述">
-              <el-input type="textarea" v-model="form.describe"></el-input>
+            <el-form-item label="部门描述" :label-width="formLabelWidth" prop="description">
+              <el-input type="textarea" v-model="form.description" style="width: 370px;"></el-input>
             </el-form-item>
 
           </el-form>
@@ -72,7 +71,7 @@
 
 
           <el-table-column
-            prop="describe"
+            prop="description"
             label="部门描述"
             width="600"
             align="center">
@@ -84,7 +83,16 @@
             label="操作"
             width="170" align="center">
             <template slot-scope="scope">
-              <el-button type="text" @click="handleEdit(scope.row)">编辑</el-button>
+              <!--<el-button type="text" @click="handleEdit(scope.row)">编辑</el-button>-->
+              <el-button
+                type="primary"
+                size="mini"
+                @click="handleEdit(scope.row)">编辑</el-button>
+              <el-button
+                size="mini"
+                type="danger"
+                @click="handleDelete( scope.row)">删除</el-button>
+
             </template>
 
           </el-table-column>
@@ -125,10 +133,10 @@
         tableData: [],
         page: {
           currentPage: 1,//当前页码
-          sizes: [3, 5, 6]
+          sizes: [10, 15, 20]
         },
         listQuery: {//初始查询条件
-          limit: 3,
+          limit: 10,
           page: 1,
           filter: ""  //查询条件
         },
@@ -136,8 +144,6 @@
         total: 0,
         //总页数
         pageCount: 0,
-
-
         //新增或者编辑功能相关数据
         dialogTitle: "新增部门",
         //用于显示对话框的显示和隐藏
@@ -155,47 +161,39 @@
           deptname: [
             {required: true, message: '请输入部门名称', trigger: 'blur'},
           ],
-          describe: [
+          description: [
             {required: true, message: '请描述部门信息', trigger: 'blur'},
           ],
 
         },
         //被选中的部门信息
         checkData:[]
-
-
       }
     },
+
     methods: {
       getDepts: function () {
         //用于获取全部的部门信息
-
         axios.post("/getDepts", this.listQuery).then(res => {
-          debugger
           //res.data返回的是对象数组
           this.tableData = res.data.depts;
           this.total = res.data.total;
-
         });
-
       },
+
       queryDepts: function () {
-
         //设置传递到后台的代码为1
-
         this.getDepts();
         this.page.currentPage = 1; //默认显示第一页
       },
 
       handleSizeChange: function (val) {
-        debugger
         //当每页显示条数发生变化时，触发该事件
         //需要根据当前参数重新去后台查询数据
-
         this.listQuery.limit = val;
         this.getDepts();
-
       },
+
       handleCurrentChange: function (val) {
         debugger
         //当前页码发生变化时，触发该事件
@@ -209,8 +207,8 @@
 
       //打开新增对话框
       showAdd: function () {
+        debugger
         this.form={};
-
         this.dialogTitle = "新增部门";
         this.dialogFormVisible = true;
       },
@@ -225,6 +223,7 @@
       addDept:function () {
         this.$refs["deptForm"].validate((valid) => {
           if (valid) {
+            debugger
             axios.post("/addOrUpdDept",this.form).then(res =>{
               if (res.data=="success"){
                 this.form={};
@@ -250,16 +249,43 @@
       },
 
       handleEdit:function (rowData) {
-
+        debugger;
+        var deptno = rowData.deptno;
         this.dialogTitle ="编辑部门";
-
-
         //根据员工编号获取员工的详细信息，展示到对话框
         axios.get("/getDeptById/"+rowData.deptno).then(res => {
           this.form = res.data;
           this.dialogFormVisible = true;
         })
       },
+
+      handleDelete:function (rowData) {
+        this.$confirm('确认删除选中的记录吗？', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => { //确定
+
+
+      debugger
+          axios.post("/delDeptById",rowData.deptno).then(res =>{
+
+            if (res.data == "success"){
+              //更新列表
+              this.getDepts();
+              this.$message({
+                type: 'success',
+                message: '删除成功!'
+              });
+            } else {
+              this.$message({
+                type: 'error',
+                message: '删除失败，该部门下仍有员工!'
+              });
+            }
+          })
+        })
+      } ,
 
       handleSelectionChange:function(val){
         //被选中的数据：行对象数组
@@ -269,7 +295,6 @@
 
 
       delBatch:function () {
-
         if (this.checkData.length == 0){
           this.$message({
             message:"请选择要删除的记录",
@@ -283,12 +308,10 @@
           type: 'warning'
         }).then(() => { //确定
           var arrDeptnos = [];
-
           for (var i  = 0;i<this.checkData.length;i++){
-            arrDeptnos[i] = this.checkData[i].Deptno;
+            arrDeptnos[i] = this.checkData[i].deptno;
           }
           axios.post("/delBatchDept",arrDeptnos).then(res =>{
-
             if (res.data == "success"){
               //更新列表
               this.getDepts();
@@ -310,9 +333,6 @@
             message: '已取消删除'
           });
         });
-
-
-
       }
     },
 
