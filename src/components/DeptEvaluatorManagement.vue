@@ -128,7 +128,7 @@
           sizes: [9, 15, 25]
         },
         listQuery: {//初始查询条件
-          limit: 9,
+          limit: 10,
           page: 1,
           filter: ""  //查询条件
         },
@@ -144,10 +144,9 @@
         dialogFormVisible: false,
         //定义表单数据
         form: {
+          deptno:"",
           deptname: "",
           describe:""
-
-
         },
         /*显示文本默认显示宽度*/
         formLabelWidth: "80px",
@@ -206,13 +205,7 @@
 
 
       },
-      //获取全部的部门信息
-      getDepts: function () {
-        axios.get("/getDepts").then(res => {
-          this.deptList = res.data;
-        })
 
-      },
       //打开新增对话框
       showAdd: function () {
         this.form={};
@@ -257,7 +250,7 @@
 
       handleEdit:function (rowData) {
 
-        this.dialogTitle ="编辑员工";
+        this.dialogTitle ="编辑部门";
 
 
         //根据员工编号获取员工的详细信息，展示到对话框
