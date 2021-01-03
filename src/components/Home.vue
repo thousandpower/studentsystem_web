@@ -5,7 +5,7 @@
     <el-container class="home-container">
       <el-header>
         <div>
-          <span>员工管理系统</span>
+          <span>学员成长跟踪系统</span>
         </div>
         <el-button type="intfo">安全退出</el-button>
       </el-header>

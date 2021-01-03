@@ -1,0 +1,98 @@
+<template>
+    <div class="back" style="width: 100%;height: 100%">
+        <div style="text-align: center;width: 100%;height: 100%">
+            <div class="loginContainer">
+                <h4 style="font-size: 20px;line-height: 1.7;margin-left: 70px">欢迎登陆学员成长跟踪系统</h4>
+                <el-form ref="loginForm" :model="form" :rules="rules" @submit.native.prevent label-width="80px">
+                    <el-form-item prop="username">
+                        <el-input v-model="form.username"  placeholder="用户名"></el-input>
+                    </el-form-item>
+                    <el-form-item prop="password">
+                        <el-input v-model="form.password" type="password"  placeholder="密码"></el-input>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-button type="primary" native-type="submit" @click="login" @keydown.enter="login"
+                                   style="width: 250px">登录</el-button>
+                    </el-form-item>
+                </el-form>
+            </div>
+        </div>
+    </div>
+</template>
+
+<script>
+    import axios from 'axios';
+    export default {
+        name: "Login",
+        data() {
+            return {
+                //表单数据
+                form: {
+                    username: "",
+                    password: ""
+                },
+                rules: {
+                    username: [
+                        {required: true, message: '请输入用户名', trigger: 'blur'},
+                        {required: true, message: '请输入用户名', trigger: 'submit'}
+                    ],
+                    password: [
+                        {required: true, message: '请输入密码', trigger: 'blur'},
+                        {required: true, message: '请输入密码', trigger: 'submit'}
+                    ]
+                }
+            }
+        },
+        methods: {
+            login: function () {
+                //判断表单验证是否通过，提交数据到后台
+                this.$refs["loginForm"].validate((valid) => {
+                    if (valid) {
+                        //提交
+                        axios.post("/login", this.form).then(res => {
+                            if (res.status === "200") {
+                                sessionStorage.setItem("userLogin",res.data)
+                                this.$router.push({
+                                    path: "/deptMaintain",
+                                });
+                                this.$message({
+                                    message: "登录成功",
+                                    type: "success"
+                                })
+                            } else {
+                                this.$message({
+                                    message: "用户名或密码错误",
+                                    type: "error"
+                                })
+                            }
+                        })
+                    } else {
+                        this.$message({
+                            message: "用户名或密码错误",
+                            type: "error"
+                        })
+                    }
+                })
+            }
+        }
+    }
+</script>
+
+<style scoped>
+    .back {
+        /*background: url(../assets/back.jpg) top left;*/
+        background-size: 100% 100%;
+        height: 100%;
+        position: fixed;
+        width: 100%
+    }
+
+    .loginContainer {
+        width: 400px;
+        position: relative;
+        left: 35%;
+        top: 160px;
+        padding: 10px 30px 20px 10px;
+        margin-left: 400px;
+    }
+</style>

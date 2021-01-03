@@ -6,6 +6,7 @@ import Router from 'vue-router'
 import Home from '@/components/Home'
 
 import DeptEvaluatorManagement from '@/components/DeptEvaluatorManagement'
+import Login from "@/components/Login";
 
 Vue.use(Router)
 
@@ -13,6 +14,11 @@ export default new Router({
   routes: [
     {
       path: '/',
+      name: 'Login',
+      component: Login
+    },
+    {
+      path: '/deptMaintain',
       name: 'Home',
       component: Home,
       redirect:"/deptMaintain",
@@ -29,6 +35,7 @@ export default new Router({
       ]
 
     },
+
 
   ]
 })
