@@ -4,8 +4,8 @@
             <div class="loginContainer">
                 <h4 style="font-size: 20px;line-height: 1.7;margin-left: 70px">欢迎登陆学员成长跟踪系统</h4>
                 <el-form ref="loginForm" :model="form" :rules="rules" @submit.native.prevent label-width="80px">
-                    <el-form-item prop="username">
-                        <el-input v-model="form.username"  placeholder="用户名"></el-input>
+                    <el-form-item prop="userid">
+                        <el-input v-model="form.userid"  placeholder="用户名"></el-input>
                     </el-form-item>
                     <el-form-item prop="password">
                         <el-input v-model="form.password" type="password"  placeholder="密码"></el-input>
@@ -28,13 +28,13 @@
             return {
                 //表单数据
                 form: {
-                    username: "",
+                    userid: "",
                     password: ""
                 },
                 rules: {
-                    username: [
-                        {required: true, message: '请输入用户名', trigger: 'blur'},
-                        {required: true, message: '请输入用户名', trigger: 'submit'}
+                    userid: [
+                        {required: true, message: '请输入Id', trigger: 'blur'},
+                        {required: true, message: '请输入Id', trigger: 'submit'}
                     ],
                     password: [
                         {required: true, message: '请输入密码', trigger: 'blur'},
