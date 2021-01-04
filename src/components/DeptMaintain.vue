@@ -1,71 +1,38 @@
 <template>
   <div>
     <el-container>
-      <el-header><h1>项目评价人管理</h1></el-header>
+      <el-header><h1>部门维护表</h1></el-header>
 
       <el-main>
         <div align="left" style="float: left">
-          <el-input v-model="listQuery.filter" placeholeder="请输入部门评价人姓名" style="width: 200px;">
+          <el-input v-model="listQuery.filter" placeholeder="请输入部门姓名" style="width: 200px;">
             <i slot="prefix" class="el-input__icon el-icon-search"></i>
           </el-input>
-          <el-button type="primary" @click="queryDeptEvaluators">查询</el-button>
+          <el-button type="primary" @click="queryDepts">查询</el-button>
         </div>
 
         <div align="right">
           <el-button type="primary" @click="showAdd">新增</el-button>
           <el-button type="danger" @click="delBatch">删除</el-button>
-
         </div>
 
         <!--新增和编辑的对话框-->
         <el-dialog :title="dialogTitle" :visible.sync="dialogFormVisible" width="500px">
 
-          <el-form :model="form" :rules="rules" ref="deptEvalutorsForm">
+          <el-form :model="form" :rules="rules" ref="deptForm">
 
-            <el-form-item label="姓名" :label-width="formLabelWidth" prop="username">
-              <el-input v-model="form.username" autocomplete="off" style="width: 370px">
-                <i slot="prefix" class="el-input__icon el-icon-user-solid"></i>
-              </el-input>
+            <el-form-item label="部门姓名" :label-width="formLabelWidth" prop="deptname">
+              <el-input v-model="form.deptname" autocomplete="off" style="width: 370px"></el-input>
             </el-form-item>
 
-            <el-form-item label="性别" :label-width="formLabelWidth" prop="sex">
-              <el-radio v-model="form.sex" label="0">
-                男
-              </el-radio>
-              <el-radio v-model="form.sex" label="1">
-                女
-              </el-radio>
-            </el-form-item>
-
-            <el-form-item label="年龄" :label-width="formLabelWidth" prop="age">
-              <el-input v-model.number="form.age" autocomplete="off" style="width: 370px" >
-                <i slot="prefix" class="el-input__icon el-icon-date"></i>
-              </el-input>
-            </el-form-item>
-
-            <el-form-item label="手机号" :label-width="formLabelWidth" prop="phone">
-              <el-input v-model="form.phone" autocomplete="off" style="width: 370px" clearable>
-                <i slot="prefix" class="el-input__icon el-icon-phone"></i>
-              </el-input>
-            </el-form-item>
-
-            <el-form-item label="所属部门" :label-width="formLabelWidth" prop="deptid">
-              <el-select v-model="form.deptno" placeholder="请选择所属部门" style="width: 370px">
-                <el-option v-for="dept in this.deptList" :value="dept.deptno" :label="dept.deptname"
-                           :key="dept.deptno"></el-option>
-              </el-select>
-            </el-form-item>
-
-            <el-form-item label="职务" :label-width="formLabelWidth" prop="jobid">
-              <el-select v-model="form.jobid" placeholder="请选择职务" style="width: 370px">
-                <el-option v-for="job in this.jobList" :value="job.jobid" :label="job.jobname" :key="job.jobid"></el-option>
-              </el-select>
+            <el-form-item label="部门描述" :label-width="formLabelWidth" prop="description">
+              <el-input type="textarea" v-model="form.description" style="width: 370px;"></el-input>
             </el-form-item>
 
           </el-form>
           <div slot="footer" class="dialog-footer">
             <el-button @click="closeDlog">取 消</el-button>
-            <el-button type="primary" @click="addDeptEvaluator">确 定</el-button>
+            <el-button type="primary" @click="addDept">确 定</el-button>
           </div>
         </el-dialog>
 
@@ -82,73 +49,41 @@
         >
           <el-table-column
             type="selection"
-            width="75"
+            width="160"
             align="center">
           </el-table-column>
 
           <el-table-column
             type="index"
             label="序号"
-            width="95"
-            align="center">
-          </el-table-column>
-
-          <el-table-column
-            prop="username"
-            label="姓名"
-            width="180"
+            width="160"
             align="center"
-            header-align="center">
+          >
           </el-table-column>
-
-          <el-table-column
-            prop="sex"
-            label="性别"
-            width="95"
-            align="center"
-            header-align="center"
-            :formatter="formatSex">
-
-
-          </el-table-column>
-
-          <el-table-column
-            prop="age"
-            label="年龄"
-            width="95"
-            align="center"
-            header-align="center">
-          </el-table-column>
-
-          <el-table-column
-            prop="phone"
-            label="手机号"
-            width="400"
-            align="center"
-            header-align="center">
-          </el-table-column>
-
-
           <el-table-column
             prop="deptname"
-            label="所属部门"
-            width="180  "
+            label="部门名称"
+            width="330"
+            align="center"
+            header-align="center"
+          >
+          </el-table-column>
+
+
+          <el-table-column
+            prop="description"
+            label="部门描述"
+            width="600"
             align="center">
           </el-table-column>
 
 
           <el-table-column
-            prop="jobname"
-            label="职务"
-            width="155"
-            align="center">
-          </el-table-column>
 
-
-          <el-table-column
             label="操作"
             width="170" align="center">
             <template slot-scope="scope">
+              <!--<el-button type="text" @click="handleEdit(scope.row)">编辑</el-button>-->
               <el-button
                 type="primary"
                 size="mini"
@@ -167,13 +102,16 @@
         </el-table>
         <el-pagination
           background
+
           :current-page.sync="page.currentPage"
           :page-sizes="page.sizes"
           :page-size="this.listQuery.limit"
           :total="total"
+
           layout="prev,pager,next,sizes,jumper"
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
+
         >
         </el-pagination>
 
@@ -188,100 +126,46 @@
   import axios from 'axios';
 
   export default {
-    name: "DeptEvaluatorManagement",
+    name: "DeptMaintain",
     data() {
-      //自定义表单验证
-      var checkAge = (rule, value, callback) => {
-        if (value < 18 || value > 65) {
-          callback(new Error('劳动法年龄要求在18-65岁之间'));
-        } else {
-          callback();
-        }
-      };
-
-      var checkPhone = (rule, value, callback) => {
-        var phoneReg=/^(((13[0-9]{1})|(15[0-9]{1})|(16[0-9]{1})|(17[3-8]{1})|(18[0-9]{1})|(19[0-9]{1})|(14[5-7]{1}))+\d{8})$/
-        if (value) {
-          if(!phoneReg.test(value)){
-            callback(new Error('手机号码格式不正确'));
-          }else{
-
-          }
-        }
-      };
-
       return {
         uname: "",//存储从sessionStorage中的用户名
+
         //表格分页、查询等数据
         tableData: [],
-
         page: {
           currentPage: 1,//当前页码
           sizes: [6, 9, 12]
         },
-
         listQuery: {//初始查询条件
           limit: 9,
           page: 1,
           filter: ""  //查询条件
         },
-
-
         //总条数，后面会被覆盖
         total: 0,
         //总页数
         pageCount: 0,
         //新增或者编辑功能相关数据
-        dialogTitle: "新增项目评价人",
+        dialogTitle: "新增部门",
         //用于显示对话框的显示和隐藏
         dialogFormVisible: false,
-
         //定义表单数据
         form: {
-          evaluatorid: "",
-          username: "",
           deptno: "",
-          age: "",
-          sex: "",
-          phone: "",
-          //离职状态
-          flag: "",
-          jobid: "",
+          deptname: "",
+          describe: ""
         },
         /*显示文本默认显示宽度*/
         formLabelWidth: "80px",
-        jobList: [],
         deptList: [],
-
-
         rules: {
-          username: [
-            {required: true, message: '请输入姓名', trigger: 'blur'},
+          deptname: [
+            {required: true, message: '请输入部门名称', trigger: 'blur'},
           ],
-
-          deptno: [
-            {required: true, message: '请选择所属部门', trigger: 'blur'},
+          description: [
+            {required: true, message: '请描述部门信息', trigger: 'blur'},
           ],
-
-          age: [
-            {required: true, message: '请输入年龄', trigger: 'blur'},
-            {type: 'number', message: '年龄必须为数字值'},
-            /*{validator: checkAge, trigger: 'blur'}*/
-          ],
-
-          sex: [
-            {required: true, message: '请选择性别', trigger: 'blur'},
-          ],
-
-          jobid: [
-            {required: true, message: '请选择职务', trigger: 'blur'},
-          ],
-          phone: [
-            {required: true, message: '请输入手机号', trigger: 'blur'},
-         /*   {type: 'number', message: '手机号必须为数字值'},*/
-            {validator: checkPhone, trigger: 'blur'}
-          ],
-
 
         },
         //被选中的部门信息
@@ -290,33 +174,18 @@
     },
 
     methods: {
-      getDeptEvaluators: function () {
+      getDepts: function () {
         //用于获取全部的部门信息
-        axios.post("/getDeptEvaluators", this.listQuery).then(res => {
+        axios.post("/getDepts", this.listQuery).then(res => {
           //res.data返回的是对象数组
-          this.tableData = res.data.deptEvaluators;
+          this.tableData = res.data.depts;
           this.total = res.data.total;
         });
       },
-      //获取全部的部门信息
-      getDepts: function () {
-        axios.get("/getDepts").then(res => {
-          this.deptList = res.data;
-        })
 
-      },
-      //获取全部的职务信息
-      getJobs: function () {
-        axios.get("/getJobs").then(res => {
-          this.jobList = res.data;
-        })
-
-      },
-
-
-      queryDeptEvaluators: function () {
+      queryDepts: function () {
         //设置传递到后台的代码为1
-        this.getDeptEvaluators();
+        this.getDepts();
         this.page.currentPage = 1; //默认显示第一页
       },
 
@@ -324,28 +193,28 @@
         //当每页显示条数发生变化时，触发该事件
         //需要根据当前参数重新去后台查询数据
         this.listQuery.limit = val;
-        this.getDeptEvaluators();
+        this.getDepts();
       },
 
       handleCurrentChange: function (val) {
         //当前页码发生变化时，触发该事件
-        //获取当前页码，赋值给this.listQuery.page，调用getDeptEvaluators方法
+        //获取当前页码，赋值给this.listQuery.page，调用getDept方法
         //val代表当前页码
         this.listQuery.page = val;
-        this.getDeptEvaluators();
-
+        this.getDepts();
 
       },
 
       //打开新增对话框
       showAdd: function () {
         this.form = {};
-        this.dialogTitle = "新增项目评价人";
+        this.dialogTitle = "新增部门";
         this.dialogFormVisible = true;
         //清空表单验证残余提示
         this.$nextTick( ()=> {
-          this.$refs['deptEvalutorsForm'].clearValidate()
+          this.$refs['deptForm'].clearValidate()
         })
+
 
       },
 
@@ -356,24 +225,23 @@
         //关闭对话框
         this.dialogFormVisible = false;
       },
-      addDeptEvaluator: function () {
-
-        this.$refs["deptEvalutorsForm"].validate((valid) => {
-
+      addDept: function () {
+        this.$refs["deptForm"].validate((valid) => {
           if (valid) {
-            axios.post("/addOrUpdDeptEvaluator", this.form).then(res => {
+            axios.post("/addOrUpdDept", this.form).then(res => {
               if (res.data == "success") {
                 this.form = {};
                 this.dialogFormVisible = false;
-                this.getDeptEvaluators();
+                this.getDepts();
                 this.$message({
+
                   message: this.dialogTitle.substr(0, 2) + "成功",
                   type: "success"
                 })
               } else {
                 this.form = {};
                 this.dialogFormVisible = false;
-                this.getDeptEvaluators();
+                this.getDepts();
                 this.$message({
                   message: this.dialogTitle.substr(0, 2) + "失败",
                   type: "error"
@@ -387,12 +255,13 @@
       handleEdit: function (rowData) {
         //清空表单验证残余提示
         this.$nextTick( ()=> {
-          this.$refs['deptEvalutorsForm'].clearValidate()
-        })
-        var evaluatorid = rowData.evaluatorid;
-        this.dialogTitle = "编辑项目评价人";
+          this.$refs['deptForm'].clearValidate()
+        });
+
+        var deptno = rowData.deptno;
+        this.dialogTitle = "编辑部门";
         //根据员工编号获取员工的详细信息，展示到对话框
-        axios.get("/getDeptEvaluatorById/" + evaluatorid).then(res => {
+        axios.get("/getDeptById/" + rowData.deptno).then(res => {
           this.form = res.data;
           this.dialogFormVisible = true;
         })
@@ -404,14 +273,10 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => { //确定
-
-
-
-          axios.post("/delDeptEvaluatorById", rowData.evaluatorid).then(res => {
-
+          axios.post("/delDeptById", rowData.deptno).then(res => {
             if (res.data == "success") {
               //更新列表
-              this.getDeptEvaluators();
+              this.getDepts();
               this.$message({
                 type: 'success',
                 message: '删除成功!'
@@ -445,14 +310,14 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => { //确定
-          var arrEvaluatorids = [];
+          var arrDeptnos = [];
           for (var i = 0; i < this.checkData.length; i++) {
-            arrEvaluatorids[i] = this.checkData[i].evaluatorid;
+            arrDeptnos[i] = this.checkData[i].deptno;
           }
-          axios.post("/delBatchDeptEvaluator", arrEvaluatorids).then(res => {
+          axios.post("/delBatchDept", arrDeptnos).then(res => {
             if (res.data == "success") {
               //更新列表
-              this.getDeptEvaluators();
+              this.getDepts();
               this.$message({
                 type: 'success',
                 message: '删除成功!'
@@ -464,36 +329,23 @@
               });
             }
           })
-
         }).catch(() => {
           this.$message({
             type: 'info',
             message: '已取消删除'
           });
         });
-      },
-
-      //将后台数据库返还回来的 0 1 转换为男 女
-      formatSex: function( row, column) {
-        return row.sex == '0' ? "男" : row.sex == '1' ? "女" : "";
-      },
-
-
+      }
     },
 
     created() {
     },
     mounted() {
       //查询数据
-
-      this.getDeptEvaluators();
       this.getDepts();
-      this.getJobs();
       //从sessionStroage中获取用户名
       this.uname = sessionStorage.getItem("uname")
     }
-
-
   }
 
 
