@@ -7,7 +7,9 @@ import Home from '@/components/Home'
 
 import DeptEvaluatorManagement from '@/components/DeptEvaluatorManagement'
 import Login from "@/components/Login";
-
+import StudentManagement from "@/components/StudentManagement";
+import resetPwd from '@/components/resetPwd'
+import MyInform from "@/components/MyInform";
 Vue.use(Router)
 
 export default new Router({
@@ -24,7 +26,10 @@ export default new Router({
       redirect:"/deptMaintain",
       children: [
         {path: '/deptMaintain', component: DeptEvaluatorManagement},
-       /* {path: '/studentManagement', component: Login},
+        {path: '/studentManagement', component: StudentManagement},
+        {path:'/resetPassword',component: resetPwd},
+        {path:'/selfinfoMaintain',component: MyInform}
+       /*
         {path: '/teacherManagement', component: EmpMain},
         {path: '/deptevaluatorManagement', component: EmpMain},
         {path: '/courseMaintain', component: EmpMain},

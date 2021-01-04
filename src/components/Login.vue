@@ -51,7 +51,10 @@
                         //提交
                         axios.post("/login", this.form).then(res => {
                             if (res.status == "200") {
-                                sessionStorage.setItem("userLogin",res.data)
+                                sessionStorage.setItem("role",res.data.role);
+                                sessionStorage.setItem("username",res.data.username);
+                                sessionStorage.setItem("password",res.data.password);
+                                sessionStorage.setItem("userid",res.data.userid);
                                 this.$router.push({
                                     path: "/deptMaintain",
                                 });

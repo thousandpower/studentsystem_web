@@ -2,8 +2,6 @@
   <div>
     <el-container>
       <el-header>部门维护表</el-header>
-
-
       <el-main>
         <div align="left" style="float: left;">
           <el-input v-model="listQuery.filter" placeholeder="请输入部门姓名" style="width: 200px;"></el-input>
@@ -12,7 +10,7 @@
 
         <div align="right">
           <el-button type="primary" @click="showAdd">新增</el-button>
-          <el-button type="primary" @click="delBatch">删除</el-button>
+          <el-button type="warning" @click="delBatch">删除</el-button>
         </div>
 
         <!--新增和编辑的对话框-->
@@ -42,7 +40,7 @@
           :data="tableData"
           border
           stripe
-          height="650"
+          height="448"
           style="width: 100%"
           @selection-change="handleSelectionChange"
         >
@@ -107,7 +105,6 @@
 
       </el-main>
 
-      <el-footer>Footer</el-footer>
     </el-container>
   </div>
 </template>
@@ -287,7 +284,6 @@
             arrDeptnos[i] = this.checkData[i].Deptno;
           }
           axios.post("/delBatchDept",arrDeptnos).then(res =>{
-
             if (res.data == "success"){
               //更新列表
               this.getDepts();
@@ -332,10 +328,10 @@
 </script>
 
 <style scoped>
-  .el-header, .el-footer {
+  el-header, el-footer {
     color: #333;
     text-align: center;
-    line-height: 60px;
+    line-height: 10px;
   }
 
 
@@ -345,9 +341,7 @@
     text-align: center;
   }
 
-  body > .el-container {
-    margin-bottom: 40px;
-  }
+
 
   .el-container:nth-child(5) .el-aside,
   .el-container:nth-child(6) .el-aside {
