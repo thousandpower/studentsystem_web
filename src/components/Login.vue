@@ -5,7 +5,7 @@
                 <h4 style="font-size: 20px;line-height: 1.7;margin-left: 70px">欢迎登陆学员成长跟踪系统</h4>
                 <el-form ref="loginForm" :model="form" :rules="rules" @submit.native.prevent label-width="80px">
                     <el-form-item prop="userid">
-                        <el-input v-model="form.userid"  placeholder="用户名"></el-input>
+                        <el-input v-model="form.userid"  placeholder="Id"></el-input>
                     </el-form-item>
                     <el-form-item prop="password">
                         <el-input v-model="form.password" type="password"  placeholder="密码"></el-input>
@@ -50,7 +50,7 @@
                     if (valid) {
                         //提交
                         axios.post("/login", this.form).then(res => {
-                            if (res.status === "200") {
+                            if (res.status == "200") {
                                 sessionStorage.setItem("userLogin",res.data)
                                 this.$router.push({
                                     path: "/deptMaintain",
@@ -61,14 +61,14 @@
                                 })
                             } else {
                                 this.$message({
-                                    message: "用户名或密码错误",
+                                    message: "Id或密码输入错误",
                                     type: "error"
                                 })
                             }
                         })
                     } else {
                         this.$message({
-                            message: "用户名或密码错误",
+                            message: "请检查您输入的Id或密码",
                             type: "error"
                         })
                     }
@@ -80,7 +80,7 @@
 
 <style scoped>
     .back {
-        /*background: url(../assets/back.jpg) top left;*/
+        /*background: url(../assets/bg.png) top left;*/
         background-size: 100% 100%;
         height: 100%;
         position: fixed;
