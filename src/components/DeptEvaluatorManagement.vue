@@ -13,8 +13,6 @@
 
         <div align="right">
           <el-button type="primary" @click="showAdd">新增</el-button>
-          <el-button type="danger" @click="delBatch">删除</el-button>
-
         </div>
 
         <!--新增和编辑的对话框-->
@@ -29,10 +27,10 @@
             </el-form-item>
 
             <el-form-item label="性别" :label-width="formLabelWidth" prop="sex">
-              <el-radio v-model="form.sex" label= 0>
+              <el-radio v-model="form.sex" :label= 0>
                 男
               </el-radio>
-              <el-radio v-model="form.sex" label= 1>
+              <el-radio v-model="form.sex" :label= 1>
                 女
               </el-radio>
             </el-form-item>
@@ -83,23 +81,19 @@
           style="width: 100%"
           @selection-change="handleSelectionChange"
         >
-          <el-table-column
-            type="selection"
-            width="75"
-            align="center">
-          </el-table-column>
+
 
           <el-table-column
             type="index"
             label="序号"
-            width="95"
+            width="115"
             align="center">
           </el-table-column>
 
           <el-table-column
             prop="username"
             label="姓名"
-            width="180"
+            width="200"
             align="center"
             header-align="center">
           </el-table-column>
@@ -107,7 +101,7 @@
           <el-table-column
             prop="sex"
             label="性别"
-            width="95"
+            width="105"
             align="center"
             header-align="center"
             :formatter="formatSex">
@@ -118,7 +112,7 @@
           <el-table-column
             prop="age"
             label="年龄"
-            width="95"
+            width="105"
             align="center"
             header-align="center">
           </el-table-column>
@@ -143,7 +137,7 @@
           <el-table-column
             prop="jobname"
             label="职务"
-            width="155"
+            width="170"
             align="center">
           </el-table-column>
 
@@ -449,47 +443,6 @@
         this.checkData = val;
       },
 
-
-      delBatch: function () {
-        if (this.checkData.length == 0) {
-          this.$message({
-            message: "请选择要删除的记录",
-            type: "warning"
-          });
-          return;
-        }
-        this.$confirm('确认删除选中的记录吗？', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => { //确定
-          var arrEvaluatorids = [];
-          for (var i = 0; i < this.checkData.length; i++) {
-            arrEvaluatorids[i] = this.checkData[i].evaluatorid;
-          }
-          axios.post("/delBatchDeptEvaluator", arrEvaluatorids).then(res => {
-            if (res.data == "success") {
-              //更新列表
-              this.getDeptEvaluators();
-              this.$message({
-                type: 'success',
-                message: '删除成功!'
-              });
-            } else {
-              this.$message({
-                type: 'error',
-                message: '删除失败!'
-              });
-            }
-          })
-
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消删除'
-          });
-        });
-      },
 
       //将后台数据库返还回来的 0 1 转换为男 女
       formatSex: function (row, column) {
