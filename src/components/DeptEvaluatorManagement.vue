@@ -353,7 +353,6 @@
         this.$nextTick(() => {
           this.$refs['deptEvalutorsForm'].clearValidate()
         })
-
       },
 
       //新增对话框中的取消按钮事件
@@ -367,10 +366,9 @@
           this.$refs['deptEvalutorsForm'].clearValidate()
         })
       },
+
       addDeptEvaluator: function () {
         //清空表单验证残余提示
-
-
         this.$refs["deptEvalutorsForm"].validate((valid) => {
           if (valid) {
             axios.post("/addOrUpdDeptEvaluator", this.form).then(res => {

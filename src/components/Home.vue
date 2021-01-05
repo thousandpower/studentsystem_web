@@ -5,9 +5,13 @@
     <el-container class="home-container">
       <el-header>
         <div>
-          <span>员工管理系统</span>
+          <span>学员成长跟踪系统</span>
         </div>
-        <el-button type="intfo">安全退出</el-button>
+
+         <span style="margin: 50px -1300px 50px 0">{{uname}}</span>
+
+
+        <el-button type="success">安全退出</el-button>
       </el-header>
 
 
@@ -48,6 +52,7 @@
     name: "Home",
     data() {
       return {
+        uname:"",//存储从sessionStorage中的用户名
         menuList: [],
         isCollapse:false,
         activePath :"/DeptEvaluatorManagement"
@@ -56,7 +61,8 @@
 
     methods: {
       getMenuList: function () {
-        axios.get("/getAllMenu").then(res => {
+        this.
+        axios.post("/getAllMenu",sessionStorage.getItem("role")).then(res => {
           if (res.data.status == "200") {
             this.menuList = res.data.data;
 
@@ -77,6 +83,8 @@
     created() {
       this.getMenuList();
       this.activePath = sessionStorage.getItem("activePath")
+      //从sessionStroage中获取用户名
+      this.uname = sessionStorage.getItem("uname")
     }
 
   }
@@ -89,7 +97,7 @@
 
   .el-header {
     background-color: #373d41;
-    background-color: #373d41;
+
     display: flex;
     justify-content: space-between;
     padding-left: 0%;
