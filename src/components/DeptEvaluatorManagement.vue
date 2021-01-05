@@ -29,27 +29,29 @@
             </el-form-item>
 
             <el-form-item label="性别" :label-width="formLabelWidth" prop="sex">
-              <el-radio v-model="form.sex" label="0">
+              <el-radio v-model="form.sex" label=0>
                 男
               </el-radio>
-              <el-radio v-model="form.sex" label="1">
+              <el-radio v-model="form.sex" label=1>
                 女
               </el-radio>
             </el-form-item>
 
+
+
             <el-form-item label="年龄" :label-width="formLabelWidth" prop="age">
-              <el-input v-model.number="form.age" autocomplete="off" style="width: 370px" >
+              <el-input v-model.number="form.age" autocomplete="off" style="width: 370px">
                 <i slot="prefix" class="el-input__icon el-icon-date"></i>
               </el-input>
             </el-form-item>
 
             <el-form-item label="手机号" :label-width="formLabelWidth" prop="phone">
-              <el-input v-model="form.phone" autocomplete="off" style="width: 370px" clearable>
+              <el-input v-model.number="form.phone" autocomplete="off" style="width: 370px" clearable>
                 <i slot="prefix" class="el-input__icon el-icon-phone"></i>
               </el-input>
             </el-form-item>
 
-            <el-form-item label="所属部门" :label-width="formLabelWidth" prop="deptid">
+            <el-form-item label="所属部门" :label-width="formLabelWidth" prop="deptno">
               <el-select v-model="form.deptno" placeholder="请选择所属部门" style="width: 370px">
                 <el-option v-for="dept in this.deptList" :value="dept.deptno" :label="dept.deptname"
                            :key="dept.deptno"></el-option>
@@ -58,7 +60,8 @@
 
             <el-form-item label="职务" :label-width="formLabelWidth" prop="jobid">
               <el-select v-model="form.jobid" placeholder="请选择职务" style="width: 370px">
-                <el-option v-for="job in this.jobList" :value="job.jobid" :label="job.jobname" :key="job.jobid"></el-option>
+                <el-option v-for="job in this.jobList" :value="job.jobid" :label="job.jobname"
+                           :key="job.jobid"></el-option>
               </el-select>
             </el-form-item>
 
@@ -191,24 +194,39 @@
     name: "DeptEvaluatorManagement",
     data() {
       //自定义表单验证
-      var checkAge = (rule, value, callback) => {
-        if (value < 18 || value > 65) {
-          callback(new Error('劳动法年龄要求在18-65岁之间'));
+      var checkAge = function (rule, value, callback) {
+
+        if (value === '') {
+          callback(new Error('请输入年龄'));
         } else {
-          callback();
-        }
-      };
-
-      var checkPhone = (rule, value, callback) => {
-        var phoneReg=/^(((13[0-9]{1})|(15[0-9]{1})|(16[0-9]{1})|(17[3-8]{1})|(18[0-9]{1})|(19[0-9]{1})|(14[5-7]{1}))+\d{8})$/
-        if (value) {
-          if(!phoneReg.test(value)){
-            callback(new Error('手机号码格式不正确'));
-          }else{
-
+          if (!Number.isInteger(value)) {
+            callback(new Error('请输入数字值'));
+          } else {
+            if (value < 18 || value > 65) {
+              callback(new Error('劳动法年龄要求在18-65岁之间'));
+            } else {
+              callback();
+            }
           }
         }
       };
+
+      var checkPhone = function (rule, value, callback) {
+
+        if (value == undefined) {
+          callback(new Error('手机号不能为空'))
+        } else {
+          if (!Number.isInteger(value)) {
+            callback(new Error('请输入数字值'));
+          }else {
+            if (!/^(((13[0-9]{1})|(15[0-9]{1})|(16[0-9]{1})|(17[3-8]{1})|(18[0-9]{1})|(19[0-9]{1})|(14[5-7]{1}))+\d{8})$/.test(value)) {
+              callback(new Error('手机号格式错误'))
+            }else {
+              callback()
+            }
+          }
+      }};
+
 
       return {
         uname: "",//存储从sessionStorage中的用户名
@@ -242,7 +260,7 @@
           username: "",
           deptno: "",
           age: "",
-          sex: "",
+          sex:"",
           phone: "",
           //离职状态
           flag: "",
@@ -264,11 +282,8 @@
           ],
 
           age: [
-            {required: true, message: '请输入年龄', trigger: 'blur'},
-            {type: 'number', message: '年龄必须为数字值'},
-            /*{validator: checkAge, trigger: 'blur'}*/
+            {validator: checkAge, trigger: 'blur'},
           ],
-
           sex: [
             {required: true, message: '请选择性别', trigger: 'blur'},
           ],
@@ -277,12 +292,10 @@
             {required: true, message: '请选择职务', trigger: 'blur'},
           ],
           phone: [
+            {validator: checkPhone, trigger: 'blur'},
             {required: true, message: '请输入手机号', trigger: 'blur'},
-         /*   {type: 'number', message: '手机号必须为数字值'},*/
-            {validator: checkPhone, trigger: 'blur'}
+
           ],
-
-
         },
         //被选中的部门信息
         checkData: []
@@ -291,11 +304,12 @@
 
     methods: {
       getDeptEvaluators: function () {
-        //用于获取全部的部门信息
+        //用于获取全部的部门评价人信息
         axios.post("/getDeptEvaluators", this.listQuery).then(res => {
           //res.data返回的是对象数组
           this.tableData = res.data.deptEvaluators;
           this.total = res.data.total;
+
         });
       },
       //获取全部的部门信息
@@ -310,7 +324,6 @@
         axios.get("/getJobs").then(res => {
           this.jobList = res.data;
         })
-
       },
 
 
@@ -339,11 +352,11 @@
 
       //打开新增对话框
       showAdd: function () {
-        this.form = {};
+        this.form = {sex:"0"};
         this.dialogTitle = "新增项目评价人";
         this.dialogFormVisible = true;
         //清空表单验证残余提示
-        this.$nextTick( ()=> {
+        this.$nextTick(() => {
           this.$refs['deptEvalutorsForm'].clearValidate()
         })
 
@@ -352,14 +365,19 @@
       //新增对话框中的取消按钮事件
       closeDlog: function () {
         //清空数据
-        this.form = {};
+        this.form = {sex:"0"};
         //关闭对话框
         this.dialogFormVisible = false;
+        //清空表单验证残余提示
+        this.$nextTick(() => {
+          this.$refs['deptEvalutorsForm'].clearValidate()
+        })
       },
       addDeptEvaluator: function () {
+        //清空表单验证残余提示
+
 
         this.$refs["deptEvalutorsForm"].validate((valid) => {
-
           if (valid) {
             axios.post("/addOrUpdDeptEvaluator", this.form).then(res => {
               if (res.data == "success") {
@@ -386,13 +404,14 @@
 
       handleEdit: function (rowData) {
         //清空表单验证残余提示
-        this.$nextTick( ()=> {
+        this.$nextTick(() => {
           this.$refs['deptEvalutorsForm'].clearValidate()
         })
         var evaluatorid = rowData.evaluatorid;
         this.dialogTitle = "编辑项目评价人";
         //根据员工编号获取员工的详细信息，展示到对话框
         axios.get("/getDeptEvaluatorById/" + evaluatorid).then(res => {
+          debugger
           this.form = res.data;
           this.dialogFormVisible = true;
         })
@@ -404,7 +423,6 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => { //确定
-
 
 
           axios.post("/delDeptEvaluatorById", rowData.evaluatorid).then(res => {
@@ -474,7 +492,7 @@
       },
 
       //将后台数据库返还回来的 0 1 转换为男 女
-      formatSex: function( row, column) {
+      formatSex: function (row, column) {
         return row.sex == '0' ? "男" : row.sex == '1' ? "女" : "";
       },
 
