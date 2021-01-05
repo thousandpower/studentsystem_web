@@ -42,8 +42,6 @@
 
 <script>
   import axios from "axios"
-
-
   export default {
     name: "Home",
     data() {
@@ -108,7 +106,7 @@
   }
 
   .el-main {
-    background-color: #eaedf1;
+    background-color: white;
   }
 
   .el-header div {

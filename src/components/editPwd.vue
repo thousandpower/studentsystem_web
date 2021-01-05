@@ -8,7 +8,7 @@
                 <el-form :model="form" :rules="rules" ref="ruleForm" label-width="100px"
                          class="demo-ruleForm"
                          style="height: 600px">
-                    <el-form-item label="id" :label-width="formLabelWidth">
+                    <el-form-item label="id" :label-width="formLabelWidth" style="display: none">
                         <el-input v-model="form.userid" autocomplete="off" style="width: 300px" readonly></el-input>
                     </el-form-item>
                     <el-form-item label="用户名" :label-width="formLabelWidth" prop="username">
@@ -50,6 +50,13 @@
                     callback();
                 }
             };
+            var oldPassChk = (rule, value, callback) => {
+                axios.get("/getMyPassword/"+this.$store.state.userid).then(res =>{
+                    if (res.data !== value){
+                        callback(new Error('请输入正确的原密码'))
+                    }
+                })
+            };
             return {
                 formLabelWidth: "100px",
                 readonly: true,
@@ -66,6 +73,7 @@
 
                 rules: {
                     oldPassword: [
+                        {validator: oldPassChk, trigger: 'blur'},
                         {required: true, message: '原密码不能为空', trigger: 'blur'},
                         {required: true, message: '原密码不能为空', trigger: 'submit'}
                     ],
@@ -102,6 +110,7 @@
                                     message: "修改成功",
                                     type: "success"
                                 });
+                                this.getThisUser();
                             }
                         })
                     } else {

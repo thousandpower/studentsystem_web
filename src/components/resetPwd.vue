@@ -8,7 +8,7 @@
                 :data="tableData"
                 border
                 stripe
-                height="540"
+                height="546"
                 style="width: 100%"
                 @selection-change="handleSelectionChange">
             <el-table-column
@@ -140,7 +140,6 @@
                 this.page.currentPage = 1;//默认显示第一页
             },
             handleReset: function (rowData) {
-                //rowData.password = "a123456";
                 //将用户id传到后端
                 axios.get("/resetMyPwd/"+rowData.userid).then(res => {
                     if (res.data === "success"){

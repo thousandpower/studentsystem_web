@@ -25,7 +25,7 @@
                     <el-input v-model="form.phone" placeholder="请输入联系电话" style="width: 300px"></el-input>
                 </el-form-item>
                 <el-form-item label="毕业院校" prop="college" :label-width="formLabelWidth">
-                    <el-input v-model="form.college" placeholder="请输入毕业院校" style="width: 300px"></el-input>
+                    <el-input v-model="form.college" placeholder="请输入毕业院校" style="width: 300px" readonly></el-input>
                 </el-form-item>
             </el-col>
             <el-col span="7" offset="2">
@@ -50,19 +50,19 @@
                     <el-input v-model="form.idNumber" placeholder="请输入身份证号" style="width: 300px" readonly></el-input>
                 </el-form-item>
                 <el-form-item label="专业" prop="major" :label-width="formLabelWidth">
-                    <el-input v-model="form.major" placeholder="请输入毕业院校" style="width: 300px"></el-input>
+                    <el-input v-model="form.major" placeholder="请输入毕业院校" style="width: 300px" readonly></el-input>
                 </el-form-item>
             </el-col>
             <el-col span="3" offset="2">
-                <el-upload
-                        class="avatar-uploader"
-                        action="/update"
-                        :show-file-list="false"
-                        :on-success="handleAvatarSuccess"
-                        :before-upload="beforeAvatarUpload">
-                    <img v-if="imageUrl" :src="imageUrl" class="avatar">
-                    <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-                </el-upload>
+                    <el-upload
+                            class="avatar-uploader"
+                            action="/update"
+                            :show-file-list="false"
+                            :on-success="handleAvatarSuccess"
+                            :before-upload="beforeAvatarUpload">
+                        <img v-if="imageUrl" :src="imageUrl" class="avatar">
+                        <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                    </el-upload>
             </el-col>
             <el-col span="16" offset="1">
                 <el-form-item label="备注" :label-width="formLabelWidth">
@@ -93,6 +93,7 @@
         name: "MyInform",
         data() {
             return {
+                imageUrl:"",
                 readonly: true,
                 formLabelWidth: "100px",
                 span: "",
@@ -107,7 +108,8 @@
                     maritalStatus: "",
                     idNumber: "",
                     nation: "",
-                    remarks: ""
+                    remarks: "",
+                    imagesDirectory:this.imageUrl
                 }
             }
         },
@@ -124,6 +126,7 @@
                             message: "修改成功",
                             type: "success"
                         });
+                        this.getMyInform();
                     }
                 })
             },
@@ -139,17 +142,15 @@
 
 <style scoped>
     .avatar-uploader .el-upload {
-        border: 5px solid black;
+        border: 1px dashed black;
         border-radius: 6px;
         cursor: pointer;
         position: relative;
         overflow: hidden;
     }
-
     .avatar-uploader .el-upload:hover {
         border-color: #409EFF;
     }
-
     .avatar-uploader-icon {
         font-size: 28px;
         color: #8c939d;
@@ -158,7 +159,6 @@
         line-height: 178px;
         text-align: center;
     }
-
     .avatar {
         width: 178px;
         height: 178px;
