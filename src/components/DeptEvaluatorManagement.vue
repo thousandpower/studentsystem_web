@@ -29,10 +29,10 @@
             </el-form-item>
 
             <el-form-item label="性别" :label-width="formLabelWidth" prop="sex">
-              <el-radio v-model="form.sex" label=0>
+              <el-radio v-model="form.sex" label= 0>
                 男
               </el-radio>
-              <el-radio v-model="form.sex" label=1>
+              <el-radio v-model="form.sex" label= 1>
                 女
               </el-radio>
             </el-form-item>
