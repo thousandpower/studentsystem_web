@@ -2,7 +2,7 @@
     <div class="back" style="width: 100%;height: 100%">
         <div style="text-align: center;width: 100%;height: 100%">
             <div class="loginContainer">
-                <h4 style="font-size: 20px;line-height: 1.7;margin-left: 70px">欢迎登陆学员成长跟踪系统</h4>
+                <h4 style="font-size: 20px;line-height: 1.7;margin-left: 70px;color: #8c939d">欢迎登陆学员成长跟踪系统</h4>
                 <el-form ref="loginForm" :model="form" :rules="rules" @submit.native.prevent label-width="80px">
                     <el-form-item prop="userid">
                         <el-input v-model="form.userid"  placeholder="Id"></el-input>
@@ -50,11 +50,8 @@
                     if (valid) {
                         //提交
                         axios.post("/login", this.form).then(res => {
-                            if (res.status == "200") {
-                                sessionStorage.setItem("role",res.data.role);
-                                sessionStorage.setItem("username",res.data.username);
-                                sessionStorage.setItem("password",res.data.password);
-                                sessionStorage.setItem("userid",res.data.userid);
+                            if (res.data.status === "200") {
+                                this.$store.dispatch("setUser",this.form.userid);
                                 this.$router.push({
                                     path: "/deptMaintain",
                                 });
@@ -83,7 +80,7 @@
 
 <style scoped>
     .back {
-        /*background: url(../assets/bg.png) top left;*/
+        background: url(../assets/back.jpg) top left;
         background-size: 100% 100%;
         height: 100%;
         position: fixed;
@@ -96,6 +93,5 @@
         left: 35%;
         top: 160px;
         padding: 10px 30px 20px 10px;
-        margin-left: 400px;
     }
 </style>
