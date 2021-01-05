@@ -5,7 +5,7 @@
             <el-form-item label="员工编号" style="display: none">
                 <el-input v-model="form.studentid" placeholder="请输入姓名"></el-input>
             </el-form-item>
-            <el-col span="7">
+            <el-col span="7" offset="1">
                 <el-form-item label="姓名" prop="studentName" :label-width="formLabelWidth">
                     <el-input v-model="form.studentName" placeholder="请输入姓名" style="width: 300px"></el-input>
                 </el-form-item>
@@ -29,7 +29,7 @@
                 </el-form-item>
             </el-col>
             <el-col span="7" offset="2">
-                <el-form-item label="性别"  :label-width="formLabelWidth">
+                <el-form-item label="性别" :label-width="formLabelWidth">
                     <el-radio-group v-model="form.sex">
                         <el-radio :label="0">男</el-radio>
                         <el-radio :label="1">女</el-radio>
@@ -64,14 +64,17 @@
                     <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                 </el-upload>
             </el-col>
-            <el-col span="20" >
+            <el-col span="16" offset="1">
                 <el-form-item label="备注" :label-width="formLabelWidth">
                     <el-input
                             type="textarea"
-                            :rows="2"
+                            :rows="4"
                             readonly
                             placeholder="请输入内容"
-                            v-model="form.remarks">
+                            v-model="form.remarks"
+                            align="center"
+                            style="width: 775px"
+                            class="el-row">
                     </el-input>
                 </el-form-item>
             </el-col>
@@ -90,9 +93,9 @@
         name: "MyInform",
         data() {
             return {
-                readonly:true,
-                formLabelWidth: "80px",
-                span:"",
+                readonly: true,
+                formLabelWidth: "100px",
+                span: "",
                 form: {
                     studentid: "",
                     studentName: "",
@@ -102,9 +105,9 @@
                     sex: "0",
                     nativePlace: "",
                     maritalStatus: "",
-                    idNumber:"",
-                    nation:"",
-                    remarks:""
+                    idNumber: "",
+                    nation: "",
+                    remarks: ""
                 }
             }
         },
@@ -124,7 +127,7 @@
                     }
                 })
             },
-            cancelMyEdit:function () {
+            cancelMyEdit: function () {
                 this.getMyInform();
             }
         },
@@ -136,7 +139,7 @@
 
 <style scoped>
     .avatar-uploader .el-upload {
-        border: 1px dashed #d9d9d9;
+        border: 5px solid black;
         border-radius: 6px;
         cursor: pointer;
         position: relative;

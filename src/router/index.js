@@ -8,7 +8,8 @@ import Home from '@/components/Home'
 import DeptEvaluatorManagement from '@/components/DeptEvaluatorManagement'
 import Login from "@/components/Login";
 import StudentManagement from "@/components/StudentManagement";
-import editPwd from '@/components/editPwd'
+import editPwd from '@/components/editPwd';
+import resetPwd from '@/components/resetPwd'
 import MyInform from "@/components/MyInform";
 import MyEvaluation from "@/components/MyEvaluation";
 Vue.use(Router)
@@ -30,7 +31,8 @@ export default new Router({
         {path: '/studentManagement', component: StudentManagement},
         {path:'/changePassword',component: editPwd},
         {path:'/selfinfoMaintain',component: MyInform},
-        {path:'/selfEvaluation',component: MyEvaluation}
+        {path:'/selfEvaluation',component: MyEvaluation},
+        {path:'/resetPassword',component: resetPwd},
        /*
         {path: '/teacherManagement', component: EmpMain},
         {path: '/deptevaluatorManagement', component: EmpMain},

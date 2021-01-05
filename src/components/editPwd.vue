@@ -15,7 +15,7 @@
                         <el-input v-model="form.username" autocomplete="off" style="width: 300px" readonly></el-input>
                     </el-form-item>
                     <el-form-item label="原密码" :label-width="formLabelWidth" prop="oldPassword">
-                        <el-input type="password" v-model="form.password" autocomplete="off"
+                        <el-input type="password" v-model="form.oldPassword" autocomplete="off"
                                   style="width: 300px"></el-input>
                     </el-form-item>
                     <el-form-item label="新密码" :label-width="formLabelWidth" prop="newPass">
@@ -41,26 +41,6 @@
     export default {
         name: "editPwd",
         data() {
-            var passchk = (rule, value, callback) => {
-                if (value === '') {
-                    callback(new Error('原密码不能为空'));
-                } else {
-                    if (this.form.password !== '') {
-
-                    }
-                    callback();
-                }
-            };
-            var newPasschk = (rule, value, callback) => {
-                if (value === '') {
-                    callback(new Error('新密码不能为空'));
-                } else {
-                    if (this.form.newPass !== '') {
-
-                    }
-                    callback();
-                }
-            };
             var newPassSamechk = (rule, value, callback) => {
                 if (value === '') {
                     callback(new Error('请再次输入密码'));
@@ -78,6 +58,7 @@
                     userid: "",
                     username: "",
                     password: "",
+                    oldPassword:"",
                     newPass: "",
                     checkNewPass: "",
                     role: ""
@@ -85,14 +66,10 @@
 
                 rules: {
                     oldPassword: [
-                        {validator: passchk, trigger: 'blur'},
-                        {validator: passchk, trigger: 'submit'},
                         {required: true, message: '原密码不能为空', trigger: 'blur'},
                         {required: true, message: '原密码不能为空', trigger: 'submit'}
                     ],
                     newPass: [
-                        {validator: newPasschk, trigger: 'blur'},
-                        {validator: newPasschk, trigger: 'submit'},
                         {min: 6, max: 12, message: '长度在6到12个字符', trigger: 'blur'},
                         {required: true, message: '新密码不能为空', trigger: 'blur'},
                         {required: true, message: '新密码不能为空', trigger: 'submit'}
