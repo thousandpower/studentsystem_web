@@ -5,74 +5,29 @@
                 <div style="margin-bottom: 50px">
                     <h3>培训学校评价</h3>
                 </div>
-                <el-table
-                        :data="studyTableData"
-                        style="width: 100%">
-                    <el-table-column
-                            prop="name"
-                            label="培训学校"
-                            width="120"
-                            align="center">
-                        <h3>学习评价</h3>
-                    </el-table-column>
-                    <el-table-column
-                            prop="gradeid"
-                            label="班期"
-                            width="120"
-                            align="center">
-                    </el-table-column>
-                    <el-table-column
-                            prop="evaluation"
-                            label="评价人"
-                            width="120"
-                            align="center">
-                    </el-table-column>
-                    <el-table-column label="培训期间测试成绩" align="center">
-                        <el-table-column
-                                prop="course_html"
-                                label="html"
-                                width="110"
-                                align="center">
-                        </el-table-column>
-                        <el-table-column
-                                prop="course_javaEasy"
-                                label="Java基础"
-                                width="110"
-                                align="center">
-                        </el-table-column>
-                        <el-table-column
-                                prop="course_javaHard"
-                                label="Java高级"
-                                width="110"
-                                align="center">
-                        </el-table-column>
-                        <el-table-column
-                                prop="course_oracle"
-                                label="Oracle"
-                                width="110"
-                                align="center">
-                        </el-table-column>
-                        <el-table-column
-                                prop="course_javascript"
-                                label="JavaScript"
-                                width="110"
-                                align="center">
-                        </el-table-column>
-                        <el-table-column
-                                prop="course_interview"
-                                label="L1面试"
-                                width="110"
-                                align="center">
-                        </el-table-column>
-
-                    </el-table-column>
-                    <el-table-column
-                            prop="appraisalScore"
-                            label="整体评价分数"
-                            width="126"
-                            align="center">
-                    </el-table-column>
-                </el-table>
+                <el-form :model="form" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+                    <el-form-item label="id" :label-width="formLabelWidth" style="display: none">
+                        <el-input v-model="form.userid" autocomplete="off" style="width: 300px" readonly></el-input>
+                    </el-form-item>
+                    <el-form-item label="用户名" :label-width="formLabelWidth" prop="username">
+                        <el-input v-model="form.username" autocomplete="off" style="width: 300px" readonly></el-input>
+                    </el-form-item>
+                    <el-form-item label="原密码" :label-width="formLabelWidth" prop="oldPassword">
+                        <el-input type="password" v-model="form.oldPassword" autocomplete="off"
+                                  style="width: 300px"></el-input>
+                    </el-form-item>
+                    <el-form-item label="新密码" :label-width="formLabelWidth" prop="newPass">
+                        <el-input type="password" v-model="form.newPass" autocomplete="off"
+                                  style="width: 300px"></el-input>
+                    </el-form-item>
+                    <el-form-item label="确认新密码" :label-width="formLabelWidth" prop="checkNewPass">
+                        <el-input type="password" v-model="form.checkNewPass" autocomplete="off"
+                                  style="width: 300px"></el-input>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-button type="primary" @click="saveThisUser" style="width: 300px">保存</el-button>
+                    </el-form-item>
+                </el-form>
             </el-tab-pane>
             <el-tab-pane label="转正工作评价">
                 <div style="margin-bottom: 50px">
@@ -106,25 +61,23 @@
             return {
                 formLabelWidth: "80px",
                 tabPosition: 'left',
-                //培训学校评价数据
-                studyTableData: [],
-                //转正评价数据
-                regularTableData: [],
-                //第一年评价数据
-                firstYearTableData: [],
-                //第二年评价数据
-                secondYearTableData: [],
-                //第三年评价数据
-                thirdYearTableData: []
+                form:{
+
+                }
             }
         },
         methods: {
-            getMyEvaluation: function () {
+            getMySchoolEvaluation: function () {
+                axios.get("/getMySchoolEvaluation/"+ this.$store.state.userid).then(res =>{
+
+                })
+            },
+            handleWatch:function () {
 
             }
         },
         mounted() {
-            this.getMyEvaluation();
+            this.getMySchoolEvaluation();
         }
     }
 </script>

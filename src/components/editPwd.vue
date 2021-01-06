@@ -51,9 +51,13 @@
                 }
             };
             var oldPassChk = (rule, value, callback) => {
-                axios.get("/getMyPassword/"+this.$store.state.userid).then(res =>{
-                    if (res.data !== value){
+                axios.get("/getMyPassword/" + this.$store.state.userid).then(res => {
+                    if (value === ''){
+                        callback(new Error('原密码不能为空'))
+                    } else if (res.data.data !== value && value !== '') {
                         callback(new Error('请输入正确的原密码'))
+                    } else {
+                        callback()
                     }
                 })
             };
@@ -65,7 +69,7 @@
                     userid: "",
                     username: "",
                     password: "",
-                    oldPassword:"",
+                    oldPassword: "",
                     newPass: "",
                     checkNewPass: "",
                     role: ""
@@ -73,8 +77,8 @@
 
                 rules: {
                     oldPassword: [
-                        {validator: oldPassChk, trigger: 'blur'},
                         {required: true, message: '原密码不能为空', trigger: 'blur'},
+                        {validator: oldPassChk, trigger: 'blur'},
                         {required: true, message: '原密码不能为空', trigger: 'submit'}
                     ],
                     newPass: [
@@ -103,16 +107,31 @@
                 //判断表单验证是否通过，提交数据到后台
                 this.$refs["ruleForm"].validate((valid) => {
                     if (valid) {
-                        this.form.password = this.form.newPass;
-                        axios.post("/editMyPwd", this.form).then(res => {
-                            if (res.data === "success") {
-                                this.$message({
-                                    message: "修改成功",
-                                    type: "success"
-                                });
-                                this.getThisUser();
-                            }
-                        })
+                        this.$confirm('确定要修改密码吗?', '提示', {
+                            confirmButtonText: '确定',
+                            cancelButtonText: '取消',
+                            type: 'warning'
+                        }).then(() => {
+                            this.form.password = this.form.newPass;
+                            axios.post("/editMyPwd", this.form).then(res => {
+                                if (res.data === "success") {
+                                    this.$message({
+                                        message: "修改成功,请重新登录",
+                                        type: "success"
+                                    });
+                                    //清空vuex中的userid并跳转到登录页面
+                                    this.$store.state.userid = "";
+                                    this.$router.push({
+                                        path: "/"
+                                    });
+                                }
+                            })
+                        }).catch(() => {
+                            this.$message({
+                                type: 'info',
+                                message: '已取消修改密码'
+                            });
+                        });
                     } else {
                         this.$message({
                             message: "请检查您输入的信息",

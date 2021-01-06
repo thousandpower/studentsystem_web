@@ -53,7 +53,7 @@
                     align="center"
                     header-align="center">
                 <template slot-scope="scope">
-                    <el-button type="warning" @click="handleReset(scope.row)">重置密码</el-button>
+                    <el-button type="danger" @click="handleReset(scope.row)">重置密码</el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -125,7 +125,7 @@
                 this.listQuery.limit = val;
                 this.listQuery.page = 1;
                 this.page.currentPage = 1;//默认显示第一页
-                this.getEmps();
+                this.getAllUser();
             },
             handleCurrentChange: function (val) {
                 //当前页码发生变化时触发该事件

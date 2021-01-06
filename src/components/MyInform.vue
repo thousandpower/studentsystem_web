@@ -31,8 +31,10 @@
             <el-col span="7" offset="2">
                 <el-form-item label="性别" :label-width="formLabelWidth">
                     <el-radio-group v-model="form.sex">
-                        <el-radio :label="0">男</el-radio>
-                        <el-radio :label="1">女</el-radio>
+                        <el-radio-button :label="0">男</el-radio-button>
+                        <el-radio-button :label="1">女</el-radio-button>
+                        <!--                        <el-radio :label="0">男</el-radio>-->
+                        <!--                        <el-radio :label="1">女</el-radio>-->
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item label="婚否" prop="maritalStatus" :label-width="formLabelWidth">
@@ -53,16 +55,16 @@
                     <el-input v-model="form.major" placeholder="请输入毕业院校" style="width: 300px" readonly></el-input>
                 </el-form-item>
             </el-col>
+            <el-form-item style="display: none">
+                <el-input v-model="form.imagesDirectory"></el-input>
+            </el-form-item>
             <el-col span="3" offset="2">
-                    <el-upload
-                            class="avatar-uploader"
-                            action="/update"
-                            :show-file-list="false"
-                            :on-success="handleAvatarSuccess"
-                            :before-upload="beforeAvatarUpload">
-                        <img v-if="imageUrl" :src="imageUrl" class="avatar">
-                        <i v-else class="el-icon-plus avatar-uploader-icon"></i>
-                    </el-upload>
+                <el-upload
+                        class="avatar-uploader"
+                        action="/update">
+                    <img v-if="imageUrl" :src="imageUrl" class="avatar">
+                    <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                </el-upload>
             </el-col>
             <el-col span="16" offset="1">
                 <el-form-item label="备注" :label-width="formLabelWidth">
@@ -92,8 +94,14 @@
     export default {
         name: "MyInform",
         data() {
+            var chkPhone = (rule, value, callback) => {
+                var reg = /^1[0-9]{10}$/
+                if (!reg.test(value)) {
+                    callback(new Error('请输入正确的手机号码'))
+                }
+            };
             return {
-                imageUrl:"",
+                imageUrl: "",
                 readonly: true,
                 formLabelWidth: "100px",
                 span: "",
@@ -109,7 +117,19 @@
                     idNumber: "",
                     nation: "",
                     remarks: "",
-                    imagesDirectory:this.imageUrl
+                    gradeid: "",
+                    imagesDirectory: this.imageUrl
+                },
+                rules: {
+                    studentName: [
+                        {required: true, message: '学员姓名不能为空', trigger: 'blur'},
+                        {required: true, message: '学员姓名不能为空', trigger: 'submit'}
+                    ],
+                    phone: [
+                        {required: true, message: '联系电话不能为空', trigger: 'blur'},
+                        {validator: chkPhone, trigger: 'blur'},
+                        {required: true, message: '联系电话不能为空', trigger: 'submit'}
+                    ]
                 }
             }
         },
@@ -120,13 +140,17 @@
                 })
             },
             editMyInform: function () {
-                axios.post("/editMyInform", this.form).then(res => {
-                    if (res.data === "success") {
-                        this.$message({
-                            message: "修改成功",
-                            type: "success"
-                        });
-                        this.getMyInform();
+                this.$refs["myForm"].validate((valid) => {
+                    if (valid) {
+                        axios.post("/editMyInform", this.form).then(res => {
+                            if (res.data === "success") {
+                                this.$message({
+                                    message: "修改成功",
+                                    type: "success"
+                                });
+                                this.getMyInform();
+                            }
+                        })
                     }
                 })
             },
@@ -142,15 +166,18 @@
 
 <style scoped>
     .avatar-uploader .el-upload {
+        border-color: #409EFF;
         border: 1px dashed black;
         border-radius: 6px;
         cursor: pointer;
         position: relative;
         overflow: hidden;
     }
+
     .avatar-uploader .el-upload:hover {
         border-color: #409EFF;
     }
+
     .avatar-uploader-icon {
         font-size: 28px;
         color: #8c939d;
@@ -159,6 +186,7 @@
         line-height: 178px;
         text-align: center;
     }
+
     .avatar {
         width: 178px;
         height: 178px;
