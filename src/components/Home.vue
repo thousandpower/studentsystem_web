@@ -11,7 +11,7 @@
          <span style="margin: 50px -1300px 50px 0">{{uname}}</span>
 
 
-        <el-button type="success">安全退出</el-button>
+        <el-button size="mini">安全退出</el-button>
       </el-header>
 
 

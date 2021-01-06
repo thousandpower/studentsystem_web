@@ -43,7 +43,7 @@
           :data="tableData"
           border
           stripe
-          height="530"
+          height="584"
           style="width: 100%"
           @selection-change="handleSelectionChange"
         >
@@ -117,7 +117,6 @@
 
       </el-main>
 
-      <el-footer>Footer</el-footer>
     </el-container>
   </div>
 </template>

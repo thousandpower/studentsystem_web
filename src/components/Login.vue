@@ -2,7 +2,7 @@
     <div class="back" style="width: 100%;height: 100%">
         <div style="text-align: center;width: 100%;height: 100%">
             <div class="loginContainer">
-                <h4 style="font-size: 20px;line-height: 1.7;margin-left: 70px;color: #8c939d">欢迎登陆学员成长跟踪系统</h4>
+                <h4 style="font-size: 20px;line-height: 1.7;margin-left: 70px;color: #8c939d">欢迎登录金桥学员成长跟踪系统</h4>
                 <el-form ref="loginForm" :model="form" :rules="rules" @submit.native.prevent label-width="80px">
                     <el-form-item prop="userid">
                         <el-input v-model="form.userid"  placeholder="请输入id"></el-input>
@@ -51,14 +51,14 @@
                         //提交
                         axios.post("/login", this.form).then(res => {
                             if (res.data.status === "200") {
-
+                              sessionStorage.setItem("userid",res.data.data.userid);
                               sessionStorage.setItem("uname",res.data.data.username);
                               sessionStorage.setItem("role",res.data.data.role);
 
                               this.$message({
                                 message: "登录成功",
                                 type: "success"
-                              })
+                              });
 
                                 this.$router.push({
                                     path: "/Home",

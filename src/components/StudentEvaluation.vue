@@ -3,22 +3,75 @@
     <el-container>
       <el-header><h1>项目评价人管理</h1></el-header>
       <el-main>
+
+
+
+
+
+        <!--打分-->
+        <el-dialog :title="dialogTitle" :visible.sync="dialogFormVisible" width="500px">
+
+
+
+
+
+
+
+        </el-dialog>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         <div align="left" style="float: left">
           <el-input v-model="listQuery.filter" placeholeder="请输入部门评价人姓名" style="width: 200px;">
             <i slot="prefix" class="el-input__icon el-icon-search"></i>
           </el-input>
           <el-button type="primary" @click="queryDeptEvaluators">查询</el-button>
         </div>
-        <div align="right">
-          <el-button type="primary" @click="showAdd">新增</el-button>
-        </div>
-
-
         <el-table
           :data="tableData"
           border
           stripe
-          height="530"
+          height="590"
           style="width: 100%"
           @selection-change="handleSelectionChange"
         >
@@ -26,14 +79,14 @@
           <el-table-column
             type="index"
             label="序号"
-            width="115"
+            width="50"
             align="center">
           </el-table-column>
 
           <el-table-column
-            prop="username"
+            prop="student_name"
             label="姓名"
-            width="200"
+            width="75"
             align="center"
             header-align="center">
           </el-table-column>
@@ -41,7 +94,7 @@
           <el-table-column
             prop="sex"
             label="性别"
-            width="105"
+            width="52"
             align="center"
             header-align="center"
             :formatter="formatSex">
@@ -50,13 +103,13 @@
           <el-table-column
             prop="college"
             label="学校"
-            width="105"
+            width="120"
             align="center"
             header-align="center">
           </el-table-column>
 
           <el-table-column
-            prop="nativePlace"
+            prop="native_place"
             label="籍贯"
             width="100"
             align="center"
@@ -64,46 +117,47 @@
           </el-table-column>
 
 
-          <el-table-column label="培训期间测试成绩">
+          <el-table-column label="培训期间测试成绩"
+          align="center">
             <el-table-column
               prop="html"
               label="HTML笔试"
-              width="100"
+              width="75"
               align="center"
               header-align="center">
             </el-table-column>
             <el-table-column
               prop="oracle"
               label="oracle成绩"
-              width="100"
+              width="75"
               align="center"
               header-align="center">
             </el-table-column>
             <el-table-column
               prop="js"
               label="JS笔试"
-              width="100"
+              width="75"
               align="center"
               header-align="center">
             </el-table-column>
             <el-table-column
               prop="java_base"
               label="java基础笔试"
-              width="100"
+              width="75"
               align="center"
               header-align="center">
             </el-table-column>
             <el-table-column
               prop="java_high"
               label="java高级笔试"
-              width="100"
+              width="75"
               align="center"
               header-align="center">
             </el-table-column>
             <el-table-column
               prop="l1"
                 label="L1面试"
-              width="100"
+              width="75"
               align="center"
               header-align="center">
             </el-table-column>
@@ -112,50 +166,49 @@
           <el-table-column
             prop="school_score"
             label="学校评价"
-            width="170"
+            width="100"
             align="center">
           </el-table-column>
 
           <el-table-column
             prop="score0"
             label="转正评价"
-            width="170"
-            align="center">
+            width="100"
+            align="center"
+            :formatter="formatScore">
           </el-table-column>
 
           <el-table-column
             prop="score1"
             label="一年评价"
-            width="170"
-            align="center">
+            width="100"
+            align="center"
+            :formatter="formatScore">
           </el-table-column>
 
           <el-table-column
             prop="score2"
             label="两年评价"
-            width="170"
-            align="center">
+            width="100"
+            align="center"
+            :formatter="formatScore">
           </el-table-column>
 
           <el-table-column
             prop="score3"
             label="三年评价"
-            width="170"
-            align="center">
+            width="100"
+            align="center"
+            :formatter="formatScore">
           </el-table-column>
           <el-table-column
             label="操作"
-            width="170" align="center">
+            width="100" align="center">
             <template slot-scope="scope">
               <el-button
                 type="primary"
                 size="mini"
-                @click="handleEdit(scope.row)">编辑
-              </el-button>
-              <el-button
-                size="mini"
-                type="danger"
-                @click="handleDelete( scope.row)">删除
+                @click="handleEdit(scope.row)">打分
               </el-button>
 
             </template>
@@ -177,7 +230,7 @@
 
       </el-main>
 
-      <el-footer>Footer</el-footer>
+
     </el-container>
   </div>
 </template>
@@ -202,7 +255,9 @@
         listQuery: {//初始查询条件
           limit: 9,
           page: 1,
-          filter: ""  //查询条件
+          filter: "", //查询条件
+          evaluatorid:sessionStorage.getItem("userid")
+
         },
 
 
@@ -232,7 +287,7 @@
 
     methods: {
       getStudents: function () {
-        //用于该部门评价人所在部门的津桥学员员工信息
+        //用于该部门评价人所在部门的金桥学员员工信息
         axios.post("/getStudentsByDeptno", this.listQuery).then(res => {
           //res.data返回的是对象数组
           this.tableData = res.data.students;
@@ -259,7 +314,6 @@
         //val代表当前页码
         this.listQuery.page = val;
         this.getStudents();
-
 
       },
 
@@ -302,6 +356,14 @@
       formatSex: function (row, column) {
         return row.sex == '0' ? "男" : row.sex == '1' ? "女" : "";
       },
+      formatScore:function (row,coulumn) {
+        return row.score1 == null ? "未评价" : row.score1;
+        return row.score0 == null ? "未评价" : row.score0;
+        return row.score2 == null ? "未评价" : row.score2;
+        return row.score3 == null ? "未评价" : row.score3;
+      }
+
+
     },
 
     created() {

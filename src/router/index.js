@@ -10,6 +10,8 @@ import editPwd from '@/components/editPwd'
 import StudentManagement from '@/components/StudentManagement'
 import Welcome from '@/components/Welcome'
 import StudentEvaluation from '@/components/StudentEvaluation'
+import test from '@/components/test'
+import test1 from '@/components/test1'
 
 
 
@@ -19,6 +21,18 @@ Vue.use(Router)
 
 export default new Router({
   routes: [
+    {
+      path:"/test",
+      name:"test",
+      component:test
+    },
+        {
+      path:"/test1",
+      name:"test1",
+      component:test1
+    },
+
+
     {
       path: '/',
       name: 'Login',
