@@ -74,10 +74,16 @@
             },
             handleWatch:function () {
 
-            }
+            },
+            isLogin: function () {
+                if (!sessionStorage.getItem("user")) {
+                    this.$router.push("/");
+                }
+            },
         },
         mounted() {
             this.getMySchoolEvaluation();
+            this.isLogin();
         }
     }
 </script>

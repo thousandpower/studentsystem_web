@@ -160,9 +160,15 @@
                 //被选中的数据：行对象数组
                 this.checkData = val;
             },
+            isLogin: function () {
+                if (!sessionStorage.getItem("user")) {
+                    this.$router.push("/");
+                }
+            },
         },
         mounted() {
             this.getAllUser();
+            this.isLogin();
         }
     }
 </script>

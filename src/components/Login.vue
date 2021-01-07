@@ -51,6 +51,7 @@
                         //提交
                         axios.post("/login", this.form).then(res => {
                             if (res.data.status === "200") {
+                                sessionStorage.setItem("user",this.form.userid);
                                 this.$store.dispatch("setUser",this.form.userid);
                                 this.$router.push({
                                     path: "/deptMaintain",
@@ -73,7 +74,8 @@
                         })
                     }
                 })
-            }
+            },
+
         }
     }
 </script>

@@ -98,7 +98,7 @@
         },
         methods: {
             getThisUser() {
-                axios.get("/getThisUser/" + this.$store.state.userid).then(res => {
+                axios.get("/getThisUser/" + sessionStorage.getItem("user")).then(res => {
                     this.form = res.data.data;
                     this.form.password = "";
                 });

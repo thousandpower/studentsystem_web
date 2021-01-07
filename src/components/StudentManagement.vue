@@ -9,8 +9,9 @@
             <el-button type="primary" @click="showAdd">新增</el-button>
             <el-button type="danger" @click="deleteBatch">删除</el-button>
         </div>
-        <el-dialog :title="dialogTitle" :visible.sync="dialogFormVisible" :modal-append-to-body="false" :width="'70%'" :top="'3%'">
-            <el-form :model="form" ref="myForm" label-position="right" :rules="rules" style="height: 520px">
+        <el-dialog :title="dialogTitle" :visible.sync="dialogFormVisible" :modal-append-to-body="false" :width="'70%'"
+                   :top="'3%'">
+            <el-form :model="form" ref="ruleForm" label-position="right" :rules="rules" style="height: 520px">
                 <el-form-item label="员工编号" style="display: none">
                     <el-input v-model="form.studentid"></el-input>
                 </el-form-item>
@@ -36,9 +37,9 @@
                     <el-form-item label="毕业院校" prop="college" :label-width="formLabelWidth">
                         <el-input v-model="form.college" placeholder="请输入毕业院校" style="width: 300px"></el-input>
                     </el-form-item>
-                    <el-form-item label="班期" prop="college" :label-width="formLabelWidth">
+                    <el-form-item label="班期" prop="gradeid" :label-width="formLabelWidth">
                         <el-select v-model="form.gradeid" placeholder="请选择班期" style="width: 300px">
-                            <el-option   v-for="item in gradeData" :key="item" :value="item" :label="item"></el-option>
+                            <el-option v-for="item in gradeData" :key="item" :value="item" :label="item"></el-option>
                         </el-select>
                     </el-form-item>
                 </el-col>
@@ -66,8 +67,8 @@
                     <el-form-item label="专业" prop="major" :label-width="formLabelWidth">
                         <el-input v-model="form.major" placeholder="请输入专业" style="width: 300px"></el-input>
                     </el-form-item>
-                    <el-form-item label="职务" prop="major" :label-width="formLabelWidth" style="visibility: hidden">
-                        <el-input v-model="form.jobid" placeholder="请输入职务" style="width: 300px"></el-input>
+                    <el-form-item label="职务" :label-width="formLabelWidth" style="visibility: hidden">
+                        <el-input v-model="form.jobid" placeholder="请输入职务" style="width: 300px" readonly></el-input>
                     </el-form-item>
                 </el-col>
                 <el-form-item style="display: none">
@@ -81,7 +82,7 @@
                                 :show-file-list="false"
                                 :on-success="handleAvatarSuccess"
                                 :before-upload="beforeAvatarUpload">
-                            <img v-if="imageUrl" :src="imageUrl" class="avatar">
+                            <img v-if="form.imagesDirectory" :src="form.imagesDirectory" class="avatar">
                             <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                         </el-upload>
                     </div>
@@ -206,7 +207,7 @@
                     align="center"
                     header-align="center">
                 <template slot-scope="scope">
-                    <el-button type="primary" size="mini" @click="handleWatch(scope.row)">查看</el-button>
+                    <el-button type="primary" size="mini" @click="handleEdit(scope.row)">编辑</el-button>
                     <el-button type="danger" size="mini" @click="removeThis(scope.row)">删除</el-button>
                 </template>
             </el-table-column>
@@ -231,15 +232,9 @@
     export default {
         name: "StudentManagement",
         data() {
-            var chkPhone = (rule, value, callback) => {
-                var reg = /^1[0-9]{10}$/
-                if (!reg.test(value)) {
-                    callback(new Error('请输入正确的手机号码'))
-                }
-            };
             return {
-                span:"",
-                offset:"",
+                span: "",
+                offset: "",
                 imageUrl: "",
                 readonly: true,
                 show: false,
@@ -298,48 +293,70 @@
                     nation: "",
                     remarks: "",
                     gradeid: "",
-                    jobid: "",
-                    imagesDirectory: this.imageUrl
+                    jobid: "5",
+                    imagesDirectory: ""
                 },
                 //设置文本显示宽度
                 formLabelWidth: "80px",
                 //被选中的员工信息
                 checkData: [],
                 //班期数据
-                gradeData:[],
-                rules:{
-                    studentName:[
+                gradeData: [],
+                rules: {
+                    studentName: [
                         {required: true, message: '学员姓名不能为空', trigger: 'blur'},
                         {required: true, message: '学员姓名不能为空', trigger: 'submit'}
                     ],
-                    nation:[
+                    nation: [
                         {required: true, message: '民族不能为空', trigger: 'blur'},
                         {required: true, message: '民族不能为空', trigger: 'submit'}
                     ],
-                    birthday:[
+                    birthday: [
                         {required: true, message: '出生日期不能为空', trigger: 'blur'},
                         {required: true, message: '出生日期不能为空', trigger: 'submit'}
                     ],
-                    phone:[
+                    phone: [
                         {required: true, message: '联系电话不能为空', trigger: 'blur'},
-                        {validator: chkPhone, trigger: 'blur'},
+                        {
+                            pattern: /^1[0-9]{10}$/,
+                            message: '请输入正确的手机号码',
+                            trigger: 'blur'
+                        },
+                        {
+                            pattern: /^1[0-9]{10}$/,
+                            message: '请输入正确的手机号码',
+                            trigger: 'submit'
+                        },
                         {required: true, message: '联系电话不能为空', trigger: 'submit'}
                     ],
-                    college:[
+                    college: [
                         {required: true, message: '毕业院校不能为空', trigger: 'blur'},
                         {required: true, message: '毕业院校不能为空', trigger: 'submit'}
                     ],
-                    nativePlace:[
+                    nativePlace: [
                         {required: true, message: '籍贯不能为空', trigger: 'blur'},
                         {required: true, message: '籍贯不能为空', trigger: 'submit'}
                     ],
-                    idNumber:[
-                        {required: true, message: '身份证号不能为空', trigger: 'blur'},
-                        {required: true, message: '身份证号不能为空', trigger: 'submit'}
+                    idNumber: [
+                        {required: true, message: '身份证号码不能为空', trigger: 'blur'},
+                        {required: true, message: '身份证号码不能为空', trigger: 'submit'},
+                        {
+                            pattern: /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/,
+                            message: '请输入正确的身份证号码',
+                            trigger: 'blur'
+                        },
+                        {
+                            pattern: /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/,
+                            message: '请输入正确的身份证号码',
+                            trigger: 'submit'
+                        }
                     ],
-                    major:[
+                    major: [
                         {required: true, message: '专业不能为空', trigger: 'blur'},
                         {required: true, message: '专业不能为空', trigger: 'submit'}
+                    ],
+                    gradeid: [
+                        {required: true, message: '班期不能为空', trigger: 'submit'},
                     ]
                 }
             }
@@ -450,63 +467,77 @@
                     });
                 });
             },
-            getAllGrade:function () {
-                axios.get("/getAllGrade").then(res =>{
+            getAllGrade: function () {
+                axios.get("/getAllGrade").then(res => {
                     this.gradeData = res.data.data;
                 })
             },
-            getStudentJob:function () {
-                axios.get("/getStudentJob").then(res =>{
-                    this.form.jobid = res.data.jobid
-                })
-            },
-            cancelThisDialog:function () {
-
+            cancelThisDialog: function () {
+                //清空表单
+                this.form = {};
+                this.form.sex = '0';
+                this.form.maritalStatus = 0;
+                this.form.jobid = '5';
+                //关闭弹框
+                this.dialogFormVisible = false;
             },
             saveThisStudent: function () {
-                debugger;
-                this.$refs["myForm"].validate((valid) => {
-                    if (valid) {
-                        axios.post("/saveThisStudent", this.form).then(res => {
-                            if (res.data === "success") {
-                                this.form = {};
-                                this.dialogFormVisible = false;
-                                this.getAllStudent();
-                                if (this.dialogTitle === "新增学员") {
+                if (this.form.remarks == '') {
+                    this.form.remarks = "无";
+                }
+                if (this.dialogTitle === "新增学员") {
+                    this.$refs["ruleForm"].validate((valid) => {
+                        if (valid) {
+                            axios.post("/saveThisStudent", this.form).then(res => {
+                                if (res.data === "success") {
+                                    this.dialogFormVisible = false;
+                                    this.form = {};
+                                    this.getAllStudent();
                                     this.$message({
                                         message: "新增成功",
                                         type: "success"
                                     });
                                 } else {
-                                    this.$message({
-                                        message: "修改成功",
-                                        type: "success"
-                                    });
-                                }
-
-                            } else {
-                                this.form = {};
-                                this.dialogFormVisible = false;
-                                this.getAllStudent();
-                                if (this.dialogTitle == "新增学员") {
+                                    this.form = {};
+                                    this.dialogFormVisible = false;
+                                    this.getAllStudent();
                                     this.$message({
                                         message: "新增失败",
                                         type: "error"
                                     })
+                                }
+                            })
+                        }
+                    })
+                } else {
+                    this.$refs["ruleForm"].validate((valid) => {
+                        if (valid) {
+                            axios.post("/editThisStudent", this.form).then(res => {
+                                if (res.data === "success") {
+                                    this.dialogFormVisible = false;
+                                    this.form = {};
+                                    this.getAllStudent();
+                                    this.$message({
+                                        message: "修改成功",
+                                        type: "success"
+                                    });
                                 } else {
+                                    this.form = {};
+                                    this.dialogFormVisible = false;
+                                    this.getAllStudent();
                                     this.$message({
                                         message: "修改失败",
                                         type: "error"
                                     })
                                 }
-                            }
-                        })
-                    }
-                })
+                            })
+                        }
+                    })
+                }
             },
             //上传成功的钩子
             handleAvatarSuccess(res) {
-                this.imageUrl = 'http://localhost:8087/upload/'+res;
+                this.form.imagesDirectory = 'http://localhost:8087/upload/' + res;
             },
             beforeAvatarUpload(file) {
                 const isJPG = file.type === 'image/jpeg';
@@ -519,12 +550,24 @@
                     this.$message.error('上传头像图片大小不能超过 2MB!');
                 }
                 return isJPG && isLt2M;
-            }
+            },
+            handleEdit: function (rowData) {
+                this.dialogTitle = "编辑学员";
+                axios.get("/getMyInform/" + rowData.studentid).then(res => {
+                    this.form = res.data.data;
+                    this.dialogFormVisible = true;
+                })
+            },
+            isLogin: function () {
+                if (!sessionStorage.getItem("user")) {
+                    this.$router.push("/");
+                }
+            },
         },
         mounted() {
             this.getAllStudent();
             this.getAllGrade();
-            this.getStudentJob();
+            this.isLogin();
         }
 
     }
