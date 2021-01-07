@@ -9,8 +9,101 @@
             <el-button type="primary" @click="showAdd">新增</el-button>
             <el-button type="danger" @click="deleteBatch">删除</el-button>
         </div>
-        <el-dialog :title="dialogTitle" :visible.sync="dialogFormVisible" :modal-append-to-body="false" :width="'70%'">
-
+        <el-dialog :title="dialogTitle" :visible.sync="dialogFormVisible" :modal-append-to-body="false" :width="'70%'" :top="'3%'">
+            <el-form :model="form" ref="myForm" label-position="right" :rules="rules" style="height: 520px">
+                <el-form-item label="员工编号" style="display: none">
+                    <el-input v-model="form.studentid"></el-input>
+                </el-form-item>
+                <el-col :span="7">
+                    <el-form-item label="姓名" prop="studentName" :label-width="formLabelWidth">
+                        <el-input v-model="form.studentName" placeholder="请输入姓名" style="width: 300px"></el-input>
+                    </el-form-item>
+                    <el-form-item label="民族" prop="nation" :label-width="formLabelWidth">
+                        <el-input v-model="form.nation" placeholder="请输入民族" style="width: 300px"></el-input>
+                    </el-form-item>
+                    <el-form-item label="出生日期" prop="birthday" :label-width="formLabelWidth">
+                        <el-date-picker
+                                v-model="form.birthday"
+                                type="date"
+                                format="yyyy-MM-dd"
+                                value-format="yyyy-MM-dd"
+                                placeholder="请选择出生日期" style="width: 300px">
+                        </el-date-picker>
+                    </el-form-item>
+                    <el-form-item label="联系电话" prop="phone" :label-width="formLabelWidth">
+                        <el-input v-model="form.phone" placeholder="请输入联系电话" style="width: 300px"></el-input>
+                    </el-form-item>
+                    <el-form-item label="毕业院校" prop="college" :label-width="formLabelWidth">
+                        <el-input v-model="form.college" placeholder="请输入毕业院校" style="width: 300px"></el-input>
+                    </el-form-item>
+                    <el-form-item label="班期" prop="college" :label-width="formLabelWidth">
+                        <el-select v-model="form.gradeid" placeholder="请选择班期" style="width: 300px">
+                            <el-option   v-for="item in gradeData" :key="item" :value="item" :label="item"></el-option>
+                        </el-select>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="7" :offset="2">
+                    <el-form-item label="性别" :label-width="formLabelWidth">
+                        <el-radio-group v-model="form.sex">
+                            <el-radio-button :label="0">男</el-radio-button>
+                            <el-radio-button :label="1">女</el-radio-button>
+                        </el-radio-group>
+                    </el-form-item>
+                    <el-form-item label="婚否" prop="maritalStatus" :label-width="formLabelWidth">
+                        <el-select v-model="form.maritalStatus" placeholder="请选择婚否" style="width: 300px">
+                            <el-option :value="0" label="未婚"></el-option>
+                            <el-option :value="1" label="已婚"></el-option>
+                            <el-option :value="2" label="丧偶"></el-option>
+                            <el-option :value="3" label="离婚"></el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item label="籍贯" prop="nativePlace" :label-width="formLabelWidth">
+                        <el-input v-model="form.nativePlace" placeholder="请输入籍贯" style="width: 300px"></el-input>
+                    </el-form-item>
+                    <el-form-item label="身份证号" prop="idNumber" :label-width="formLabelWidth">
+                        <el-input v-model="form.idNumber" placeholder="请输入身份证号" style="width: 300px"></el-input>
+                    </el-form-item>
+                    <el-form-item label="专业" prop="major" :label-width="formLabelWidth">
+                        <el-input v-model="form.major" placeholder="请输入专业" style="width: 300px"></el-input>
+                    </el-form-item>
+                    <el-form-item label="职务" prop="major" :label-width="formLabelWidth" style="visibility: hidden">
+                        <el-input v-model="form.jobid" placeholder="请输入职务" style="width: 300px"></el-input>
+                    </el-form-item>
+                </el-col>
+                <el-form-item style="display: none">
+                    <el-input v-model="form.imagesDirectory"></el-input>
+                </el-form-item>
+                <el-col :span="4" :offset="3">
+                    <div>
+                        <el-upload
+                                class="avatar-uploader"
+                                action="http://localhost:8087/upload"
+                                :show-file-list="false"
+                                :on-success="handleAvatarSuccess"
+                                :before-upload="beforeAvatarUpload">
+                            <img v-if="imageUrl" :src="imageUrl" class="avatar">
+                            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                        </el-upload>
+                    </div>
+                </el-col>
+                <el-col :span="16">
+                    <el-form-item label="备注" :label-width="formLabelWidth">
+                        <el-input
+                                type="textarea"
+                                :rows="4"
+                                placeholder="请输入内容"
+                                v-model="form.remarks"
+                                align="center"
+                                style="width: 690px"
+                                class="el-row">
+                        </el-input>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="24">
+                    <el-button type="primary" @click="saveThisStudent">保 存</el-button>
+                    <el-button @click="cancelThisDialog">取 消</el-button>
+                </el-col>
+            </el-form>
         </el-dialog>
         <el-table
                 :data="tableData"
@@ -138,7 +231,15 @@
     export default {
         name: "StudentManagement",
         data() {
+            var chkPhone = (rule, value, callback) => {
+                var reg = /^1[0-9]{10}$/
+                if (!reg.test(value)) {
+                    callback(new Error('请输入正确的手机号码'))
+                }
+            };
             return {
+                span:"",
+                offset:"",
                 imageUrl: "",
                 readonly: true,
                 show: false,
@@ -192,17 +293,55 @@
                     college: "",
                     sex: "0",
                     nativePlace: "",
-                    maritalStatus: "",
+                    maritalStatus: 0,
                     idNumber: "",
                     nation: "",
                     remarks: "",
                     gradeid: "",
+                    jobid: "",
                     imagesDirectory: this.imageUrl
                 },
                 //设置文本显示宽度
                 formLabelWidth: "80px",
                 //被选中的员工信息
-                checkData: []
+                checkData: [],
+                //班期数据
+                gradeData:[],
+                rules:{
+                    studentName:[
+                        {required: true, message: '学员姓名不能为空', trigger: 'blur'},
+                        {required: true, message: '学员姓名不能为空', trigger: 'submit'}
+                    ],
+                    nation:[
+                        {required: true, message: '民族不能为空', trigger: 'blur'},
+                        {required: true, message: '民族不能为空', trigger: 'submit'}
+                    ],
+                    birthday:[
+                        {required: true, message: '出生日期不能为空', trigger: 'blur'},
+                        {required: true, message: '出生日期不能为空', trigger: 'submit'}
+                    ],
+                    phone:[
+                        {required: true, message: '联系电话不能为空', trigger: 'blur'},
+                        {validator: chkPhone, trigger: 'blur'},
+                        {required: true, message: '联系电话不能为空', trigger: 'submit'}
+                    ],
+                    college:[
+                        {required: true, message: '毕业院校不能为空', trigger: 'blur'},
+                        {required: true, message: '毕业院校不能为空', trigger: 'submit'}
+                    ],
+                    nativePlace:[
+                        {required: true, message: '籍贯不能为空', trigger: 'blur'},
+                        {required: true, message: '籍贯不能为空', trigger: 'submit'}
+                    ],
+                    idNumber:[
+                        {required: true, message: '身份证号不能为空', trigger: 'blur'},
+                        {required: true, message: '身份证号不能为空', trigger: 'submit'}
+                    ],
+                    major:[
+                        {required: true, message: '专业不能为空', trigger: 'blur'},
+                        {required: true, message: '专业不能为空', trigger: 'submit'}
+                    ]
+                }
             }
         },
         methods: {
@@ -236,7 +375,6 @@
                 this.page.currentPage = 1;
             },
             showAdd: function () {
-                this.form = {};
                 this.dialogTitle = "新增学员";
                 this.dialogFormVisible = true;
             },
@@ -312,34 +450,108 @@
                     });
                 });
             },
+            getAllGrade:function () {
+                axios.get("/getAllGrade").then(res =>{
+                    this.gradeData = res.data.data;
+                })
+            },
+            getStudentJob:function () {
+                axios.get("/getStudentJob").then(res =>{
+                    this.form.jobid = res.data.jobid
+                })
+            },
+            cancelThisDialog:function () {
 
+            },
+            saveThisStudent: function () {
+                debugger;
+                this.$refs["myForm"].validate((valid) => {
+                    if (valid) {
+                        axios.post("/saveThisStudent", this.form).then(res => {
+                            if (res.data === "success") {
+                                this.form = {};
+                                this.dialogFormVisible = false;
+                                this.getAllStudent();
+                                if (this.dialogTitle === "新增学员") {
+                                    this.$message({
+                                        message: "新增成功",
+                                        type: "success"
+                                    });
+                                } else {
+                                    this.$message({
+                                        message: "修改成功",
+                                        type: "success"
+                                    });
+                                }
+
+                            } else {
+                                this.form = {};
+                                this.dialogFormVisible = false;
+                                this.getAllStudent();
+                                if (this.dialogTitle == "新增学员") {
+                                    this.$message({
+                                        message: "新增失败",
+                                        type: "error"
+                                    })
+                                } else {
+                                    this.$message({
+                                        message: "修改失败",
+                                        type: "error"
+                                    })
+                                }
+                            }
+                        })
+                    }
+                })
+            },
+            //上传成功的钩子
+            handleAvatarSuccess(res) {
+                this.imageUrl = 'http://localhost:8087/upload/'+res;
+            },
+            beforeAvatarUpload(file) {
+                const isJPG = file.type === 'image/jpeg';
+                const isLt2M = file.size / 1024 / 1024 < 2;
+
+                if (!isJPG) {
+                    this.$message.error('上传头像图片只能是 JPG 格式!');
+                }
+                if (!isLt2M) {
+                    this.$message.error('上传头像图片大小不能超过 2MB!');
+                }
+                return isJPG && isLt2M;
+            }
         },
         mounted() {
             this.getAllStudent();
+            this.getAllGrade();
+            this.getStudentJob();
         }
 
     }
 </script>
 
 <style scoped>
-    .avatar-uploader el-upload {
-        border: 10px dashed #d9d9d9;
+    .avatar-uploader .el-upload {
+        border: 1px dashed #d9d9d9;
         border-radius: 6px;
         cursor: pointer;
         position: relative;
         overflow: hidden;
     }
-    .avatar-uploader el-upload:hover {
+
+    .avatar-uploader .el-upload:hover {
         border-color: #409EFF;
     }
+
     .avatar-uploader-icon {
-        font-size: 28px;
+        font-size: 50px;
         color: #8c939d;
         width: 178px;
-        height: 250px;
+        height: 178px;
         line-height: 178px;
         text-align: center;
     }
+
     .avatar {
         width: 178px;
         height: 178px;
