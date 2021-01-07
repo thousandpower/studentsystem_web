@@ -3,6 +3,10 @@
         <h1>学员信息列表</h1>
         <div align="left" style="float: left">
             <el-input v-model="listQuery.filter" placeholder="请输入学员姓名" style="width: 200px"></el-input>
+            <el-select v-model="listQuery.gradeid" placeholder="请选择班期" style="width: 200px">
+                <el-option value="全部" label="全部"></el-option>
+                <el-option v-for="item in gradeData" :key="item" :value="item" :label="item"></el-option>
+            </el-select>
             <el-button type="primary" @click="queryStudents">查询</el-button>
         </div>
         <div align="right">
@@ -248,7 +252,8 @@
                 listQuery: {
                     limit: 8,
                     page: 1,
-                    filter: ""
+                    filter: "",
+                    gradeid:""
                 },
                 //总条数
                 total: 0,
@@ -393,6 +398,10 @@
             },
             showAdd: function () {
                 this.dialogTitle = "新增学员";
+                this.form = {};
+                this.form.sex = '0';
+                this.form.maritalStatus = 0;
+                this.form.jobid = '5';
                 this.dialogFormVisible = true;
             },
             handleSelectionChange: function (val) {
