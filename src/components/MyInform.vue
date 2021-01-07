@@ -1,11 +1,11 @@
 <template>
     <div>
         <h4>我的信息</h4>
-        <el-form :model="form" ref="myForm" label-position="right" :rules="rules" style="height: 600px">
+        <el-form :model="form" ref="myForm" status-icon label-position="right" :rules="rules" style="height: 600px">
             <el-form-item label="员工编号" style="display: none">
                 <el-input v-model="form.studentid" placeholder="请输入姓名"></el-input>
             </el-form-item>
-            <el-col span="7" offset="1">
+            <el-col :span="7" :offset="1">
                 <el-form-item label="姓名" prop="studentName" :label-width="formLabelWidth">
                     <el-input v-model="form.studentName" placeholder="请输入姓名" style="width: 300px"></el-input>
                 </el-form-item>
@@ -28,7 +28,7 @@
                     <el-input v-model="form.college" placeholder="请输入毕业院校" style="width: 300px" readonly></el-input>
                 </el-form-item>
             </el-col>
-            <el-col span="7" offset="2">
+            <el-col :span="7" :offset="2">
                 <el-form-item label="性别" :label-width="formLabelWidth">
                     <el-radio-group v-model="form.sex">
                         <el-radio-button :label="0">男</el-radio-button>
@@ -58,15 +58,18 @@
             <el-form-item style="display: none">
                 <el-input v-model="form.imagesDirectory"></el-input>
             </el-form-item>
-            <el-col span="3" offset="2">
+            <el-col :span="3" :offset="2">
                 <el-upload
                         class="avatar-uploader"
-                        action="/update">
-                    <img v-if="imageUrl" :src="imageUrl" class="avatar">
+                        action="http://localhost:8087/upload"
+                        :show-file-list="false"
+                        :on-success="handleAvatarSuccess"
+                        :before-upload="beforeAvatarUpload">
+                    <img v-if="form.imagesDirectory" :src="form.imagesDirectory" class="avatar">
                     <i v-else class="el-icon-plus avatar-uploader-icon"></i>
                 </el-upload>
             </el-col>
-            <el-col span="16" offset="1">
+            <el-col :span="16" :offset="1">
                 <el-form-item label="备注" :label-width="formLabelWidth">
                     <el-input
                             type="textarea"
@@ -80,7 +83,7 @@
                     </el-input>
                 </el-form-item>
             </el-col>
-            <el-col span="24">
+            <el-col :span="24">
                 <el-button type="primary" @click="editMyInform">保 存</el-button>
                 <el-button @click="cancelMyEdit">取 消</el-button>
             </el-col>
@@ -94,14 +97,7 @@
     export default {
         name: "MyInform",
         data() {
-            var chkPhone = (rule, value, callback) => {
-                var reg = /^1[0-9]{10}$/
-                if (!reg.test(value)) {
-                    callback(new Error('请输入正确的手机号码'))
-                }
-            };
             return {
-                imageUrl: "",
                 readonly: true,
                 formLabelWidth: "100px",
                 span: "",
@@ -118,17 +114,19 @@
                     nation: "",
                     remarks: "",
                     gradeid: "",
-                    imagesDirectory: this.imageUrl
+                    imagesDirectory: ""
                 },
                 rules: {
                     studentName: [
-                        {required: true, message: '学员姓名不能为空', trigger: 'blur'},
-                        {required: true, message: '学员姓名不能为空', trigger: 'submit'}
+                        {required: true, message: '学员姓名不能为空', trigger: 'blur'}
                     ],
                     phone: [
                         {required: true, message: '联系电话不能为空', trigger: 'blur'},
-                        {validator: chkPhone, trigger: 'blur'},
-                        {required: true, message: '联系电话不能为空', trigger: 'submit'}
+                        {
+                            pattern:  /^1[0-9]{10}$/,
+                            message: '请输入正确的手机号码',
+                            trigger: 'blur'
+                        }
                     ]
                 }
             }
@@ -156,6 +154,22 @@
             },
             cancelMyEdit: function () {
                 this.getMyInform();
+            },
+            //上传成功的钩子
+            handleAvatarSuccess(res) {
+                this.form.imagesDirectory ='http://localhost:8087/upload/'+res;
+            },
+            beforeAvatarUpload(file) {
+                const isJPG = file.type === 'image/jpeg';
+                const isLt2M = file.size / 1024 / 1024 < 2;
+
+                if (!isJPG) {
+                    this.$message.error('上传头像图片只能是 JPG 格式!');
+                }
+                if (!isLt2M) {
+                    this.$message.error('上传头像图片大小不能超过 2MB!');
+                }
+                return isJPG && isLt2M;
             }
         },
         mounted() {
