@@ -44,7 +44,7 @@
             </el-form-item>
 
             <el-form-item label="手机号" :label-width="formLabelWidth" prop="phone">
-              <el-input v-model.number="form.phone" autocomplete="off" style="width: 370px" clearable>
+              <el-input v-model="form.phone" autocomplete="off" style="width: 370px" clearable>
                 <i slot="prefix" class="el-input__icon el-icon-phone"></i>
               </el-input>
             </el-form-item>
@@ -210,15 +210,11 @@
         if (value == undefined) {
           callback(new Error('手机号不能为空'))
         } else {
-          if (!Number.isInteger(value)) {
-            callback(new Error('请输入数字值'));
-          }else {
-            if (!/^(((13[0-9]{1})|(15[0-9]{1})|(16[0-9]{1})|(17[3-8]{1})|(18[0-9]{1})|(19[0-9]{1})|(14[5-7]{1}))+\d{8})$/.test(value)) {
+          if  (!/^(((13[0-9]{1})|(15[0-9]{1})|(16[0-9]{1})|(17[3-8]{1})|(18[0-9]{1})|(19[0-9]{1})|(14[5-7]{1}))+\d{8})$/.test(value)) {
               callback(new Error('手机号格式错误'))
             }else {
               callback()
             }
-          }
       }};
 
 
@@ -287,7 +283,7 @@
           ],
           phone: [
             {validator: checkPhone, trigger: 'blur'},
-            {required: true, message: '请输入手机号', trigger: 'blur'},
+
 
           ],
         },
@@ -298,6 +294,7 @@
 
     methods: {
       getDeptEvaluators: function () {
+
         //用于获取全部的部门评价人信息
         axios.post("/getDeptEvaluators", this.listQuery).then(res => {
           //res.data返回的是对象数组
@@ -323,6 +320,7 @@
 
       queryDeptEvaluators: function () {
         //设置传递到后台的代码为1
+        this.listQuery.page = 1;
         this.getDeptEvaluators();
         this.page.currentPage = 1; //默认显示第一页
       },
@@ -346,7 +344,7 @@
 
       //打开新增对话框
       showAdd: function () {
-        this.form = {sex:"0"};
+        this.form = {sex:0};
         this.dialogTitle = "新增项目评价人";
         this.dialogFormVisible = true;
         //清空表单验证残余提示
@@ -421,7 +419,7 @@
 
             if (res.data == "success") {
               //更新列表
-              this.getDeptEvaluators();
+              this.queryDeptEvaluators()
               this.$message({
                 type: 'success',
                 message: '删除成功!'
