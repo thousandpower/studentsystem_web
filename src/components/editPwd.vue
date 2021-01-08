@@ -4,7 +4,7 @@
             <div style="margin-bottom: 50px;margin-right: 450px">
                 <h3>修改密码</h3>
             </div>
-            <el-col span="10">
+            <el-col :span="10">
                 <el-form :model="form" :rules="rules" ref="ruleForm" label-width="100px"
                          class="demo-ruleForm"
                          style="height: 600px">
@@ -100,7 +100,7 @@
             getThisUser() {
                 axios.get("/getThisUser/" + sessionStorage.getItem("user")).then(res => {
                     this.form = res.data.data;
-                    this.form.password = "";
+                    this.form.prasswod = "";
                 });
             },
             saveThisUser() {

@@ -133,7 +133,7 @@
         },
         methods: {
             getMyInform: function () {
-                axios.get("/getMyInform/" + this.$store.state.userid).then(res => {
+                axios.get("/getMyInform/" + sessionStorage.getItem("user")).then(res => {
                     this.form = res.data.data;
                 })
             },
