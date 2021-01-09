@@ -129,7 +129,6 @@
     data() {
       return {
         uname: "",//存储从sessionStorage中的用户名
-
         //表格分页、查询等数据
         tableData: [],
         page: {
@@ -165,7 +164,6 @@
           description: [
             {required: true, message: '请描述部门信息', trigger: 'blur'},
           ],
-
         },
         //被选中的部门信息
         checkData: []
@@ -324,7 +322,7 @@
             } else {
               this.$message({
                 type: 'error',
-                message: '删除失败!'
+                message: '删除失败，被选部门中仍有员工!'
               });
             }
           })

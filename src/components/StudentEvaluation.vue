@@ -12,7 +12,8 @@
                 <tr>
                   <td style="width: 110px">姓名</td>
                   <td style="width: 110px">
-                    <el-input v-model="formInfo.studentName" class="paperview-input-text" readonly></el-input>
+
+                    <el-input v-model="formInfo.student_name" class="paperview-input-text" readonly></el-input>
                   </td>
                   <td style="width: 55px">性别</td>
                   <td style="width: 110px">
@@ -32,17 +33,17 @@
                   </td>
                   <td>籍贯</td>
                   <td>
-                    <el-input v-model="formInfo.nativePlace" class="paperview-input-text" readonly></el-input>
+                    <el-input v-model="formInfo.native_place" class="paperview-input-text" readonly></el-input>
                   </td>
                   <td>婚否</td>
                   <td>
-                    <el-input v-if="formInfo.maritalStatus == '0'" value="未婚" class="paperview-input-text"
+                    <el-input v-if="formInfo.marital_status == '0'" value="未婚" class="paperview-input-text"
                               readonly></el-input>
-                    <el-input v-if="formInfo.maritalStatus =='1'" value="已婚" class="paperview-input-text"
+                    <el-input v-if="formInfo.marital_status =='1'" value="已婚" class="paperview-input-text"
                               readonly></el-input>
-                    <el-input v-if="formInfo.maritalStatus == '2'" value="丧偶" class="paperview-input-text"
+                    <el-input v-if="formInfo.marital_status == '2'" value="丧偶" class="paperview-input-text"
                               readonly></el-input>
-                    <el-input v-if="formInfo.maritalStatus =='3'" value="离婚" class="paperview-input-text"
+                    <el-input v-if="formInfo.marital_status =='3'" value="离婚" class="paperview-input-text"
                               readonly></el-input>
                   </td>
                 </tr>
@@ -53,7 +54,7 @@
                   </td>
                   <td>身份证号码</td>
                   <td colspan="2">
-                    <el-input v-model="formInfo.idNumber" class="paperview-input-text" readonly></el-input>
+                    <el-input v-model="formInfo.id_number" class="paperview-input-text" readonly></el-input>
                   </td>
                 </tr>
                 <tr>
@@ -70,7 +71,7 @@
                   <td>备注</td>
                   <td colspan="6">
                     <el-input v-model="formInfo.remarks" type="textarea"
-                              class="paperview-input-textarea" readonly rows="3"></el-input>
+                              class="paperview-input-textarea" readonly rows="2"></el-input>
                   </td>
                 </tr>
               </table>
@@ -82,8 +83,7 @@
           <div>
             <el-tabs v-model="activeName" @tab-click="handleClick">
               <el-tab-pane label="学校评价" name="school">
-                <!--<el-form :model="formEvaInfoSc" :rules="rules" ref="studentEvaInfoSc">-->
-                <el-form :model="formEvaInfoSc" :rules="rules" ref="studentEvaInfo">
+                <el-form :model="formEvaInfoSc" :rules="rules" ref="studentEvaInfoSc">
 
                   <table border="1px" cellspacing="0px" style="border-collapse:collapse" align="center">
                     <tr>
@@ -109,6 +109,7 @@
                       <td colspan="2">学习评价</td>
                       <td>
                         <el-input v-model="formEvaInfoSc.gradeid" class="paperview-input-text" readonly></el-input>
+                        <br><br>
                       </td>
                       <td>
                         <el-input v-model="formEvaInfoSc.teachername" class="paperview-input-text" readonly></el-input>
@@ -146,15 +147,13 @@
                     </tr>
                   </table>
                   <br>
-                  <el-button type="primary" @click="saveFormEvaInfo" disabled>确 定</el-button>
+                  <el-button type="primary"  disabled>评 价</el-button>
                 </el-form>
               </el-tab-pane>
 
 
               <el-tab-pane label="转正评价" name="zero" :disabled="disabled0">
-                <!--<el-form :model="formEvaInfo0" :rules="rules" ref="studentEvaInfo0">-->
-                <el-form :model="formEvaInfo0" :rules="rules" ref="studentEvaInfo">
-
+                <el-form :model="formEvaInfo0" :rules="rules" ref="studentEvaInfo0">
                   <table border="1px" cellspacing="0px" style="border-collapse:collapse">
                     <tr>
                       <td colspan="12"></td>
@@ -177,57 +176,57 @@
                     <tr>
                       <td colspan="2">工作评价</td>
                       <td>
-                        <el-input v-model="formEvaInfo0.deptname" class="paperview-input-text" readonly></el-input>
+                        <el-form-item prop="deptname"><el-input v-model="formEvaInfo0.deptname" class="paperview-input-text" readonly></el-input></el-form-item>
+                      </td>
+                      <td><el-form-item prop="jobname"><el-input v-model="formEvaInfo0.jobname" class="paperview-input-text" readonly></el-input>  </el-form-item>
                       </td>
                       <td>
-                        <el-input v-model="formEvaInfo0.jobname" class="paperview-input-text" readonly></el-input>
+                        <el-form-item prop="username"> <el-input v-model="formEvaInfo0.username" class="paperview-input-text" readonly></el-input> </el-form-item>
                       </td>
                       <td>
-                        <el-input v-model="formEvaInfo0.username" class="paperview-input-text" readonly></el-input>
+                        <el-form-item prop="ability"> <el-input v-model.number="formEvaInfo0.ability" class="paperview-input-text"
+                                                                 :readonly="readZero"></el-input> </el-form-item>
+
                       </td>
                       <td>
-                        <el-input v-model="formEvaInfo0.ability" class="paperview-input-text"
-                                  :readonly="readZero"></el-input>
+                        <el-form-item prop="initiative"><el-input v-model.number="formEvaInfo0.initiative" class="paperview-input-text"
+                                                               :readonly="readZero"></el-input></el-form-item>
+
                       </td>
                       <td>
-                        <el-input v-model="formEvaInfo0.initiative" class="paperview-input-text"
-                                  :readonly="readZero"></el-input>
+                        <el-form-item prop="communication"><el-input v-model.number="formEvaInfo0.communication" class="paperview-input-text"
+                                                                  :readonly="readZero"></el-input></el-form-item>
                       </td>
                       <td>
-                        <el-input v-model="formEvaInfo0.communication" class="paperview-input-text"
-                                  :readonly="readZero"></el-input>
+                        <el-form-item prop="moral_quality"><el-input v-model.number="formEvaInfo0.moral_quality" class="paperview-input-text"
+                                                                     :readonly="readZero"></el-input></el-form-item>
                       </td>
                       <td>
-                        <el-input v-model="formEvaInfo0.moral_quality" class="paperview-input-text"
-                                  :readonly="readZero"></el-input>
-                      </td>
-                      <td>
-                        <el-input v-model="formEvaInfo0.characters" class="paperview-input-text"
-                                  :readonly="readZero"></el-input>
+                        <el-form-item prop="characters"><el-input v-model.number="formEvaInfo0.characters" class="paperview-input-text"
+                                                                     :readonly="readZero"></el-input></el-form-item>
                       </td>
                       <td colspan="2">
-                        <el-input v-model="formEvaInfo0.appraisal_score" class="paperview-input-text"
-                                  :readonly="readZero"></el-input>
+                        <el-form-item prop="appraisal_score"><el-input v-model.number="formEvaInfo0.appraisal_score" class="paperview-input-text"
+                                                                     :readonly="readZero"></el-input></el-form-item>
+
                       </td>
                     </tr>
                     <tr>
                       <td colspan="2">评价(包括主要优点及缺陷)</td>
                       <td colspan="10">
-                        <el-input v-model="formEvaInfo0.appraisal_content" type="textarea"
-                                  class="paperview-input-textarea" :readonly="readZero" rows="3"></el-input>
+                        <el-form-item prop="appraisal_content"><el-input v-model="formEvaInfo0.appraisal_content" type="textarea"
+                                                                       class="paperview-input-textarea" :readonly="readZero" rows="2"></el-input></el-form-item>
                       </td>
                     </tr>
                   </table>
                   <br>
-                  <el-button type="primary" @click="saveFormEvaInfo" :disabled="readZero">确 定</el-button>
+                  <el-button type="primary" @click="saveFormEvaInfo0" :disabled="readZero">评 价</el-button>
                 </el-form>
               </el-tab-pane>
 
 
               <el-tab-pane label="一年评价" name="first" :disabled="disabled1">
-                <!-- <el-form :model="formEvaInfo1" :rules="rules" ref="studentEvaInfo1">-->
-                <el-form :model="formEvaInfo1" :rules="rules" ref="studentEvaInfo">
-
+                <el-form :model="formEvaInfo1" :rules="rules" ref="studentEvaInfo1">
 
                   <table border="1px" cellspacing="0px" style="border-collapse:collapse">
                     <tr>
@@ -251,56 +250,57 @@
                     <tr>
                       <td colspan="2">工作评价</td>
                       <td>
-                        <el-input v-model="formEvaInfo1.deptname" class="paperview-input-text" readonly></el-input>
+                        <el-form-item prop="deptname"><el-input v-model="formEvaInfo1.deptname" class="paperview-input-text" readonly></el-input></el-form-item>
+                      </td>
+                      <td><el-form-item prop="jobname"><el-input v-model="formEvaInfo1.jobname" class="paperview-input-text" readonly></el-input>  </el-form-item>
                       </td>
                       <td>
-                        <el-input v-model="formEvaInfo1.jobname" class="paperview-input-text" readonly></el-input>
+                        <el-form-item prop="username"> <el-input v-model="formEvaInfo1.username" class="paperview-input-text" readonly></el-input> </el-form-item>
                       </td>
                       <td>
-                        <el-input v-model="formEvaInfo1.username" class="paperview-input-text" readonly></el-input>
+                        <el-form-item prop="ability"> <el-input v-model.number="formEvaInfo1.ability" class="paperview-input-text"
+                                                                :readonly="readFirst"></el-input> </el-form-item>
+
                       </td>
                       <td>
-                        <el-input v-model="formEvaInfo1.ability" class="paperview-input-text"
-                                  :readonly="readFirst"></el-input>
+                        <el-form-item prop="initiative"><el-input v-model.number="formEvaInfo1.initiative" class="paperview-input-text"
+                                                                  :readonly="readFirst"></el-input></el-form-item>
+
                       </td>
                       <td>
-                        <el-input v-model="formEvaInfo1.initiative" class="paperview-input-text"
-                                  :readonly="readFirst"></el-input>
+                        <el-form-item prop="communication"><el-input v-model.number="formEvaInfo1.communication" class="paperview-input-text"
+                                                                     :readonly="readFirst"></el-input></el-form-item>
                       </td>
                       <td>
-                        <el-input v-model="formEvaInfo1.communication" class="paperview-input-text"
-                                  :readonly="readFirst"></el-input>
+                        <el-form-item prop="moral_quality"><el-input v-model.number="formEvaInfo1.moral_quality" class="paperview-input-text"
+                                                                     :readonly="readFirst"></el-input></el-form-item>
                       </td>
                       <td>
-                        <el-input v-model="formEvaInfo1.moral_quality" class="paperview-input-text"
-                                  :readonly="readFirst"></el-input>
-                      </td>
-                      <td>
-                        <el-input v-model="formEvaInfo1.characters" class="paperview-input-text"
-                                  :readonly="readFirst"></el-input>
+                        <el-form-item prop="characters"><el-input v-model.number="formEvaInfo1.characters" class="paperview-input-text"
+                                                                  :readonly="readFirst"></el-input></el-form-item>
                       </td>
                       <td colspan="2">
-                        <el-input v-model="formEvaInfo1.appraisal_score" class="paperview-input-text"
-                                  :readonly="readFirst"></el-input>
+                        <el-form-item prop="appraisal_score"><el-input v-model.number="formEvaInfo1.appraisal_score" class="paperview-input-text"
+                                                                       :readonly="readFirst"></el-input></el-form-item>
+
                       </td>
                     </tr>
                     <tr>
                       <td colspan="2">评价(包括主要优点及缺陷)</td>
                       <td colspan="10">
-                        <el-input v-model="formEvaInfo1.appraisal_content" type="textarea"
-                                  class="paperview-input-textarea" :readonly="readFirst" rows="3"></el-input>
+                        <el-form-item prop="appraisal_content"><el-input v-model="formEvaInfo1.appraisal_content" type="textarea"
+                                                                         class="paperview-input-textarea" :readonly="readFirst" rows="2"></el-input></el-form-item>
                       </td>
                     </tr>
                   </table>
                   <br>
-                  <el-button type="primary" @click="saveFormEvaInfo" :disabled="readFirst">确 定</el-button>
+                  <el-button type="primary" @click="saveFormEvaInfo1" :disabled="readFirst">评 价</el-button>
                 </el-form>
               </el-tab-pane>
 
 
               <el-tab-pane label="两年评价" name="second" :disabled="disabled2">
-                <!--<el-form :model="formEvaInfo2" :rules="rules" ref="studentEvaInfo2">-->
-                <el-form :model="formEvaInfo2" :rules="rules" ref="studentEvaInfo">
+                <el-form :model="formEvaInfo2" :rules="rules" ref="studentEvaInfo2">
 
                   <table border="1px" cellspacing="0px" style="border-collapse:collapse">
                     <tr>
@@ -324,55 +324,56 @@
                     <tr>
                       <td colspan="2">工作评价</td>
                       <td>
-                        <el-input v-model="formEvaInfo2.deptname" class="paperview-input-text" readonly></el-input>
+                        <el-form-item prop="deptname"><el-input v-model="formEvaInfo2.deptname" class="paperview-input-text" readonly></el-input></el-form-item>
+                      </td>
+                      <td><el-form-item prop="jobname"><el-input v-model="formEvaInfo2.jobname" class="paperview-input-text" readonly></el-input>  </el-form-item>
                       </td>
                       <td>
-                        <el-input v-model="formEvaInfo2.jobname" class="paperview-input-text" readonly></el-input>
+                        <el-form-item prop="username"> <el-input v-model="formEvaInfo2.username" class="paperview-input-text" readonly></el-input> </el-form-item>
                       </td>
                       <td>
-                        <el-input v-model="formEvaInfo2.username" class="paperview-input-text" readonly></el-input>
+                        <el-form-item prop="ability"> <el-input v-model.number="formEvaInfo2.ability" class="paperview-input-text"
+                                                                :readonly="readSecond"></el-input> </el-form-item>
+
                       </td>
                       <td>
-                        <el-input v-model="formEvaInfo2.ability" class="paperview-input-text"
-                                  :readonly="readSecond"></el-input>
+                        <el-form-item prop="initiative"><el-input v-model.number="formEvaInfo2.initiative" class="paperview-input-text"
+                                                                  :readonly="readSecond"></el-input></el-form-item>
+
                       </td>
                       <td>
-                        <el-input v-model="formEvaInfo2.initiative" class="paperview-input-text"
-                                  :readonly="readSecond"></el-input>
+                        <el-form-item prop="communication"><el-input v-model.number="formEvaInfo2.communication" class="paperview-input-text"
+                                                                     :readonly="readSecond"></el-input></el-form-item>
                       </td>
                       <td>
-                        <el-input v-model="formEvaInfo2.communication" class="paperview-input-text"
-                                  :readonly="readSecond"></el-input>
+                        <el-form-item prop="moral_quality"><el-input v-model.number="formEvaInfo2.moral_quality" class="paperview-input-text"
+                                                                     :readonly="readSecond"></el-input></el-form-item>
                       </td>
                       <td>
-                        <el-input v-model="formEvaInfo2.moral_quality" class="paperview-input-text"
-                                  :readonly="readSecond"></el-input>
-                      </td>
-                      <td>
-                        <el-input v-model="formEvaInfo2.characters" class="paperview-input-text"
-                                  :readonly="readSecond"></el-input>
+                        <el-form-item prop="characters"><el-input v-model.number="formEvaInfo2.characters" class="paperview-input-text"
+                                                                  :readonly="readSecond"></el-input></el-form-item>
                       </td>
                       <td colspan="2">
-                        <el-input v-model="formEvaInfo2.appraisal_score" class="paperview-input-text"
-                                  :readonly="readSecond"></el-input>
+                        <el-form-item prop="appraisal_score"><el-input v-model.number="formEvaInfo2.appraisal_score" class="paperview-input-text"
+                                                                       :readonly="readSecond"></el-input></el-form-item>
+
                       </td>
                     </tr>
                     <tr>
                       <td colspan="2">评价(包括主要优点及缺陷)</td>
                       <td colspan="10">
-                        <el-input v-model="formEvaInfo2.appraisal_content" type="textarea"
-                                  class="paperview-input-textarea" :readonly="readSecond" rows="3"></el-input>
+                        <el-form-item prop="appraisal_content"><el-input v-model="formEvaInfo2.appraisal_content" type="textarea"
+                                                                         class="paperview-input-textarea" :readonly="readSecond" rows="2"></el-input></el-form-item>
                       </td>
                     </tr>
                   </table>
                   <br>
-                  <el-button type="primary" @click="saveFormEvaInfo" :disabled="readSecond">确 定</el-button>
+                  <el-button type="primary" @click="saveFormEvaInfo2" :disabled="readSecond">评 价</el-button>
                 </el-form>
               </el-tab-pane>
 
               <el-tab-pane label="三年评价" name="third" :disabled="disabled3">
-                <!--<el-form :model="formEvaInfo3" :rules="rules" ref="studentEvaInfo3">-->
-                <el-form :model="formEvaInfo3" :rules="rules" ref="studentEvaInfo">
+                <el-form :model="formEvaInfo3" :rules="rules" ref="studentEvaInfo3">
 
                   <table border="1px" cellspacing="0px" style="border-collapse:collapse">
                     <tr>
@@ -396,49 +397,51 @@
                     <tr>
                       <td colspan="2">工作评价</td>
                       <td>
-                        <el-input v-model="formEvaInfo3.deptname" class="paperview-input-text" readonly></el-input>
+                        <el-form-item prop="deptname"><el-input v-model="formEvaInfo3.deptname" class="paperview-input-text" readonly></el-input></el-form-item>
+                      </td>
+                      <td><el-form-item prop="jobname"><el-input v-model="formEvaInfo3.jobname" class="paperview-input-text" readonly></el-input>  </el-form-item>
                       </td>
                       <td>
-                        <el-input v-model="formEvaInfo3.jobname" class="paperview-input-text" readonly></el-input>
+                        <el-form-item prop="username"> <el-input v-model="formEvaInfo3.username" class="paperview-input-text" readonly></el-input> </el-form-item>
                       </td>
                       <td>
-                        <el-input v-model="formEvaInfo3.username" class="paperview-input-text" readonly></el-input>
+                        <el-form-item prop="ability"> <el-input v-model.number="formEvaInfo3.ability" class="paperview-input-text"
+                                                                :readonly="readThird"></el-input> </el-form-item>
+
                       </td>
                       <td>
-                        <el-input v-model="formEvaInfo3.ability" class="paperview-input-text"
-                                  :readonly="readThird"></el-input>
+                        <el-form-item prop="initiative"><el-input v-model.number="formEvaInfo3.initiative" class="paperview-input-text"
+                                                                  :readonly="readThird"></el-input></el-form-item>
+
                       </td>
                       <td>
-                        <el-input v-model="formEvaInfo3.initiative" class="paperview-input-text"
-                                  :readonly="readThird"></el-input>
+                        <el-form-item prop="communication"><el-input v-model.number="formEvaInfo3.communication" class="paperview-input-text"
+                                                                     :readonly="readThird"></el-input></el-form-item>
                       </td>
                       <td>
-                        <el-input v-model="formEvaInfo3.communication" class="paperview-input-text"
-                                  :readonly="readThird"></el-input>
+                        <el-form-item prop="moral_quality"><el-input v-model.number="formEvaInfo3.moral_quality" class="paperview-input-text"
+                                                                     :readonly="readThird"></el-input></el-form-item>
                       </td>
                       <td>
-                        <el-input v-model="formEvaInfo3.moral_quality" class="paperview-input-text"
-                                  :readonly="readThird"></el-input>
-                      </td>
-                      <td>
-                        <el-input v-model="formEvaInfo3.characters" class="paperview-input-text"
-                                  :readonly="readThird"></el-input>
+                        <el-form-item prop="characters"><el-input v-model.number="formEvaInfo3.characters" class="paperview-input-text"
+                                                                  :readonly="readThird"></el-input></el-form-item>
                       </td>
                       <td colspan="2">
-                        <el-input v-model="formEvaInfo3.appraisal_score" class="paperview-input-text"
-                                  :readonly="readThird"></el-input>
+                        <el-form-item prop="appraisal_score"><el-input v-model.number="formEvaInfo3.appraisal_score" class="paperview-input-text"
+                                                                       :readonly="readThird"></el-input></el-form-item>
+
                       </td>
                     </tr>
                     <tr>
                       <td colspan="2">评价(包括主要优点及缺陷)</td>
                       <td colspan="10">
-                        <el-input v-model="formEvaInfo3.appraisal_content" type="textarea"
-                                  class="paperview-input-textarea" :readonly="readThird" rows="3"></el-input>
+                        <el-form-item prop="appraisal_content"><el-input v-model="formEvaInfo3.appraisal_content" type="textarea"
+                                                                         class="paperview-input-textarea" :readonly="readThird" rows="2"></el-input></el-form-item>
                       </td>
                     </tr>
                   </table>
                   <br>
-                  <el-button type="primary" @click="saveFormEvaInfo" :disabled="readThird">确 定</el-button>
+                  <el-button type="primary" @click="saveFormEvaInfo3" :disabled="readThird">评 价</el-button>
                 </el-form>
               </el-tab-pane>
             </el-tabs>
@@ -599,9 +602,7 @@
           @current-change="handleCurrentChange"
         >
         </el-pagination>
-
       </el-main>
-
 
     </el-container>
   </div>
@@ -614,6 +615,39 @@
   export default {
     name: "StudentEvaluation",
     data() {
+
+      //自定义表单验证
+      var checkItemScore = function (rule, value, callback) {
+        if (value == '' || value == null || value == undefined) {
+          callback(new Error('请输入成绩'));
+        } else {
+          if (!Number.isInteger(value)) {
+            callback(new Error('请输入整数'));
+          } else {
+            if (value > 100 || value < 0) {
+              callback(new Error('请输入0-100'));
+            } else {
+              callback();
+            }
+          }
+        }
+      };
+      var checkTotalScore = function (rule, value, callback) {
+        if (value == '' || value == null || value == undefined) {
+          callback(new Error('请输入成绩'));
+        } else {
+          if (!Number.isInteger(value)) {
+            callback(new Error('请输入整数'));
+          } else {
+            if (value > 5 || value < 0) {
+              callback(new Error('总评价评分标准为5分制'));
+            } else {
+              callback();
+            }
+          }
+        }
+      };
+
 
       return {
         uname: "",//存储从sessionStorage中的用户名
@@ -646,23 +680,24 @@
 
         //学生基础信息的声明
         formInfo: {
-          studentName: "",
+          studentid: "",
+          student_name: "",
           sex: "",
-          nativePlace: "",
+          native_place: "",
           birthday: "",
-          maritalStatus: "",
+          marital_status: "",
           phone: "",
-          idNumber: "",
+          id_number: "",
           hiredate: "",
           college: "",
           major: "",
-          imagesDirectory: "",
+          images_directory: "",
           remarks: "",
           deptno: "",
           gradeid: "",
           jobname: ""
-
         },
+
         //入职后工作时长
         workMonth: "",
         workYear: "",
@@ -676,6 +711,10 @@
 
         //转正评价信息表单的声明
         formEvaInfo0: {
+          studentid: "",
+          evaluatorid:"",
+          deptno:"",
+          jobid:"",
           deptname: "",
           jobname: "",
           username: "",
@@ -685,13 +724,16 @@
           moral_quality: "",
           characters: "",
           work_year: "",
-          appraisal_socre: "",
+          appraisal_score: "",
           appraisal_content: ""
-
-
         },
+
         //一年评价信息表单的声明
         formEvaInfo1: {
+          studentid: "",
+          evaluatorid:"",
+          deptno:"",
+          jobid:"",
           deptname: "",
           jobname: "",
           username: "",
@@ -701,11 +743,15 @@
           moral_quality: "",
           characters: "",
           work_year: "",
-          appraisal_socre: "",
+          appraisal_score: "",
           appraisal_content: ""
         },
         //二年评价信息表单的声明
         formEvaInfo2: {
+          studentid: "",
+          evaluatorid:"",
+          deptno:"",
+          jobid:"",
           deptname: "",
           jobname: "",
           username: "",
@@ -715,11 +761,15 @@
           moral_quality: "",
           characters: "",
           work_year: "",
-          appraisal_socre: "",
+          appraisal_score: "",
           appraisal_content: ""
         },
         //三年评价信息表单的声明
         formEvaInfo3: {
+          evaluatorid:"",
+          studentid: "",
+          deptno:"",
+          jobid:"",
           deptname: "",
           jobname: "",
           username: "",
@@ -729,7 +779,7 @@
           moral_quality: "",
           characters: "",
           work_year: "",
-          appraisal_socre: "",
+          appraisal_score: "",
           appraisal_content: ""
         },
         //学校评价信息表单的声明
@@ -750,7 +800,29 @@
         /*显示文本默认显示宽度*/
         formLabelWidth: "80px",
 
-        rules: {},
+        rules: {
+          ability:[
+            {validator: checkItemScore, trigger: 'blur'}
+          ],
+          initiative:[
+            {validator: checkItemScore, trigger: 'blur'}
+          ],
+          communication:[
+            {validator: checkItemScore, trigger: 'blur'}
+          ],
+          moral_quality:[
+            {validator: checkItemScore, trigger: 'blur'}
+          ],
+          characters:[
+            {validator: checkItemScore, trigger: 'blur'}
+          ],
+          appraisal_score:[
+            {validator: checkTotalScore, trigger: 'blur'}
+          ],
+          appraisal_content:[
+            {required: true, message: '请输入评价', trigger: 'blur'}
+          ]
+        },
         //被选中的学生员工信息
         checkData: [],
         //标签页的活动页 （当前页）
@@ -804,13 +876,21 @@
         this.dialogFormVisible = false;
         //清空表单验证残余提示
         this.$nextTick(() => {
-          this.$refs['deptEvalutorsForm'].clearValidate()
+          this.$refs['studentEvaInfo0'].clearValidate()
+          this.$refs['studentEvaInfo1'].clearValidate()
+          this.$refs['studentEvaInfo2'].clearValidate()
+          this.$refs['studentEvaInfo3'].clearValidate()
         })
       },
 
       handleEdit: function (rowData) {
-
-    this.formEvaInfoSc = {};
+        this.$nextTick(() => {
+          this.$refs['studentEvaInfo0'].clearValidate()
+          this.$refs['studentEvaInfo1'].clearValidate()
+          this.$refs['studentEvaInfo2'].clearValidate()
+          this.$refs['studentEvaInfo3'].clearValidate()
+        })
+        this.formEvaInfoSc = {};
         this.formEvaInfo0 = {};
         this.formEvaInfo1 = {};
         this.formEvaInfo2 = {};
@@ -820,25 +900,44 @@
         this.dialogTitle = "员工评价";
         //根据员studentid获取员工的详细信息，展示到对话框
         axios.post("/getStudentAllInfoByStudentid", studentid).then(res => {
-          debugger
+          debugger;
 
           this.formEvaInfo0.username = sessionStorage.getItem("uname");
-          this.formEvaInfo0.deptname = res.data.studentInfo.deptno;
-          this.formEvaInfo0.jobname = res.data.studentInfo.jobid;
+          this.formEvaInfo0.evaluatorid = sessionStorage.getItem("userid");
+          this.formEvaInfo0.studentid = res.data.studentInfo.studentid;
+          this.formEvaInfo0.deptno = res.data.studentInfo.deptno;
+          this.formEvaInfo0.jobid = res.data.studentInfo.jobid;
+          this.formEvaInfo0.deptname = res.data.studentInfo.deptname;
+          this.formEvaInfo0.jobname = res.data.studentInfo.jobname;
+          this.formEvaInfo0.work_year = "0";
+
 
           this.formEvaInfo1.username = sessionStorage.getItem("uname");
-          this.formEvaInfo1.deptname = res.data.studentInfo.deptno;
+          this.formEvaInfo1.evaluatorid = sessionStorage.getItem("userid");
+          this.formEvaInfo1.studentid = res.data.studentInfo.studentid;
+          this.formEvaInfo1.deptno = res.data.studentInfo.deptno;
+          this.formEvaInfo1.jobid = res.data.studentInfo.jobid;
+          this.formEvaInfo1.deptname = res.data.studentInfo.deptname;
           this.formEvaInfo1.jobname = res.data.studentInfo.jobname;
+          this.formEvaInfo1.work_year = "1";
 
           this.formEvaInfo2.username = sessionStorage.getItem("uname");
-          this.formEvaInfo2.deptname = res.data.studentInfo.deptno;
+          this.formEvaInfo2.evaluatorid = sessionStorage.getItem("userid");
+          this.formEvaInfo2.studentid = res.data.studentInfo.studentid;
+          this.formEvaInfo2.deptno = res.data.studentInfo.deptno;
+          this.formEvaInfo2.jobid = res.data.studentInfo.jobid;
+          this.formEvaInfo2.deptname = res.data.studentInfo.deptname;
           this.formEvaInfo2.jobname = res.data.studentInfo.jobname;
+          this.formEvaInfo2.work_year = "2";
 
           this.formEvaInfo3.username = sessionStorage.getItem("uname");
-          this.formEvaInfo3.deptname = res.data.studentInfo.deptno;
+          this.formEvaInfo3.evaluatorid = sessionStorage.getItem("userid");
+          this.formEvaInfo3.studentid = res.data.studentInfo.studentid;
+          this.formEvaInfo3.deptno = res.data.studentInfo.deptno;
+          this.formEvaInfo3.jobid = res.data.studentInfo.jobid;
+          this.formEvaInfo3.deptname = res.data.studentInfo.deptname;
           this.formEvaInfo3.jobname = res.data.studentInfo.jobname;
-
-
+          this.formEvaInfo3.work_year = "3";
 
           this.formInfo = res.data.studentInfo;
           this.formEvaInfoSc = res.data.studentEvaInfoSc == null ? this.formEvaInfoSc : res.data.studentEvaInfoSc;
@@ -861,13 +960,11 @@
             this.disabled2 = true;
             this.disabled3 = true;
             //可编辑转正
-            if (this.formEvaInfo0 == null) {
+            if (this.formEvaInfo0.appraisal_score == null) {
               this.readZero = false;
               this.activeName = "zero";
-
-
             } else {
-              this.readThird = true;
+              this.readZero = true;
               this.activeName = "school";
             }
             this.readFirst = true;
@@ -880,15 +977,18 @@
             this.disabled1 = false;
             this.disabled2 = true;
             this.disabled3 = true;
-
-
-            this.readZero = true;
             //是空可以评价，评价之后不能再次编辑
-            if (this.formEvaInfo1 == null) {
+            if (this.formEvaInfo0.appraisal_score == null) {
+              this.readZero = false;
+            } else {
+              this.readZero = true;
+            }
+            //是空可以评价，评价之后不能再次编辑
+            if (this.formEvaInfo1.appraisal_score == null) {
               this.readFirst = false;
               this.activeName = "first"
             } else {
-              this.readThird = true;
+              this.readFirst = true;
               this.activeName = "school";
             }
             this.readSecond = true;
@@ -900,29 +1000,88 @@
             this.disabled1 = false;
             this.disabled2 = false;
             this.disabled3 = true;
-
-
-            this.readZero = true;
-            this.readFirst = true;
             //是空可以评价，评价之后不能再次编辑
-            if (this.formEvaInfo2 == null) {
+            if (this.formEvaInfo0.appraisal_score == null) {
+              this.readZero = false;
+            } else {
+              this.readZero = true;
+            }
+            //是空可以评价，评价之后不能再次编辑
+            if (this.formEvaInfo1.appraisal_score == null) {
+              this.readFirst = false;
+            } else {
+              this.readFirst = true;
+            }
+            //是空可以评价，评价之后不能再次编辑
+            if (this.formEvaInfo2.appraisal_score == null) {
               this.readSecond = false;
               this.activeName = "second"
             } else {
-              this.readThird = true;
+              this.readSecond = true;
               this.activeName = "school";
             }
             this.readThird = true;
-          } else {
+          } else if (this.workMonth < 48) {
             this.disabled0 = false;
             this.disabled1 = false;
             this.disabled2 = false;
             this.disabled3 = false;
 
-            this.readZero = true;
-            this.readFirst = true;
-            this.readSecond = true;
-            if (this.formEvaInfo3 == null) {
+            //是空可以评价，评价之后不能再次编辑
+            if (this.formEvaInfo0.appraisal_score == null) {
+              this.readZero = false;
+            } else {
+              this.readZero = true;
+            }
+            //是空可以评价，评价之后不能再次编辑
+            if (this.formEvaInfo1.appraisal_score == null) {
+              this.readFirst = false;
+            } else {
+              this.readFirst = true;
+            }
+            //是空可以评价，评价之后不能再次编辑
+            if (this.formEvaInfo2.appraisal_score == null) {
+              this.readSecond = false;
+            } else {
+              this.readSecond = true;
+            }
+            //是空可以评价，评价之后不能再次编辑
+            if (this.formEvaInfo3.appraisal_score == null) {
+              this.readThird = false;
+              this.activeName = "third"
+            } else {
+              this.readThird = true;
+              this.activeName = "school";
+            }
+          }else {
+            this.disabled0 = false;
+            this.disabled1 = false;
+            this.disabled2 = false;
+            this.disabled3 = false;
+
+            //是空可以评价，评价之后不能再次编辑
+            if (this.formEvaInfo0.appraisal_score == null) {
+              this.readZero = false;
+            } else {
+              this.readZero = true;
+            }
+            //是空可以评价，评价之后不能再次编辑
+            if (this.formEvaInfo1.appraisal_score == null) {
+              this.readFirst = false;
+            } else {
+              this.readFirst = true;
+            }
+            //是空可以评价，评价之后不能再次编辑
+            if (this.formEvaInfo2.appraisal_score == null) {
+              this.readSecond = false;
+            } else {
+              this.readSecond = true;
+            }
+            debugger
+            var a =  this.formEvaInfo3.appraisal_score;
+            //是空可以评价，评价之后不能再次编辑
+            if (this.formEvaInfo3.appraisal_score == null) {
+
               this.readThird = false;
               this.activeName = "third"
             } else {
@@ -931,17 +1090,110 @@
             }
           }
 
-
           this.dialogFormVisible = true;
 
 
         })
       },
 
-      saveFormEvaInfo: function () {
+      saveFormEvaInfo0: function () {
+        //表单验证
+        this.$refs["studentEvaInfo0"].validate((valid) => {
+          if (valid) {
+            axios.post("/addOrUpdDeptEvaluation", this.formEvaInfo0).then(res => {
+              if (res.data == "success") {
+                this.getStudents();
+                this.readZero= true,
+                this.$message({
+                  message: "评价成功",
+                  type: "success"
+                })
+              } else {
+                this.dialogFormVisible = false;
+                this.getStudents();
+                this.$message({
+                  message: "评价失败",
+                  type: "error"
+                })
+              }
+            })
+          }
+        })
+      },
 
-      }
-      ,
+      saveFormEvaInfo1: function () {
+        //表单验证
+        this.$refs["studentEvaInfo1"].validate((valid) => {
+          if (valid) {
+            axios.post("/addOrUpdDeptEvaluation", this.formEvaInfo1).then(res => {
+              if (res.data == "success") {
+                this.getStudents();
+                this.readFirst= true;
+                this.$message({
+                  message: "评价成功",
+                  type: "success"
+                })
+              } else {
+                this.getStudents();
+                this.$message({
+                  message: "评价失败",
+                  type: "error"
+                })
+              }
+            })
+          }
+        })
+      },
+
+      saveFormEvaInfo2: function () {
+        //表单验证
+        this.$refs["studentEvaInfo2"].validate((valid) => {
+          if (valid) {
+            axios.post("/addOrUpdDeptEvaluation", this.formEvaInfo2).then(res => {
+              if (res.data == "success") {
+                this.getStudents();
+                this.readSecond =true;
+                this.$message({
+                  message: "评价成功",
+                  type: "success"
+                })
+              } else {
+                this.getStudents();
+                this.$message({
+                  message: "评价失败",
+                  type: "error"
+                })
+              }
+            })
+          }
+        })
+      },
+
+      saveFormEvaInfo3: function () {
+        //表单验证
+        this.$refs["studentEvaInfo3"].validate((valid) => {
+          if (valid) {
+            axios.post("/addOrUpdDeptEvaluation", this.formEvaInfo3).then(res => {
+              if (res.data == "success") {
+                this.readThird= true,
+                this.getStudents();
+                this.$message({
+                  message: "评价成功",
+                  type: "success"
+                })
+              } else {
+                this.getStudents();
+                this.$message({
+                  message: "评价失败",
+                  type: "error"
+                })
+              }
+            })
+          }
+        })
+      },
+
+
       handleSelectionChange: function (val) {
         //被选中的数据：行对象数组
         this.checkData = val;
@@ -1010,22 +1262,3 @@
   }
 
 </style>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

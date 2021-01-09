@@ -35,8 +35,6 @@
               </el-radio>
             </el-form-item>
 
-
-
             <el-form-item label="年龄" :label-width="formLabelWidth" prop="age">
               <el-input v-model.number="form.age" autocomplete="off" style="width: 370px">
                 <i slot="prefix" class="el-input__icon el-icon-date"></i>
@@ -189,8 +187,7 @@
     data() {
       //自定义表单验证
       var checkAge = function (rule, value, callback) {
-
-        if (value === '') {
+        if (value == '') {
           callback(new Error('请输入年龄'));
         } else {
           if (!Number.isInteger(value)) {
@@ -283,8 +280,6 @@
           ],
           phone: [
             {validator: checkPhone, trigger: 'blur'},
-
-
           ],
         },
         //被选中的部门信息
@@ -366,7 +361,7 @@
       },
 
       addDeptEvaluator: function () {
-        //清空表单验证残余提示
+        //表单验证
         this.$refs["deptEvalutorsForm"].validate((valid) => {
           if (valid) {
             axios.post("/addOrUpdDeptEvaluator", this.form).then(res => {
