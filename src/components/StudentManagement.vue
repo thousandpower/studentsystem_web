@@ -15,20 +15,20 @@
         </div>
         <el-dialog :title="dialogTitle" :visible.sync="dialogFormVisible" :modal-append-to-body="false" :width="'70%'"
                    :top="'3%'">
-            <el-form :model="form" ref="ruleForm" label-position="right" :rules="rules" style="height: 520px">
-                <el-form-item label="员工编号" style="display: none">
-                    <el-input v-model="form.studentid"></el-input>
+            <el-form :model="studentForm" ref="ruleForm" label-position="right" :rules="rules" style="height: 520px">
+                <el-form-item label="学员编号" style="display: none">
+                    <el-input v-model="studentForm.studentid"></el-input>
                 </el-form-item>
                 <el-col :span="7">
                     <el-form-item label="姓名" prop="studentName" :label-width="formLabelWidth">
-                        <el-input v-model="form.studentName" placeholder="请输入姓名" style="width: 300px"></el-input>
+                        <el-input v-model="studentForm.studentName" placeholder="请输入姓名" style="width: 300px"></el-input>
                     </el-form-item>
                     <el-form-item label="民族" prop="nation" :label-width="formLabelWidth">
-                        <el-input v-model="form.nation" placeholder="请输入民族" style="width: 300px"></el-input>
+                        <el-input v-model="studentForm.nation" placeholder="请输入民族" style="width: 300px"></el-input>
                     </el-form-item>
                     <el-form-item label="出生日期" prop="birthday" :label-width="formLabelWidth">
                         <el-date-picker
-                                v-model="form.birthday"
+                                v-model="studentForm.birthday"
                                 type="date"
                                 format="yyyy-MM-dd"
                                 value-format="yyyy-MM-dd"
@@ -36,26 +36,26 @@
                         </el-date-picker>
                     </el-form-item>
                     <el-form-item label="联系电话" prop="phone" :label-width="formLabelWidth">
-                        <el-input v-model="form.phone" placeholder="请输入联系电话" style="width: 300px"></el-input>
+                        <el-input v-model="studentForm.phone" placeholder="请输入联系电话" style="width: 300px"></el-input>
                     </el-form-item>
                     <el-form-item label="毕业院校" prop="college" :label-width="formLabelWidth">
-                        <el-input v-model="form.college" placeholder="请输入毕业院校" style="width: 300px"></el-input>
+                        <el-input v-model="studentForm.college" placeholder="请输入毕业院校" style="width: 300px"></el-input>
                     </el-form-item>
                     <el-form-item label="班期" prop="gradeid" :label-width="formLabelWidth">
-                        <el-select v-model="form.gradeid" placeholder="请选择班期" style="width: 300px">
+                        <el-select v-model="studentForm.gradeid" placeholder="请选择班期" style="width: 300px">
                             <el-option v-for="item in gradeData" :key="item" :value="item" :label="item"></el-option>
                         </el-select>
                     </el-form-item>
                 </el-col>
                 <el-col :span="7" :offset="2">
                     <el-form-item label="性别" :label-width="formLabelWidth">
-                        <el-radio-group v-model="form.sex">
-                            <el-radio-button :label="0">男</el-radio-button>
-                            <el-radio-button :label="1">女</el-radio-button>
+                        <el-radio-group v-model="studentForm.sex" >
+                            <el-radio value="0" name="sex" :label="0">男</el-radio>
+                            <el-radio value="1" name="sex" :label="1">女</el-radio>
                         </el-radio-group>
                     </el-form-item>
                     <el-form-item label="婚否" prop="maritalStatus" :label-width="formLabelWidth">
-                        <el-select v-model="form.maritalStatus" placeholder="请选择婚否" style="width: 300px">
+                        <el-select v-model="studentForm.maritalStatus" placeholder="请选择婚否" style="width: 300px">
                             <el-option :value="0" label="未婚"></el-option>
                             <el-option :value="1" label="已婚"></el-option>
                             <el-option :value="2" label="丧偶"></el-option>
@@ -63,33 +63,31 @@
                         </el-select>
                     </el-form-item>
                     <el-form-item label="籍贯" prop="nativePlace" :label-width="formLabelWidth">
-                        <el-input v-model="form.nativePlace" placeholder="请输入籍贯" style="width: 300px"></el-input>
+                        <el-input v-model="studentForm.nativePlace" placeholder="请输入籍贯" style="width: 300px"></el-input>
                     </el-form-item>
                     <el-form-item label="身份证号" prop="idNumber" :label-width="formLabelWidth">
-                        <el-input v-model="form.idNumber" placeholder="请输入身份证号" style="width: 300px"></el-input>
+                        <el-input v-model="studentForm.idNumber" placeholder="请输入身份证号" style="width: 300px"></el-input>
                     </el-form-item>
                     <el-form-item label="专业" prop="major" :label-width="formLabelWidth">
-                        <el-input v-model="form.major" placeholder="请输入专业" style="width: 300px"></el-input>
+                        <el-input v-model="studentForm.major" placeholder="请输入专业" style="width: 300px"></el-input>
                     </el-form-item>
                     <el-form-item label="职务" :label-width="formLabelWidth" style="visibility: hidden">
-                        <el-input v-model="form.jobid" placeholder="请输入职务" style="width: 300px" readonly></el-input>
+                        <el-input v-model="studentForm.jobid" placeholder="请输入职务" style="width: 300px" readonly></el-input>
                     </el-form-item>
                 </el-col>
-                <el-form-item style="display: none">
-                    <el-input v-model="form.imagesDirectory"></el-input>
-                </el-form-item>
                 <el-col :span="4" :offset="3">
-                    <div>
+                    <span>个人证件照</span>
                         <el-upload
                                 class="avatar-uploader"
-                                action="http://localhost:8087/upload"
+                                action="http://localhost:8087/upload/"
                                 :show-file-list="false"
                                 :on-success="handleAvatarSuccess"
                                 :before-upload="beforeAvatarUpload">
-                            <img v-if="form.imagesDirectory" :src="form.imagesDirectory" class="avatar">
-                            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                            <div style="border-style: dashed;border-color: #4A5064;border-width:1px">
+                                <img v-if="studentForm.imagesDirectory" :src="studentForm.imagesDirectory" class="avatar">
+                                <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                            </div>
                         </el-upload>
-                    </div>
                 </el-col>
                 <el-col :span="16">
                     <el-form-item label="备注" :label-width="formLabelWidth">
@@ -97,7 +95,7 @@
                                 type="textarea"
                                 :rows="4"
                                 placeholder="请输入内容"
-                                v-model="form.remarks"
+                                v-model="studentForm.remarks"
                                 align="center"
                                 style="width: 690px"
                                 class="el-row">
@@ -253,7 +251,7 @@
                     limit: 8,
                     page: 1,
                     filter: "",
-                    gradeid:""
+                    gradeid: ""
                 },
                 //总条数
                 total: 0,
@@ -285,7 +283,7 @@
                 dialogTitle: "新增学员",
                 //控制对话框的显示和隐藏
                 dialogFormVisible: false,
-                form: {
+                studentForm: {
                     studentid: "",
                     studentName: "",
                     birthday: "",
@@ -298,7 +296,7 @@
                     nation: "",
                     remarks: "",
                     gradeid: "",
-                    jobid: "5",
+                    jobid: "0",
                     imagesDirectory: ""
                 },
                 //设置文本显示宽度
@@ -398,11 +396,11 @@
             },
             showAdd: function () {
                 this.dialogTitle = "新增学员";
-                this.form = {};
-                this.form.sex = '0';
-                this.form.maritalStatus = 0;
-                this.form.jobid = '5';
                 this.dialogFormVisible = true;
+                this.studentForm = {};
+                this.studentForm.sex = '0';
+                this.studentForm.maritalStatus = 0;
+                this.studentForm.jobid = '0';
             },
             handleSelectionChange: function (val) {
                 //被选中的数据：行对象数组
@@ -484,9 +482,9 @@
             cancelThisDialog: function () {
                 //清空表单
                 this.form = {};
-                this.form.sex = '0';
-                this.form.maritalStatus = 0;
-                this.form.jobid = '5';
+                this.studentForm.sex = '0';
+                this.studentForm.maritalStatus = 0;
+                this.studentForm.jobid = '0';
                 //关闭弹框
                 this.dialogFormVisible = false;
             },
@@ -497,17 +495,23 @@
                 if (this.dialogTitle === "新增学员") {
                     this.$refs["ruleForm"].validate((valid) => {
                         if (valid) {
-                            axios.post("/saveThisStudent", this.form).then(res => {
+                            axios.post("/saveThisStudent", this.studentForm).then(res => {
                                 if (res.data === "success") {
                                     this.dialogFormVisible = false;
-                                    this.form = {};
+                                    this.studentForm = {};
+                                    this.studentForm.sex = '0';
+                                    this.studentForm.maritalStatus = 0;
+                                    this.studentForm.jobid = '0';
                                     this.getAllStudent();
                                     this.$message({
                                         message: "新增成功",
                                         type: "success"
                                     });
                                 } else {
-                                    this.form = {};
+                                    this.studentForm = {};
+                                    this.studentForm.sex = '0';
+                                    this.studentForm.maritalStatus = 0;
+                                    this.studentForm.jobid = '0';
                                     this.dialogFormVisible = false;
                                     this.getAllStudent();
                                     this.$message({
@@ -521,10 +525,10 @@
                 } else {
                     this.$refs["ruleForm"].validate((valid) => {
                         if (valid) {
-                            axios.post("/editThisStudent", this.form).then(res => {
+                            axios.post("/editThisStudent", this.studentForm).then(res => {
                                 if (res.data === "success") {
                                     this.dialogFormVisible = false;
-                                    this.form = {};
+                                    this.studentForm = {};
                                     this.getAllStudent();
                                     this.$message({
                                         message: "修改成功",
@@ -546,7 +550,7 @@
             },
             //上传成功的钩子
             handleAvatarSuccess(res) {
-                this.form.imagesDirectory = 'http://localhost:8087/upload/' + res;
+                this.studentForm.imagesDirectory = 'http://localhost:8087/upload/' + res;
             },
             beforeAvatarUpload(file) {
                 const isJPG = file.type === 'image/jpeg';
@@ -563,7 +567,7 @@
             handleEdit: function (rowData) {
                 this.dialogTitle = "编辑学员";
                 axios.get("/getMyInform/" + rowData.studentid).then(res => {
-                    this.form = res.data.data;
+                    this.studentForm = res.data.data;
                     this.dialogFormVisible = true;
                 })
             },
@@ -572,6 +576,7 @@
                     this.$router.push("/");
                 }
             },
+
         },
         mounted() {
             this.getAllStudent();

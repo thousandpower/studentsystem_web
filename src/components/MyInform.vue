@@ -31,10 +31,10 @@
             <el-col :span="7" :offset="2">
                 <el-form-item label="性别" :label-width="formLabelWidth">
                     <el-radio-group v-model="form.sex">
-                        <el-radio-button :label="0">男</el-radio-button>
-                        <el-radio-button :label="1">女</el-radio-button>
-                        <!--                        <el-radio :label="0">男</el-radio>-->
-                        <!--                        <el-radio :label="1">女</el-radio>-->
+<!--                        <el-radio-button :label="0">男</el-radio-button>-->
+                        <!--                        <el-radio-button :label="1">女</el-radio-button>-->
+                        <el-radio :label="0">男</el-radio>
+                        <el-radio :label="1">女</el-radio>
                     </el-radio-group>
                 </el-form-item>
                 <el-form-item label="婚否" prop="maritalStatus" :label-width="formLabelWidth">
@@ -58,15 +58,18 @@
             <el-form-item style="display: none">
                 <el-input v-model="form.imagesDirectory"></el-input>
             </el-form-item>
-            <el-col :span="3" :offset="2">
+            <el-col :span="4" :offset="2">
+                <span>个人证件照</span>
                 <el-upload
                         class="avatar-uploader"
                         action="http://localhost:8087/upload"
                         :show-file-list="false"
                         :on-success="handleAvatarSuccess"
                         :before-upload="beforeAvatarUpload">
-                    <img v-if="form.imagesDirectory" :src="form.imagesDirectory" class="avatar">
-                    <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                    <div style="border-style: dashed;border-color: #4A5064;border-width:1px">
+                        <img v-if="form.imagesDirectory" :src="form.imagesDirectory" class="avatar">
+                        <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                    </div>
                 </el-upload>
             </el-col>
             <el-col :span="16" :offset="1">
@@ -83,7 +86,7 @@
                     </el-input>
                 </el-form-item>
             </el-col>
-            <el-col :span="24">
+            <el-col :span="24" style="margin-top: 50px">
                 <el-button type="primary" @click="editMyInform">保 存</el-button>
                 <el-button @click="cancelMyEdit">取 消</el-button>
             </el-col>
@@ -114,7 +117,7 @@
                     nation: "",
                     remarks: "",
                     gradeid: "",
-                    imagesDirectory: ""
+                    imagesDirectory: "1"
                 },
                 rules: {
                     studentName: [
@@ -123,7 +126,7 @@
                     phone: [
                         {required: true, message: '联系电话不能为空', trigger: 'blur'},
                         {
-                            pattern:  /^1[0-9]{10}$/,
+                            pattern: /^1[0-9]{10}$/,
                             message: '请输入正确的手机号码',
                             trigger: 'blur'
                         }
@@ -157,7 +160,7 @@
             },
             //上传成功的钩子
             handleAvatarSuccess(res) {
-                this.form.imagesDirectory ='http://localhost:8087/upload/'+res;
+                this.form.imagesDirectory = 'http://localhost:8087/upload/' + res;
             },
             beforeAvatarUpload(file) {
                 const isJPG = file.type === 'image/jpeg';

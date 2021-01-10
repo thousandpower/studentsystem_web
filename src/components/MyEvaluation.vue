@@ -93,7 +93,7 @@
                             <td v-else>{{beginList.moral_quality}}</td>
                             <td v-if="beginList.characters < 60" style="color: red">{{beginList.characters}}</td>
                             <td v-else>{{beginList.characters}}</td>
-                            <td v-if="beginList.appraisal_score < 60" style="color: red">{{beginList.appraisal_score}}</td>
+                            <td v-if="beginList.appraisal_score < 3" style="color: red">{{beginList.appraisal_score}}</td>
                             <td v-else>{{beginList.appraisal_score}}</td>
                         </tr>
                         <tr>
@@ -145,7 +145,7 @@
                             <td v-else>{{firstList.moral_quality}}</td>
                             <td v-if="firstList.characters < 60" style="color: red">{{firstList.characters}}</td>
                             <td v-else>{{firstList.characters}}</td>
-                            <td v-if="firstList.appraisal_score < 60" style="color: red">{{firstList.appraisal_score}}</td>
+                            <td v-if="firstList.appraisal_score < 3" style="color: red">{{firstList.appraisal_score}}</td>
                             <td v-else>{{firstList.appraisal_score}}</td>
                         </tr>
                         <tr>
@@ -197,7 +197,7 @@
                             <td v-else>{{secondList.moral_quality}}</td>
                             <td v-if="secondList.characters < 60" style="color: red">{{secondList.characters}}</td>
                             <td v-else>{{secondList.characters}}</td>
-                            <td v-if="secondList.appraisal_score < 60" style="color: red">{{secondList.appraisal_score}}</td>
+                            <td v-if="secondList.appraisal_score < 3" style="color: red">{{secondList.appraisal_score}}</td>
                             <td v-else>{{secondList.appraisal_score}}</td>
                         </tr>
                         <tr>
@@ -249,7 +249,7 @@
                             <td v-else>{{thirdList.moral_quality}}</td>
                             <td v-if="thirdList.characters < 60" style="color: red">{{thirdList.characters}}</td>
                             <td v-else>{{thirdList.characters}}</td>
-                            <td v-if="thirdList.appraisal_score < 60" style="color: red">{{thirdList.appraisal_score}}</td>
+                            <td v-if="thirdList.appraisal_score < 3" style="color: red">{{thirdList.appraisal_score}}</td>
                             <td v-else>{{thirdList.appraisal_score}}</td>
                         </tr>
                         <tr>
