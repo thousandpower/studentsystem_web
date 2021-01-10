@@ -171,6 +171,9 @@
     },
 
     methods: {
+      /**
+       * 全部获取部门信息
+       */
       getDepts: function () {
         //用于获取全部的部门信息
         axios.post("/getDepts", this.listQuery).then(res => {
@@ -249,6 +252,10 @@
         })
       },
 
+      /**
+       * 编辑
+       * @param rowData
+       */
       handleEdit: function (rowData) {
         //清空表单验证残余提示
         this.$nextTick( ()=> {
@@ -264,6 +271,10 @@
         })
       },
 
+      /**
+       * 单个删除
+       * @param rowData
+       */
       handleDelete: function (rowData) {
         this.$confirm('确认删除选中的记录吗？', '提示', {
           confirmButtonText: '确定',
@@ -293,7 +304,9 @@
         this.checkData = val;
       },
 
-
+      /**
+       * 批量删除
+       */
       delBatch: function () {
         if (this.checkData.length == 0) {
           this.$message({

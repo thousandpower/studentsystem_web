@@ -883,6 +883,7 @@
         })
       },
 
+      //打分
       handleEdit: function (rowData) {
         this.$nextTick(() => {
           this.$refs['studentEvaInfo0'].clearValidate()
@@ -1095,7 +1096,9 @@
 
         })
       },
-
+      /**
+       * 保存转正评价
+       */
       saveFormEvaInfo0: function () {
         //表单验证
         this.$refs["studentEvaInfo0"].validate((valid) => {
@@ -1120,7 +1123,9 @@
           }
         })
       },
-
+      /**
+       * 保存一年评价
+       */
       saveFormEvaInfo1: function () {
         //表单验证
         this.$refs["studentEvaInfo1"].validate((valid) => {
@@ -1144,7 +1149,9 @@
           }
         })
       },
-
+      /**
+       * 保存二年评价
+       */
       saveFormEvaInfo2: function () {
         //表单验证
         this.$refs["studentEvaInfo2"].validate((valid) => {
@@ -1168,7 +1175,9 @@
           }
         })
       },
-
+      /**
+       * 保存三年评价
+       */
       saveFormEvaInfo3: function () {
         //表单验证
         this.$refs["studentEvaInfo3"].validate((valid) => {
@@ -1245,7 +1254,7 @@
     background-image: none;
     border-radius: 4px;
     border: 0px;
-  / / 改成0，边框就消失了！ width: 100 %;
+     width: 100%;
   }
 
   .paperview-input-textarea >>> .el-textarea__inner {
@@ -1253,11 +1262,10 @@
     background-color: #FFF;
     background-image: none;
     border-radius: 4px;
-    text-align: center;
     vertical-align: middle;
     font-size: 19px;
     border: 0px;
-  / / 改成0，边框就消失了！ width: 100 %;
+    width: 100%;
     resize: none;
   }
 

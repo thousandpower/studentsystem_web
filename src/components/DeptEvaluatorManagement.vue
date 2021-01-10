@@ -68,9 +68,7 @@
           </div>
         </el-dialog>
 
-
         <br>
-
         <el-table
           :data="tableData"
           border
@@ -79,7 +77,6 @@
           style="width: 100%"
           @selection-change="handleSelectionChange"
         >
-
 
           <el-table-column
             type="index"
@@ -103,8 +100,6 @@
             align="center"
             header-align="center"
             :formatter="formatSex">
-
-
           </el-table-column>
 
           <el-table-column
@@ -123,7 +118,6 @@
             header-align="center">
           </el-table-column>
 
-
           <el-table-column
             prop="deptname"
             label="所属部门"
@@ -131,14 +125,12 @@
             align="center">
           </el-table-column>
 
-
           <el-table-column
             prop="jobname"
             label="职务"
             width="170"
             align="center">
           </el-table-column>
-
 
           <el-table-column
             label="操作"
@@ -203,7 +195,6 @@
       };
 
       var checkPhone = function (rule, value, callback) {
-
         if (value == undefined) {
           callback(new Error('手机号不能为空'))
         } else {
@@ -288,14 +279,15 @@
     },
 
     methods: {
+      /**
+       * 获取部门评价人
+       */
       getDeptEvaluators: function () {
-
         //用于获取全部的部门评价人信息
         axios.post("/getDeptEvaluators", this.listQuery).then(res => {
           //res.data返回的是对象数组
           this.tableData = res.data.deptEvaluators;
           this.total = res.data.total;
-
         });
       },
       //获取全部的部门信息
@@ -312,7 +304,9 @@
         })
       },
 
-
+      /**
+       * 查询
+       */
       queryDeptEvaluators: function () {
         //设置传递到后台的代码为1
         this.listQuery.page = 1;
@@ -320,6 +314,10 @@
         this.page.currentPage = 1; //默认显示第一页
       },
 
+      /**
+       *
+       * @param val
+       */
       handleSizeChange: function (val) {
         //当每页显示条数发生变化时，触发该事件
         //需要根据当前参数重新去后台查询数据
@@ -360,6 +358,9 @@
         })
       },
 
+      /**
+       * 新增部门评价人
+       */
       addDeptEvaluator: function () {
         //表单验证
         this.$refs["deptEvalutorsForm"].validate((valid) => {
@@ -387,6 +388,10 @@
         })
       },
 
+      /**
+       * 点击编辑按钮
+       * @param rowData
+       */
       handleEdit: function (rowData) {
         //清空表单验证残余提示
         this.$nextTick(() => {
@@ -402,16 +407,17 @@
         })
       },
 
+      /**
+       * 单个删除
+       * @param rowData
+       */
       handleDelete: function (rowData) {
         this.$confirm('确认删除选中的记录吗？', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => { //确定
-
-
           axios.post("/delDeptEvaluatorById", rowData.evaluatorid).then(res => {
-
             if (res.data == "success") {
               //更新列表
               this.queryDeptEvaluators()
