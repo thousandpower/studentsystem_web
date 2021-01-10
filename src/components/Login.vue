@@ -70,7 +70,7 @@
                                 sessionStorage.setItem("user",this.form.userid);
                                 this.$store.dispatch("setUser",this.form.userid);
                                 this.$router.push({
-                                    path: "/deptMaintain",
+                                    path: "/",
                                 });
                                 this.$message({
                                     message: "登录成功",
