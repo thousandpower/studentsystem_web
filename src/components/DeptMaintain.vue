@@ -1,7 +1,7 @@
 <template>
   <div>
+    <h1>部门维护表</h1>
     <el-container>
-      <el-header><h1>部门维护表</h1></el-header>
 
       <el-main>
         <div align="left" style="float: left">
@@ -81,7 +81,7 @@
           <el-table-column
 
             label="操作"
-            width="170" align="center">
+             align="center">
             <template slot-scope="scope">
               <!--<el-button type="text" @click="handleEdit(scope.row)">编辑</el-button>-->
               <el-button
@@ -305,7 +305,7 @@
       },
 
       /**
-       * 批量删除
+       * pils
        */
       delBatch: function () {
         if (this.checkData.length == 0) {

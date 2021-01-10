@@ -5,15 +5,14 @@ import Router from 'vue-router'
 import Home from '@/components/Home'
 import DeptMaintain from '@/components/DeptMaintain'
 import DeptEvaluatorManagement from '@/components/DeptEvaluatorManagement'
+import resetPwd from '@/components/resetPwd'
+import MyInform from "@/components/MyInform";
+import MyEvaluation from "@/components/MyEvaluation";
 import Login from "@/components/Login";
 import editPwd from '@/components/editPwd'
 import StudentManagement from '@/components/StudentManagement'
 import Welcome from '@/components/Welcome'
 import StudentEvaluation from '@/components/StudentEvaluation'
-import test from '@/components/test'
-import test1 from '@/components/test1'
-
-
 
 
 
@@ -21,18 +20,6 @@ Vue.use(Router)
 
 export default new Router({
   routes: [
-    {
-      path:"/test",
-      name:"test",
-      component:test
-    },
-        {
-      path:"/test1",
-      name:"test1",
-      component:test1
-    },
-
-
     {
       path: '/',
       name: 'Login',
@@ -42,21 +29,25 @@ export default new Router({
       path: '/Home',
       name: 'Home',
       component: Home,
-      redirect:"/Welcome",
+      redirect: "/Welcome",
       children: [
+        {path: '/studentManagement', component: StudentManagement},
+        {path: '/changePassword', component: editPwd},
+        {path: '/selfinfoMaintain', component: MyInform},
+        {path: '/selfEvaluation', component: MyEvaluation},
+        {path: '/resetPassword', component: resetPwd},
         {path: '/deptMaintain', component: DeptMaintain},
         {path: '/studentManagement', component: StudentManagement},
-        {path:'/changePassword',component: editPwd},
+        {path: '/changePassword', component: editPwd},
         {path: '/deptevaluatorManagement', component: DeptEvaluatorManagement},
         {path: '/Welcome', component: Welcome},
         //学生评价
-        {path: '/studentEvaluation', component: StudentEvaluation},
-
-
-
+        {path: '/studentEvaluation', component: StudentEvaluation}
       ]
 
     },
+
+
 
   ]
 })

@@ -1,8 +1,8 @@
 <template>
-  <div>
-    <el-container>
-      <el-header><h1>项目评价人管理</h1></el-header>
 
+  <div>
+    <h1>项目评价人管理</h1>
+    <el-container>
       <el-main>
         <div align="left" style="float: left">
           <el-input v-model="listQuery.filter" placeholeder="请输入部门评价人姓名" style="width: 200px;">
@@ -73,7 +73,7 @@
           :data="tableData"
           border
           stripe
-          height="582"
+          height="572"
           style="width: 100%"
           @selection-change="handleSelectionChange"
         >
@@ -134,7 +134,7 @@
 
           <el-table-column
             label="操作"
-            width="170" align="center">
+           align="center">
             <template slot-scope="scope">
               <el-button
                 type="primary"

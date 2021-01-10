@@ -8,10 +8,10 @@
           <span>学员成长跟踪系统</span>
         </div>
 
-         <span style="margin: 50px -1300px 50px 0">{{uname}}</span>
+        <span style="margin: 50px -1300px 50px 0">{{uname}}</span>
 
 
-        <el-button size="mini">安全退出</el-button>
+        <el-button size="mini"  @click="exitThisSystem" >安全退出</el-button>
       </el-header>
 
 
@@ -27,9 +27,10 @@
               <template slot="title"><span>
                   {{menu.title}}
                 </span> </template>
-
             </el-menu-item>
-
+            <template>
+              <el-menu-item  @click="exitThisSystem">退出</el-menu-item>
+            </template>
           </el-menu>
         </el-aside>
         <el-main>
@@ -46,6 +47,7 @@
 
 <script>
   import axios from "axios"
+  import Welcome from "./Welcome";
 
 
   export default {
@@ -55,7 +57,7 @@
         uname:"",//存储从sessionStorage中的用户名
         menuList: [],
         isCollapse:false,
-        activePath :"/DeptEvaluatorManagement"
+        activePath :"/Welcome"
       }
     },
 
@@ -77,10 +79,30 @@
       saveNavState:function (activePath) {
         this.activePath = activePath;
         sessionStorage.setItem('activePath',activePath);
-      }
+      },
+      exitThisSystem: function () {
+        this.$confirm('确认退出吗？', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$message({
+            type: 'success',
+            message: '退出成功!',
+          });
+          //清空session
+          sessionStorage.clear();
+          //  跳转到登录
+          this.$router.push('/')
+        }).catch(() => {
+
+        });
+      },
     },
 
+
     created() {
+
       this.getMenuList();
       this.activePath = sessionStorage.getItem("activePath")
       //从sessionStroage中获取用户名
