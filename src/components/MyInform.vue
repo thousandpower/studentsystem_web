@@ -174,15 +174,11 @@
                 }
                 return isJPG && isLt2M;
             },
-            isLogin: function () {
-                if (!sessionStorage.getItem("user")) {
-                    this.$router.push("/");
-                }
-            },
+
         },
         mounted() {
             this.getMyInform();
-            this.isLogin();
+
         }
     }
 </script>

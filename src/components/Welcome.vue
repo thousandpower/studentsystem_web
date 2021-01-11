@@ -1,9 +1,9 @@
 <template>
 
-  <div style="height:545px;font-size: 24px">
-    <div style="height: 200px;width: 800px;text-align: left;margin-left: 200px;" >
+  <div style="height:645px;font-size: 24px;margin-top: 120px">
+    <div style="height: 200px;width: 820px;text-align: left;margin-left: 200px;">
       <h1 style="font-size: 36px">欢迎登陆金桥学员成长跟踪系统</h1>
-      <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;现代信息产业股份有限公司，
+      <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;金现代信息产业股份有限公司，
         是一家为电力、铁路、石化等行业提供信息化解决方案的高新技术企业，
         是国家规划布局内重点软件企业、国家高新技术企业、国家火炬计划软件产业基地骨干企业、
         中国区域卓越IT服务商、双软认证企业、山东省优秀软件企业、
@@ -14,22 +14,29 @@
   </div>
 
 
-
 </template>
 
 <script>
-    export default {
-        name: "Welcome",
-      data(){
-          return{
-            uname:""
-          }
-
-      },
-      mounted() {
-          this.uname = sessionStorage.getItem("uname")
+  export default {
+    name: "Welcome",
+    data() {
+      return {
+        uname: ""
       }
+
+    },
+    methods: {
+      isLogin: function () {
+        if (!sessionStorage.getItem("user")) {
+          this.$router.push("/");
+        }
+      },
+    },
+    mounted() {
+      this.uname = sessionStorage.getItem("uname");
+      this.isLogin();
     }
+  }
 </script>
 
 <style scoped>
@@ -37,6 +44,7 @@
   .home-container {
     height: 768px;
   }
+
   .el-header, .el-footer {
     color: #333;
     text-align: center;

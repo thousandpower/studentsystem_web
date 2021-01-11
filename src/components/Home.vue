@@ -5,10 +5,12 @@
     <el-container class="home-container">
       <el-header>
         <div>
-          <span>学员成长跟踪系统</span>
+          <span>金桥学员成长跟踪系统（{{roleName}}）</span>
         </div>
 
-        <span style="margin: 50px -1300px 50px 0">{{uname}}</span>
+        <div class="block" style="margin: 50px 0 50px 1100px">  <el-row class="demo-avatar demo-basic"><el-avatar> user </el-avatar></el-row><span >{{uname}}</span>
+        </div>
+
 
 
         <el-button size="mini"  @click="exitThisSystem" >安全退出</el-button>
@@ -18,7 +20,7 @@
       <el-container>
         <!--导航显示下-->
         <el-aside :width="isCollapse ?'64px': '200px'">
-          <div class="toggle-button" @click="toggleCollapase">|||</div>
+          <div class="toggle-button" @click="toggleCollapase" v-html="sign"></div>
           <el-menu background-color="#545c64" text-color="#fff" active-text-color="#409eff" unique-opened :router="true"
                    :collapse="isCollapse" :collapse-transition="false" :default-active="activePath"
           >
@@ -57,7 +59,13 @@
         uname:"",//存储从sessionStorage中的用户名
         menuList: [],
         isCollapse:false,
-        activePath :"/Welcome"
+        activePath :"/Welcome",
+        roleName:"",
+        sign:"<<<",
+        circleUrl: "https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png",
+        squareUrl: "https://cube.elemecdn.com/9/c2/f0ee8a3c7c9638a54940382568c9dpng.png",
+        sizeList: ["large", "medium", "small"]
+
       }
     },
 
@@ -75,6 +83,13 @@
       },
       toggleCollapase:function () {
         this.isCollapse = !this.isCollapse
+        if (this.isCollapse){
+          this.sign =">>>"
+        } else {
+          this.sign="<<<"
+        }
+
+
       },
       saveNavState:function (activePath) {
         this.activePath = activePath;
@@ -90,6 +105,7 @@
             type: 'success',
             message: '退出成功!',
           });
+
           //清空session
           sessionStorage.clear();
           //  跳转到登录
@@ -98,15 +114,21 @@
 
         });
       },
+      isLogin: function () {
+        if (!sessionStorage.getItem("user")) {
+          this.$router.push("/");
+        }
+      },
     },
 
 
     created() {
-
+      this.roleName = sessionStorage.getItem("roleName");
       this.getMenuList();
-      this.activePath = sessionStorage.getItem("activePath")
+      this.activePath = sessionStorage.getItem("activePath");
       //从sessionStroage中获取用户名
-      this.uname = sessionStorage.getItem("uname")
+      this.uname = sessionStorage.getItem("uname");
+      this.isLogin();
     }
 
   }
@@ -156,8 +178,8 @@
 
   .toggle-button {
     background-color: #4A5064;
-    font-size: 10px;
-    line-height: 24px;
+    font-size: 15px;
+    line-height: 38px;
     color: #fff;
     text-align: center;
     letter-spacing: 0.2em;

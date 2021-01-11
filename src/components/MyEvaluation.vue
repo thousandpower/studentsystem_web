@@ -286,11 +286,6 @@
                     this.schoolList = res.data.data;
                 });
             },
-            isLogin: function () {
-                if (!sessionStorage.getItem("user")) {
-                    this.$router.push("/");
-                }
-            },
             getMyBeginDeptEvaluation: function () {
                 axios.get("/getMyDeptEvaluation/" + sessionStorage.getItem("user") + "/0").then(res => {
                     this.beginList = res.data.data;
@@ -318,7 +313,7 @@
             this.getMyFirstDeptEvaluation();
             this.getMySecondDeptEvaluation();
             this.getMyThirdDeptEvaluation();
-            this.isLogin();
+
         }
     }
 </script>

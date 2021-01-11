@@ -36,20 +36,19 @@
           </div>
         </el-dialog>
 
-
         <br>
 
         <el-table
           :data="tableData"
           border
           stripe
-          height="584"
+          height="572"
           style="width: 100%"
           @selection-change="handleSelectionChange"
         >
           <el-table-column
             type="selection"
-            width="160"
+            width="90"
             align="center">
           </el-table-column>
 
@@ -59,27 +58,30 @@
             width="160"
             align="center"
           >
+            <template slot-scope="scope">
+              <!--作用域插槽slot-scope，设置序号从1一直到获得数据的最后一个元素的数组下标+1-->
+              <span>{{(page.currentPage - 1)*listQuery.limit + scope.$index +1}}</span>
+            </template>
           </el-table-column>
           <el-table-column
             prop="deptname"
             label="部门名称"
-            width="330"
+            min-width="300"
             align="center"
             header-align="center"
           >
           </el-table-column>
 
-
           <el-table-column
             prop="description"
             label="部门描述"
-            width="600"
+            min-width="600"
             align="center">
           </el-table-column>
 
 
           <el-table-column
-
+            width="250"
             label="操作"
              align="center">
             <template slot-scope="scope">
@@ -96,22 +98,18 @@
               </el-button>
 
             </template>
-
           </el-table-column>
 
         </el-table>
         <el-pagination
           background
-
           :current-page.sync="page.currentPage"
           :page-sizes="page.sizes"
           :page-size="this.listQuery.limit"
           :total="total"
-
           layout="prev,pager,next,sizes,jumper"
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
-
         >
         </el-pagination>
 
@@ -133,10 +131,10 @@
         tableData: [],
         page: {
           currentPage: 1,//当前页码
-          sizes: [6, 9, 12]
+          sizes: [2, 10, 12]
         },
         listQuery: {//初始查询条件
-          limit: 9,
+          limit: 10,
           page: 1,
           filter: ""  //查询条件
         },
@@ -176,7 +174,7 @@
        */
       getDepts: function () {
         //用于获取全部的部门信息
-        axios.post("/getDepts", this.listQuery).then(res => {
+        axios.post("/getDeptsInfo", this.listQuery).then(res => {
           //res.data返回的是对象数组
           this.tableData = res.data.depts;
           this.total = res.data.total;
@@ -214,8 +212,6 @@
         this.$nextTick( ()=> {
           this.$refs['deptForm'].clearValidate()
         })
-
-
       },
 
       //新增对话框中的取消按钮事件
@@ -345,7 +341,7 @@
             message: '已取消删除'
           });
         });
-      }
+      },
     },
 
     created() {
@@ -354,7 +350,7 @@
       //查询数据
       this.getDepts();
       //从sessionStroage中获取用户名
-      this.uname = sessionStorage.getItem("uname")
+      this.uname = sessionStorage.getItem("uname");
     }
   }
 

@@ -53,10 +53,13 @@
                         //提交
                         axios.post("/login", this.form).then(res => {
                             if (res.data.status === "200") {
-
+                              debugger
                               sessionStorage.setItem("userid",res.data.data.userid);
                               sessionStorage.setItem("uname",res.data.data.username);
                               sessionStorage.setItem("role",res.data.data.role);
+                              sessionStorage.setItem("roleName",res.data.roleName);
+                              sessionStorage.setItem("user",this.form.userid);
+                              this.$store.dispatch("setUser",this.form.userid);
 
                               this.$message({
                                 message: "登录成功",
@@ -67,15 +70,8 @@
                                     path: "/Home",
                                 });
 
-                                sessionStorage.setItem("user",this.form.userid);
-                                this.$store.dispatch("setUser",this.form.userid);
-                                this.$router.push({
-                                    path: "/",
-                                });
-                                this.$message({
-                                    message: "登录成功",
-                                    type: "success"
-                                })
+
+
 
                             } else {
                                 this.$message({

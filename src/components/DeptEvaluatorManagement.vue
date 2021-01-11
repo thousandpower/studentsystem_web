@@ -81,14 +81,18 @@
           <el-table-column
             type="index"
             label="序号"
-            width="115"
+          width="115"
             align="center">
+            <template slot-scope="scope">
+              <!--作用域插槽slot-scope，设置序号从1一直到获得数据的最后一个元素的数组下标+1-->
+              <span>{{(page.currentPage - 1)*listQuery.limit + scope.$index +1}}</span>
+            </template>
           </el-table-column>
 
           <el-table-column
             prop="username"
             label="姓名"
-            width="200"
+            min-width="200"
             align="center"
             header-align="center">
           </el-table-column>
@@ -96,7 +100,7 @@
           <el-table-column
             prop="sex"
             label="性别"
-            width="105"
+            min-width="105"
             align="center"
             header-align="center"
             :formatter="formatSex">
@@ -105,7 +109,7 @@
           <el-table-column
             prop="age"
             label="年龄"
-            width="105"
+            min-width="105"
             align="center"
             header-align="center">
           </el-table-column>
@@ -113,7 +117,7 @@
           <el-table-column
             prop="phone"
             label="手机号"
-            width="400"
+            min-width="300"
             align="center"
             header-align="center">
           </el-table-column>
@@ -121,19 +125,20 @@
           <el-table-column
             prop="deptname"
             label="所属部门"
-            width="180  "
+            min-width="180  "
             align="center">
           </el-table-column>
 
           <el-table-column
             prop="jobname"
             label="职务"
-            width="170"
+            min-width="170"
             align="center">
           </el-table-column>
 
           <el-table-column
             label="操作"
+            width="250"
            align="center">
             <template slot-scope="scope">
               <el-button
@@ -213,11 +218,11 @@
 
         page: {
           currentPage: 1,//当前页码
-          sizes: [6, 9, 12]
+          sizes: [6, 10, 12]
         },
 
         listQuery: {//初始查询条件
-          limit: 9,
+          limit: 10,
           page: 1,
           filter: ""  //查询条件
         },
@@ -254,11 +259,9 @@
           username: [
             {required: true, message: '请输入姓名', trigger: 'blur'},
           ],
-
           deptno: [
             {required: true, message: '请选择所属部门', trigger: 'blur'},
           ],
-
           age: [
             {validator: checkAge, trigger: 'blur'},
           ],
@@ -446,7 +449,6 @@
         return row.sex == '0' ? "男" : row.sex == '1' ? "女" : "";
       },
 
-
     },
 
     created() {
@@ -458,7 +460,8 @@
       this.getDepts();
       this.getJobs();
       //从sessionStroage中获取用户名
-      this.uname = sessionStorage.getItem("uname")
+      this.uname = sessionStorage.getItem("uname");
+
     }
 
 
