@@ -28,9 +28,8 @@
             <el-form-item label="部门描述" :label-width="formLabelWidth" prop="description">
               <el-input type="textarea" v-model="form.description" style="width: 370px;"></el-input>
             </el-form-item>
-
           </el-form>
-          <div slot="footer" class="dialog-footer">
+          <div>
             <el-button @click="closeDlog">取 消</el-button>
             <el-button type="primary" @click="addDept">确 定</el-button>
           </div>
