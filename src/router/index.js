@@ -13,8 +13,10 @@ import editPwd from '@/components/editPwd'
 import StudentManagement from '@/components/StudentManagement'
 import Welcome from '@/components/Welcome'
 import StudentEvaluation from '@/components/StudentEvaluation'
-
-
+import GradeManagement from '@/components/GradeManagement'
+import TeacherEvaluateManagement from '@/components/TeacherEvaluateManagement'
+import StudentRating from '@/components/StudentRating'
+import DeptAssignment from '@/components/DeptAssignment'
 
 Vue.use(Router)
 
@@ -42,7 +44,15 @@ export default new Router({
         {path: '/deptevaluatorManagement', component: DeptEvaluatorManagement},
         {path: '/Welcome', component: Welcome},
         //学生评价
-        {path: '/studentEvaluation', component: StudentEvaluation}
+        {path: '/studentEvaluation', component: StudentEvaluation},
+        {path: '/courseMaintain', component: GradeManagement},
+        {path: '/studentRating', component: StudentRating},
+        {path: '/teacherManagement', component: TeacherEvaluateManagement},
+        {path: '/deptAssignment', component: DeptAssignment},
+
+
+
+
       ]
 
     },

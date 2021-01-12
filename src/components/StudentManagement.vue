@@ -1,5 +1,6 @@
 <template>
-  <div>
+  <div >
+
     <h1>学员信息列表</h1>
     <div align="left" style="float: left">
       <el-input v-model="listQuery.filter" placeholder="请输入学员姓名" style="width: 200px"></el-input>
@@ -97,7 +98,7 @@
               placeholder="请输入内容"
               v-model="studentForm.remarks"
               align="center"
-              style="width: 690px"
+              style="width: 745px"
               class="el-row">
             </el-input>
           </el-form-item>
@@ -108,6 +109,7 @@
         </el-col>
       </el-form>
     </el-dialog>
+
     <el-table
       :data="tableData"
       border
@@ -678,8 +680,8 @@
   }
 
   .avatar {
-    width: 178px;
-    height: 178px;
+    width: 140px;
+    height: 160px;
     display: block;
   }
 </style>

@@ -76,6 +76,7 @@
             prop="description"
             label="部门描述"
             min-width="600"
+            show-overflow-tooltip
             align="center">
           </el-table-column>
 

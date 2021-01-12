@@ -207,8 +207,8 @@
     }
 
     .avatar {
-        width: 178px;
-        height: 178px;
-        display: block;
+      width: 140px;
+      height: 160px;
+      display: block;
     }
 </style>
