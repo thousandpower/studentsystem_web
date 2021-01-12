@@ -36,13 +36,13 @@
           </div>
         </el-dialog>
 
-        <br>
+
 
         <el-table
           :data="tableData"
           border
           stripe
-          height="572"
+          height="591"
           style="width: 100%"
           @selection-change="handleSelectionChange"
         >

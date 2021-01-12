@@ -68,12 +68,12 @@
           </div>
         </el-dialog>
 
-        <br>
+
         <el-table
           :data="tableData"
           border
           stripe
-          height="572"
+          height="591"
           style="width: 100%"
           @selection-change="handleSelectionChange"
         >
@@ -190,8 +190,8 @@
           if (!Number.isInteger(value)) {
             callback(new Error('请输入数字值'));
           } else {
-            if (value < 18 || value > 65) {
-              callback(new Error('劳动法年龄要求在18-65岁之间'));
+            if (value < 18 || value > 60) {
+              callback(new Error('劳动法年龄要求在18-60岁之间'));
             } else {
               callback();
             }
@@ -347,6 +347,7 @@
         this.$nextTick(() => {
           this.$refs['deptEvalutorsForm'].clearValidate()
         })
+
       },
 
       //新增对话框中的取消按钮事件

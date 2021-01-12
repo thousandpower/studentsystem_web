@@ -157,7 +157,7 @@
 
 
               <el-tab-pane label="转正评价" name="zero" :disabled="disabled0">
-                <el-form :model="formEvaInfo0" :rules="rules" ref="studentEvaInfo0">
+                <el-form :model="formEvaInfo0" :rules="rules" ref="StudentEvaInfo0">
                   <table border="1px" cellspacing="0px" style="border-collapse:collapse">
                     <tr>
                       <td colspan="12"></td>
@@ -251,7 +251,7 @@
 
 
               <el-tab-pane label="一年评价" name="first" :disabled="disabled1">
-                <el-form :model="formEvaInfo1" :rules="rules" ref="studentEvaInfo1">
+                <el-form :model="formEvaInfo1" :rules="rules" ref="StudentEvaInfo1">
 
                   <table border="1px" cellspacing="0px" style="border-collapse:collapse">
                     <tr>
@@ -346,7 +346,7 @@
 
 
               <el-tab-pane label="两年评价" name="second" :disabled="disabled2">
-                <el-form :model="formEvaInfo2" :rules="rules" ref="studentEvaInfo2">
+                <el-form :model="formEvaInfo2" :rules="rules" ref="StudentEvaInfo2">
 
                   <table border="1px" cellspacing="0px" style="border-collapse:collapse">
                     <tr>
@@ -440,7 +440,7 @@
               </el-tab-pane>
 
               <el-tab-pane label="三年评价" name="third" :disabled="disabled3">
-                <el-form :model="formEvaInfo3" :rules="rules" ref="studentEvaInfo3">
+                <el-form :model="formEvaInfo3" :rules="rules" ref="StudentEvaInfo3">
 
                   <table border="1px" cellspacing="0px" style="border-collapse:collapse">
                     <tr>
@@ -970,43 +970,41 @@
 
       //新增对话框中的取消按钮事件
       closeDlog: function () {
-        //清空数据
-        this.form = {};
+        this.formEvaInfoSc = {};
+        this.formEvaInfo0 = {};
+        this.formEvaInfo1 = {};
+        this.formEvaInfo2 = {};
+        this.formEvaInfo3 = {};
         //关闭对话框
         this.dialogFormVisible = false;
-        //清空表单验证残余提示
-        this.$nextTick(() => {
-          this.$refs['studentEvaInfo0'].clearValidate();
-          this.$refs['studentEvaInfo1'].clearValidate();
-          this.$refs['studentEvaInfo2'].clearValidate();
-          this.$refs['studentEvaInfo3'].clearValidate();
-        })
+
       },
 
       //打分
       handleEdit: function (rowData) {
-
-
-        this.$nextTick(() => {
-          this.$refs['studentEvaInfo0'].clearValidate();
-          this.$refs['studentEvaInfo1'].clearValidate();
-          this.$refs['studentEvaInfo2'].clearValidate();
-          this.$refs['studentEvaInfo3'].clearValidate();
-        })
 
         this.formEvaInfoSc = {};
         this.formEvaInfo0 = {};
         this.formEvaInfo1 = {};
         this.formEvaInfo2 = {};
         this.formEvaInfo3 = {};
+        this.$nextTick( ()=> {
+          this.$refs['StudentEvaInfo0'].clearValidate();
+          this.$refs['StudentEvaInfo1'].clearValidate();
+          this.$refs['StudentEvaInfo2'].clearValidate();
+          this.$refs['StudentEvaInfo3'].clearValidate();
+
+        })
 
         var studentid = rowData.studentid;
         this.dialogTitle = "员工评价";
+
         //根据员studentid获取员工的详细信息，展示到对话框
         axios.post("/getStudentAllInfoByStudentid", studentid).then(res => {
 
 
-          //预填充，后面会覆盖。
+          //部分为对当前评价人的预填充，后面会被覆盖。
+          //另一部分为对表单隐藏数据的补充
           this.formEvaInfo0.username = sessionStorage.getItem("uname");
           this.formEvaInfo0.evaluatorid = sessionStorage.getItem("userid");
           this.formEvaInfo0.studentid = res.data.studentInfo.studentid;
@@ -1070,11 +1068,15 @@
 
 
           //根据入职后工作月份，来判断选项卡的开启禁用，以及是否可以编辑，
+
+          //评价为空可以编辑，评价不为空，若第一次评价时间与当前时间相比不超过七天都可以进行重新的修改编辑
+          //readnumber 为控制只读的变量，false 为不只读，即可以编辑。
           if (this.workMonth < 3) {
             this.disabled0 = true;
             this.disabled1 = true;
             this.disabled2 = true;
             this.disabled3 = true;
+            this.activeName ="school";
           } else if (this.workMonth < 12) {
             // 1 2 3年 选项卡禁用
             this.disabled0 = false;
@@ -1384,6 +1386,7 @@
       this.getStudents();
       //从sessionStroage中获取用户名
       this.uname = sessionStorage.getItem("uname");
+
     }
   }
 
