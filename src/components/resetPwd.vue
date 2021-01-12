@@ -1,15 +1,18 @@
 <template>
     <div>
-        <div align="left" style="margin-bottom: 20px">
-            <el-input v-model="listQuery.filter" placeholder="请输入用户名" style="width: 200px"></el-input>
-            <el-button type="primary" @click="queryUsers">查询</el-button>
+      <h1>重置密码</h1>
+      <div   style="width: 1434px;margin-top: 40px;margin-left: 20px">
+        <div align="left">
+          <el-input v-model="listQuery.filter" placeholder="请输入用户名" style="width: 200px"></el-input>
+          <el-button type="primary" @click="queryUsers">查询</el-button>
         </div>
+      </div>
         <el-table
                 :data="tableData"
                 border
                 stripe
-                height="673"
-                style="width: 100%"
+                height="608"
+                style="width: 1434px;margin-left: 20px"
                 @selection-change="handleSelectionChange">
             <el-table-column
                     type="selection"

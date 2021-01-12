@@ -81,7 +81,7 @@
                             placeholder="请输入内容"
                             v-model="form.remarks"
                             align="center"
-                            style="width: 775px"
+                            style="width: 860px"
                             class="el-row">
                     </el-input>
                 </el-form-item>

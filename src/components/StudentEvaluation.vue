@@ -1,19 +1,19 @@
 <template>
   <div>
+    <h1>项目评价人管理</h1>
     <el-container>
-      <el-header><h1>项目评价人管理</h1></el-header>
       <el-main>
 
         <!--打分-->
         <el-dialog :title="dialogTitle" :visible.sync="dialogFormVisible" width="900px">
           <div>
-            <el-form :model="formInfo" :rules="rules" ref="studentInfo">
+            <el-form :model="formInfo">
               <table border="1px" cellspacing="0px" style="border-collapse:collapse" align="center">
                 <tr>
                   <td style="width: 110px">姓名</td>
                   <td style="width: 110px">
 
-                    <el-input v-model="formInfo.student_name" class="paperview-input-text" readonly></el-input>
+                    <el-input v-model="formInfo.student_name" class="paperview-input-text"  readonly></el-input>
                   </td>
                   <td style="width: 55px">性别</td>
                   <td style="width: 110px">
@@ -88,7 +88,7 @@
           <div>
             <el-tabs v-model="activeName" @tab-click="handleClick">
               <el-tab-pane label="学校评价" name="school">
-                <el-form :model="formEvaInfoSc" :rules="rules" ref="studentEvaInfoSc">
+                <el-form :model="formEvaInfoSc">
 
                   <table border="1px" cellspacing="0px" style="border-collapse:collapse" align="center">
                     <tr>
@@ -118,28 +118,35 @@
                       </td>
                       <td>
                         <el-input v-model="formEvaInfoSc.teachername" class="paperview-input-text" readonly></el-input>
+                        <br><br>
                       </td>
                       <td>
                         <el-input v-model="formEvaInfoSc.html" class="paperview-input-text" readonly></el-input>
+                        <br><br>
                       </td>
                       <td>
                         <el-input v-model="formEvaInfoSc.oracle" class="paperview-input-text" readonly></el-input>
+                        <br><br>
                       </td>
                       <td>
                         <el-input v-model="formEvaInfoSc.js" class="paperview-input-text" readonly></el-input>
+                        <br><br>
                       </td>
                       <td>
                         <el-input v-model="formEvaInfoSc.java_base" class="paperview-input-text" readonly></el-input>
+                        <br><br>
                       </td>
                       <td>
                         <el-input v-model="formEvaInfoSc.java_high" class="paperview-input-text" readonly></el-input>
+                        <br><br>
                       </td>
                       <td>
                         <el-input v-model="formEvaInfoSc.l1" class="paperview-input-text" readonly></el-input>
+                        <br><br>
                       </td>
                       <td colspan="2">
                         <el-input v-model="formEvaInfoSc.appraisal_score" class="paperview-input-text"
-                                  readonly></el-input>
+                                  readonly></el-input><br><br>
                       </td>
 
                     </tr>
@@ -158,7 +165,7 @@
 
 
               <el-tab-pane label="转正评价" name="zero" :disabled="disabled0">
-                <el-form :model="formEvaInfo0" :rules="rules" ref="StudentEvaInfo0">
+                <el-form :model="formEvaInfo0" :rules="rules" ref="studentEvaInfor0">
                   <table border="1px" cellspacing="0px" style="border-collapse:collapse">
                     <tr>
                       <td colspan="12"></td>
@@ -252,7 +259,7 @@
 
 
               <el-tab-pane label="一年评价" name="first" :disabled="disabled1">
-                <el-form :model="formEvaInfo1" :rules="rules" ref="StudentEvaInfo1">
+                <el-form :model="formEvaInfo1" :rules="rules" ref="studentEvaInfor1">
 
                   <table border="1px" cellspacing="0px" style="border-collapse:collapse">
                     <tr>
@@ -347,7 +354,7 @@
 
 
               <el-tab-pane label="两年评价" name="second" :disabled="disabled2">
-                <el-form :model="formEvaInfo2" :rules="rules" ref="StudentEvaInfo2">
+                <el-form :model="formEvaInfo2" :rules="rules" ref="studentEvaInfor2">
 
                   <table border="1px" cellspacing="0px" style="border-collapse:collapse">
                     <tr>
@@ -441,7 +448,7 @@
               </el-tab-pane>
 
               <el-tab-pane label="三年评价" name="third" :disabled="disabled3">
-                <el-form :model="formEvaInfo3" :rules="rules" ref="StudentEvaInfo3">
+                <el-form :model="formEvaInfo3" :rules="rules" ref="studentEvaInfor3">
 
                   <table border="1px" cellspacing="0px" style="border-collapse:collapse">
                     <tr>
@@ -539,7 +546,7 @@
 
 
         <div align="left" style="float: left">
-          <el-input v-model="listQuery.filter" placeholeder="请输入部门评价人姓名" style="width: 200px;">
+          <el-input v-model="listQuery.filter"  placeholder="请输入部门评价人姓名"  style="width: 200px;">
             <i slot="prefix" class="el-input__icon el-icon-search"></i>
           </el-input>
           <el-button type="primary" @click="queryDeptEvaluators">查询</el-button>
@@ -986,26 +993,22 @@
       //打分
       handleEdit: function (rowData) {
 
+
         this.formEvaInfoSc = {};
         this.formEvaInfo0 = {};
         this.formEvaInfo1 = {};
         this.formEvaInfo2 = {};
         this.formEvaInfo3 = {};
-        this.$nextTick(() => {
-          this.$refs['StudentEvaInfo0'].clearValidate();
-          this.$refs['StudentEvaInfo1'].clearValidate();
-          this.$refs['StudentEvaInfo2'].clearValidate();
-          this.$refs['StudentEvaInfo3'].clearValidate();
 
-        })
 
         var studentid = rowData.studentid;
         this.dialogTitle = "员工评价";
 
+
+
         //根据员studentid获取员工的详细信息，展示到对话框
         axios.post("/getStudentAllInfoByStudentid", studentid).then(res => {
 
-          debugger
           //部分为对当前评价人的预填充，后面会被覆盖。
           //另一部分为对表单隐藏数据的补充
           this.formEvaInfo0.username = sessionStorage.getItem("uname");
@@ -1069,18 +1072,19 @@
           this.formEvaInfo3.save3 = res.data.save3;
           this.formEvaInfo3.saveTime3 = res.data.saveTime3;
 
-          //部门被删除，则显示该部门被解散
-          if (res.data.studentEvaInfo0.deptname = null) {
-            this.formEvaInfo0.deptname = "部门已解散"
+        //部门被删除，则显示该部门被解散
+
+          if (this.formEvaInfo0.deptname == null) {
+            this.formEvaInfo0.deptname = "已解散"
           }
-          if (res.data.studentEvaInfo1.deptname = null) {
-            this.formEvaInfo1.deptname = "部门已解散"
+          if (this.formEvaInfo1.deptname == null) {
+            this.formEvaInfo1.deptname = "已解散"
           }
-          if (res.data.studentEvaInfo2.deptname = null) {
-            this.formEvaInfo2.deptname = "部门已解散"
+          if (this.formEvaInfo2.deptname == null) {
+            this.formEvaInfo2.deptname = "已解散"
           }
-          if (res.data.studentEvaInfo3.deptname = null) {
-            this.formEvaInfo3.deptname = "部门已解散"
+          if (this.formEvaInfo3.deptname == null) {
+            this.formEvaInfo3.deptname = "已解散"
           };
 
 
@@ -1191,7 +1195,7 @@
               this.readSecond = false;
               this.activeName = "second"
             } else {
-              debugger
+
               if (this.formEvaInfo2.saveTime2 <= 7) {
                 this.readSecond = false;
                 this.activeName = "second";
@@ -1258,7 +1262,12 @@
           }
 
           this.dialogFormVisible = true;
-
+          this.$nextTick(() => {
+            this.$refs['studentEvaInfor0'].clearValidate();
+            this.$refs['studentEvaInfor1'].clearValidate();
+            this.$refs['studentEvaInfor2'].clearValidate();
+            this.$refs['studentEvaInfor3'].clearValidate();
+          })
 
         })
       },
@@ -1267,7 +1276,7 @@
        */
       saveFormEvaInfo0: function () {
         //表单验证
-        this.$refs["studentEvaInfo0"].validate((valid) => {
+        this.$refs["studentEvaInfor0"].validate((valid) => {
           if (valid) {
             axios.post("/addOrUpdDeptEvaluation", this.formEvaInfo0).then(res => {
               if (res.data == "success") {
@@ -1293,7 +1302,7 @@
        */
       saveFormEvaInfo1: function () {
         //表单验证
-        this.$refs["studentEvaInfo1"].validate((valid) => {
+        this.$refs["studentEvaInfor1"].validate((valid) => {
           if (valid) {
             axios.post("/addOrUpdDeptEvaluation", this.formEvaInfo1).then(res => {
               if (res.data == "success") {
@@ -1318,7 +1327,7 @@
        */
       saveFormEvaInfo2: function () {
         //表单验证
-        this.$refs["studentEvaInfo2"].validate((valid) => {
+        this.$refs["studentEvaInfor2"].validate((valid) => {
           if (valid) {
             axios.post("/addOrUpdDeptEvaluation", this.formEvaInfo2).then(res => {
               if (res.data == "success") {
@@ -1343,7 +1352,7 @@
        */
       saveFormEvaInfo3: function () {
         //表单验证
-        this.$refs["studentEvaInfo3"].validate((valid) => {
+        this.$refs["studentEvaInfor3"].validate((valid) => {
           if (valid) {
             axios.post("/addOrUpdDeptEvaluation", this.formEvaInfo3).then(res => {
               if (res.data == "success") {

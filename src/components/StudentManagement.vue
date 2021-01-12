@@ -1,18 +1,19 @@
 <template>
   <div >
-
-    <h1>学员信息列表</h1>
-    <div align="left" style="float: left">
-      <el-input v-model="listQuery.filter" placeholder="请输入学员姓名" style="width: 200px"></el-input>
-      <el-select v-model="listQuery.gradeid" placeholder="请选择班期" style="width: 200px">
-        <el-option value="全部" label="全部"></el-option>
-        <el-option v-for="item in gradeData" :key="item" :value="item" :label="item"></el-option>
-      </el-select>
-      <el-button type="primary" @click="queryStudents">查询</el-button>
-    </div>
-    <div align="right">
-      <el-button type="primary" @click="showAdd">新增</el-button>
-      <el-button type="danger" @click="deleteBatch">删除</el-button>
+    <h1>学员信息管理</h1>
+    <div  style="width: 1434px;margin-top: 40px;margin-left: 20px">
+      <div align="left" style="float: left">
+        <el-input v-model="listQuery.filter" placeholder="请输入学员姓名" style="width: 200px"></el-input>
+        <el-select v-model="listQuery.gradeid" placeholder="请选择班期" style="width: 200px">
+          <el-option value="全部" label="全部"></el-option>
+          <el-option v-for="item in gradeData" :key="item" :value="item" :label="item"></el-option>
+        </el-select>
+        <el-button type="primary" @click="queryStudents">查询</el-button>
+      </div>
+      <div align="right">
+        <el-button type="primary" @click="showAdd">新增</el-button>
+        <el-button type="danger" @click="deleteBatch">删除</el-button>
+      </div>
     </div>
     <el-dialog :title="dialogTitle" :visible.sync="dialogFormVisible" :width="'70%'" :top="'3%'">
       <el-form :model="studentForm" ref="ruleForm" label-position="right" :rules="rules" style="height: 520px">
@@ -114,17 +115,17 @@
       :data="tableData"
       border
       stripe
-      height="631"
-      style="width: 100%"
+      height="608"
+      style="width: 1434px;margin-left: 20px"
       @selection-change="handleSelectionChange">
       <el-table-column
         type="selection"
-        width="55"
+        width="50"
         align="center">
       </el-table-column>
       <el-table-column
         type="index"
-        width="55"
+        width="50"
         label="序号"
         align="center">
         <template slot-scope="scope">
@@ -309,16 +310,14 @@
         gradeData: [],
         rules: {
           studentName: [
-            {required: true, message: '学员姓名不能为空', trigger: 'blur'},
-            {required: true, message: '学员姓名不能为空', trigger: 'submit'}
+            {required: true, message: '学员姓名不能为空', trigger: 'blur'}
           ],
           nation: [
             {required: true, message: '民族不能为空', trigger: 'blur'},
-            {required: true, message: '民族不能为空', trigger: 'submit'}
+            {pattern: /^[\u4e00-\u9fa5]+$/,message:"请输入汉字", trigger: "blur"}
           ],
           birthday: [
-            {required: true, message: '出生日期不能为空', trigger: 'blur'},
-            {required: true, message: '出生日期不能为空', trigger: 'submit'}
+            {required: true, message: '出生日期不能为空', trigger: 'blur'}
           ],
           phone: [
             {required: true, message: '联系电话不能为空', trigger: 'blur'},
@@ -326,21 +325,13 @@
               pattern: /^1[0-9]{10}$/,
               message: '请输入正确的手机号码',
               trigger: 'blur'
-            },
-            {
-              pattern: /^1[0-9]{10}$/,
-              message: '请输入正确的手机号码',
-              trigger: 'submit'
-            },
-            {required: true, message: '联系电话不能为空', trigger: 'submit'}
+            }
           ],
           college: [
-            {required: true, message: '毕业院校不能为空', trigger: 'blur'},
-            {required: true, message: '毕业院校不能为空', trigger: 'submit'}
+            {required: true, message: '毕业院校不能为空', trigger: 'blur'}
           ],
           nativePlace: [
-            {required: true, message: '籍贯不能为空', trigger: 'blur'},
-            {required: true, message: '籍贯不能为空', trigger: 'submit'}
+            {required: true, message: '籍贯不能为空', trigger: 'blur'}
           ],
           idNumber: [
             {required: true, message: '身份证号码不能为空', trigger: 'blur'},
@@ -349,16 +340,11 @@
               pattern: /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/,
               message: '请输入正确的身份证号码',
               trigger: 'blur'
-            },
-            {
-              pattern: /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/,
-              message: '请输入正确的身份证号码',
-              trigger: 'submit'
             }
           ],
           major: [
             {required: true, message: '专业不能为空', trigger: 'blur'},
-            {required: true, message: '专业不能为空', trigger: 'submit'}
+            {pattern: /^[\u4e00-\u9fa5]+$/,message:"请输入汉字", trigger: "blur"}
           ],
           gradeid: [
             {required: true, message: '班期不能为空', trigger: 'submit'},
@@ -463,6 +449,7 @@
                 type: 'error',
                 message: '删除失败!'
               });
+              this.getAllStudent();
             }
           })
         }).catch(() => {

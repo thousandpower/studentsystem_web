@@ -1,11 +1,11 @@
 <template>
 
   <div>
-    <h1>项目评价人管理</h1>
+    <h1>部门评价人管理</h1>
     <el-container>
       <el-main>
         <div align="left" style="float: left">
-          <el-input v-model="listQuery.filter" placeholeder="请输入部门评价人姓名" style="width: 200px;">
+          <el-input v-model="listQuery.filter" placeholder="请输入部门评价人姓名" style="width: 200px;">
             <i slot="prefix" class="el-input__icon el-icon-search"></i>
           </el-input>
           <el-button type="primary" @click="queryDeptEvaluators">查询</el-button>
@@ -21,7 +21,7 @@
           <el-form :model="form" :rules="rules" ref="deptEvalutorsForm">
 
             <el-form-item label="姓名" :label-width="formLabelWidth" prop="username">
-              <el-input v-model="form.username" autocomplete="off" style="width: 370px">
+              <el-input v-model="form.username" autocomplete="off" placeholder="请输入姓名" style="width: 370px">
                 <i slot="prefix" class="el-input__icon el-icon-user-solid"></i>
               </el-input>
             </el-form-item>
@@ -36,13 +36,13 @@
             </el-form-item>
 
             <el-form-item label="年龄" :label-width="formLabelWidth" prop="age">
-              <el-input v-model.number="form.age" autocomplete="off" style="width: 370px">
+              <el-input v-model.number="form.age" autocomplete="off" placeholder="请输入年龄" style="width: 370px">
                 <i slot="prefix" class="el-input__icon el-icon-date"></i>
               </el-input>
             </el-form-item>
 
             <el-form-item label="手机号" :label-width="formLabelWidth" prop="phone">
-              <el-input v-model="form.phone" autocomplete="off" style="width: 370px" clearable>
+              <el-input v-model="form.phone" autocomplete="off" style="width: 370px" placeholder="请输入手机号" clearable>
                 <i slot="prefix" class="el-input__icon el-icon-phone"></i>
               </el-input>
             </el-form-item>
@@ -258,6 +258,7 @@
         rules: {
           username: [
             {required: true, message: '请输入姓名', trigger: 'blur'},
+            {pattern: /^[\u4e00-\u9fa5]+$/,message:"请输入汉字", trigger: "blur"}
           ],
           deptno: [
             {required: true, message: '请选择所属部门', trigger: 'blur'},

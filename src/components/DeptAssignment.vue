@@ -186,6 +186,24 @@
     export default {
         name: "DeptAssignment",
       data(){
+        var checkTime = (rule, value, callback) => {
+          if (value === ''|| value == null || value == undefined) {
+            callback(new Error('请选择入职日期'));
+          } else if (value < this.getdatatime()) {
+            callback(new Error('选中时间不得早于当前时间!'));
+          } else {
+            callback();
+          }
+        };
+
+        var checkDept = (rule, value, callback) => {
+          if (value === ''|| value == null || value == undefined) {
+            callback(new Error('请指定部门'));
+          }  else {
+            callback();
+          }
+        };
+
           return {
             page: {
               currentPage: 1,//当前页码
@@ -217,13 +235,11 @@
             jobs:[], //职位列表
             rules: { //表单验证
               deptno: [
-                {required: true, message: '请指定部门', trigger: 'change'},
+                {required: true,validator: checkDept, trigger: 'blur'}
               ],
-              jobid: [
-                {required: true, message: '请指定职务', trigger: 'blur'},
-              ],
+
               hiredate: [
-                {required: true, message: '请选择入职时间', trigger: 'blur'},
+                {required: true,validator: checkTime, trigger: 'blur'}
               ],
             },
           }
@@ -274,6 +290,14 @@
               };
             }
           })
+        },
+
+        getdatatime(){//默认显示今天
+          this.curtime= new Date();
+          var year=this.curtime.getFullYear();
+          var month= this.curtime.getMonth()+1<10 ? "0"+(this.curtime.getMonth()+1) : this.curtime.getMonth()+1;
+          var day=this.curtime.getDate()<10 ? "0"+this.curtime.getDate() : this.curtime.getDate();
+          return year+"-"+month+"-"+day;
         },
         query(){ //执行模糊查询操作
           this.listQuery.page = 1;

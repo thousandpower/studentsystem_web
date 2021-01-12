@@ -4,7 +4,7 @@
     <el-container>
       <el-main>
         <div align="left" style="float: left;">
-          <el-input v-model="listQuery.filter" placeholeder="请输入姓名" style="width: 200px;"></el-input>
+          <el-input v-model="listQuery.filter" placeholder="请输入姓名" style="width: 200px;"></el-input>
           <el-button type="primary" @click="queryTeacher">查询</el-button>
         </div>
 
@@ -18,25 +18,25 @@
 
           <el-form :model="form" :label-position="right" ref="teacherform" :rules="rules" >
 
-            <el-form-item label="教师id" prop="teacherid" v-if="false">
+            <el-form-item label="教师id" prop="teacherid" v-if="false" :label-width="formLabelWidth">
               <el-input v-model="form.teacherid" autocomplete="off" style="width: 350px" ></el-input>
             </el-form-item>
 
-            <el-form-item label="教师姓名" prop="username">
+            <el-form-item label="教师姓名" prop="username" :label-width="formLabelWidth">
               <el-input v-model="form.username" autocomplete="off" style="width: 350px"></el-input>
             </el-form-item>
 
-            <el-form-item label="教师年龄" prop="age">
+            <el-form-item label="教师年龄" prop="age" :label-width="formLabelWidth">
               <el-input v-model.number="form.age" autocomplete="off" style="width: 350px"></el-input>
             </el-form-item>
-            <el-form-item label="性别" prop="sex">
+            <el-form-item label="性别" prop="sex" :label-width="formLabelWidth">
               <el-radio-group v-model="form.sex" size="medium">
                 <el-radio :label="0" >男</el-radio>
                 <el-radio :label="1">女</el-radio>
               </el-radio-group>
             </el-form-item>
 
-            <el-form-item label="手机号码" prop="phone">
+            <el-form-item label="手机号码" prop="phone" :label-width="formLabelWidth">
               <el-input v-model="form.phone" autocomplete="off" style="width: 350px"></el-input>
             </el-form-item>
           </el-form>
@@ -227,7 +227,7 @@
             teacherid:"",
             username:"",
             age:"",
-            sex:"",
+            sex:0,
             phone:"",
           },
           /*显示文本默认显示宽度*/
@@ -237,16 +237,16 @@
           checkData:[],
           rules: { //表单验证功能
             username:[
-              {validator:checkName,trigger:'blur'}
+              {required: true,validator:checkName,trigger:'blur'}
             ],
             age:[
-              {validator:checkage,trigger:'blur'}
+              {required: true,validator:checkage,trigger:'blur'}
             ],
-            sex:[{
-              validator:checksex,trigger:'blur'
-            }],
+            sex:[
+              {required: true, message: '请选择性别', trigger: 'blur'},
+            ],
             phone:[
-              {validator:checkPhone,trigger:'blur'}
+              {required: true,validator:checkPhone,trigger:'blur'}
             ]
 
           },

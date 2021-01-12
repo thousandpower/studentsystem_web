@@ -30,9 +30,7 @@
                   {{menu.title}}
                 </span> </template>
             </el-menu-item>
-            <template>
-              <el-menu-item  @click="exitThisSystem">退出</el-menu-item>
-            </template>
+
           </el-menu>
         </el-aside>
         <el-main>

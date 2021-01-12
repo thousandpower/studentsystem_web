@@ -5,7 +5,7 @@
 
       <el-main>
         <div align="left" style="float: left">
-          <el-input v-model="listQuery.filter" placeholeder="请输入部门姓名" style="width: 200px;">
+          <el-input v-model="listQuery.filter"  placeholder="请输入部门名称"   style="width: 200px;">
             <i slot="prefix" class="el-input__icon el-icon-search"></i>
           </el-input>
           <el-button type="primary" @click="queryDepts">查询</el-button>
@@ -21,14 +21,13 @@
 
           <el-form :model="form" :rules="rules" ref="deptForm">
 
-            <el-form-item label="部门姓名" :label-width="formLabelWidth" prop="deptname">
-              <el-input v-model="form.deptname" autocomplete="off" style="width: 370px"></el-input>
+            <el-form-item label="部门名称" :label-width="formLabelWidth" prop="deptname">
+              <el-input v-model="form.deptname" autocomplete="off" placeholder="请输入部门名称" style="width: 370px"></el-input>
             </el-form-item>
 
             <el-form-item label="部门描述" :label-width="formLabelWidth" prop="description">
-              <el-input type="textarea" v-model="form.description" style="width: 370px;"></el-input>
+              <el-input type="textarea" v-model="form.description" placeholder="请输入部门描述"  rows="8" style="width: 370px;"></el-input>
             </el-form-item>
-
           </el-form>
           <div slot="footer" class="dialog-footer">
             <el-button @click="closeDlog">取 消</el-button>
@@ -159,6 +158,7 @@
         rules: {
           deptname: [
             {required: true, message: '请输入部门名称', trigger: 'blur'},
+            {pattern: /^[\u4e00-\u9fa5]+$/,message:"请输入汉字", trigger: "blur"}
           ],
           description: [
             {required: true, message: '请描述部门信息', trigger: 'blur'},

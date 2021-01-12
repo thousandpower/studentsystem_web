@@ -4,7 +4,7 @@
     <el-container>
       <el-main>
         <div align="left" style="float: left;">
-          <el-input v-model="listQuery.filter" placeholeder="请输入班期号" style="width: 200px;"></el-input>
+          <el-input v-model="listQuery.filter" placeholder="请输入班期号" style="width: 200px;"></el-input>
           <el-button type="primary" @click="queryGrade">查询</el-button>
         </div>
 
@@ -16,13 +16,13 @@
         <!--新增和编辑的对话框-->
         <el-dialog :title="dialogTitle" :visible.sync="dialogFormVisible" width="550px">
 
-          <el-form :model="form" :label-position="right" ref="gradeForm" :rules="rules" label-position="right">
+          <el-form :model="form" :label-position="right" ref="gradeForm" :rules="rules" >
 
-            <el-form-item label="班期号" :label-width="formLabelWidth" prop="gradeid" >
-              <el-input v-model="form.gradeid" autocomplete="off" style="width: 350px" readonly="true"></el-input>
+            <el-form-item label="班期号"  prop="gradeid" :label-width="formLabelWidth">
+              <el-input v-model="form.gradeid"  style="width: 350px" readonly="true"></el-input>
             </el-form-item>
 
-            <el-form-item label="指定教师" prop="teacherid">
+            <el-form-item label="指定教师" prop="teacherid" :label-width="formLabelWidth">
               <el-select v-model="form.teacherid" placeholder="请指定教师"  style="width: 350px">
                 <el-option
                   v-for="item in teachers"
@@ -34,7 +34,7 @@
             </el-form-item>
 
 
-            <el-form-item label="开班日期" prop="startDate" >
+            <el-form-item label="开班日期" prop="startDate" :label-width="formLabelWidth">
               <el-date-picker
                 v-model="form.startDate"
                 type="date"
@@ -144,11 +144,38 @@
     export default {
         name: "GradeManagement",
       data() {
-        return {
+        var checkTime = (rule, value, callback) => {
+          if (value === ''|| value == null || value == undefined) {
+            callback(new Error('请选择开班日期'));
+          } else if (value < this.getdatatime()) {
+            callback(new Error('选中时间不得早于当前时间!'));
+          } else {
+            callback();
+          }
+        };
+
+        var checkName = (rule, value, callback) => {
+          if (value === ''|| value == null || value == undefined) {
+            callback(new Error('请指定教师'));
+          }  else {
+            callback();
+          }
+        };
+
+        var checkid = (rule, value, callback) => {
+          if (value === ''|| value == null || value == undefined) {
+            callback(new Error('请指定班期'));
+          }  else {
+            callback();
+          }
+        };
+
+          return {
           uname:"",//存储从sessionStorage中的用户名
           gradeForm:{
             teacherid:"" ,//表单验证选择教师
             startDate:"",//表单验证日期
+            gradeid:""
           },
 
           //表格分页、查询等数据
@@ -170,12 +197,17 @@
           max:'',
           rules: { //表单验证内容
             teacherid: [
-              {required: true, message: '请指定教师', trigger: 'change'},
+
+              {required: true,validator: checkName, trigger: 'blur'}
             ],
             startDate: [
-              {required: true, message: '请选择开班日期', trigger: 'blur'},
-            ],
 
+              {required: true,validator: checkTime, trigger: 'blur'}
+            ],
+            gradeid :[
+
+              {required: true,validator: checkid, trigger: 'blur'}
+            ],
           },
 
           //新增或者编辑功能相关数据
@@ -243,6 +275,13 @@
           })
 
         },
+        getdatatime(){//默认显示今天
+          this.curtime= new Date();
+          var year=this.curtime.getFullYear();
+          var month= this.curtime.getMonth()+1<10 ? "0"+(this.curtime.getMonth()+1) : this.curtime.getMonth()+1;
+          var day=this.curtime.getDate()<10 ? "0"+this.curtime.getDate() : this.curtime.getDate();
+          return year+"-"+month+"-"+day;
+        },
         //打开新增对话框
         showAdd: function () {
           this.form={}; //情况表单数据
@@ -299,6 +338,7 @@
           axios.get("/getGradeById/"+rowData.gradeid).then(res => {
             this.form = res.data;
             this.dialogFormVisible = true;
+            this.form.teacherid = rowData.username
           })
         },
 
