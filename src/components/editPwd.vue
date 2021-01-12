@@ -1,7 +1,7 @@
 <template>
     <div>
         <div style="margin-left: 350px">
-            <div style="margin-bottom: 50px;margin-right: 450px">
+            <div style="margin-bottom: 50px;margin-right: 580px">
                 <h3>修改密码</h3>
             </div>
             <el-col :span="10">

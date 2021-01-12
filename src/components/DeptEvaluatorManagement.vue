@@ -432,7 +432,7 @@
             } else {
               this.$message({
                 type: 'error',
-                message: '删除失败，该部门下仍有员工!'
+                message: '删除失败，每个部门下应至少有一个评价人!'
               });
             }
           })

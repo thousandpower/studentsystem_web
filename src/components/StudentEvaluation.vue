@@ -25,8 +25,9 @@
                     <el-input v-model="formInfo.nation" class="paperview-input-text" readonly></el-input>
                   </td>
                   <td style="width: 110px" rowspan="4">
-                    <img v-if="formInfo.images_directory" :src="formInfo.images_directory" width="110px" >
-                    <img v-else ="formInfo.images_directory" src = "http://localhost:8087/upload/201e0451001545b6b0568ed6db4d8a53-defaultpicture.jpg"
+                    <img v-if="formInfo.images_directory" :src="formInfo.images_directory" width="110px">
+                    <img v-else="formInfo.images_directory"
+                         src="http://localhost:8087/upload/201e0451001545b6b0568ed6db4d8a53-defaultpicture.jpg"
                          width="110px">
                   </td>
                 </tr>
@@ -554,7 +555,7 @@
           <el-table-column
             type="index"
             label="序号"
-            min-width="50"
+            width="50"
             align="center">
             <template slot-scope="scope">
               <!--作用域插槽slot-scope，设置序号从1一直到获得数据的最后一个元素的数组下标+1-->
@@ -581,6 +582,7 @@
             label="学校"
             min-width="120"
             align="center"
+            show-overflow-tooltip
             header-align="center">
           </el-table-column>
           <el-table-column
@@ -588,6 +590,7 @@
             label="籍贯"
             min-width="100"
             align="center"
+            show-overflow-tooltip
             header-align="center">
           </el-table-column>
           <el-table-column label="培训期间测试成绩"
@@ -988,7 +991,7 @@
         this.formEvaInfo1 = {};
         this.formEvaInfo2 = {};
         this.formEvaInfo3 = {};
-        this.$nextTick( ()=> {
+        this.$nextTick(() => {
           this.$refs['StudentEvaInfo0'].clearValidate();
           this.$refs['StudentEvaInfo1'].clearValidate();
           this.$refs['StudentEvaInfo2'].clearValidate();
@@ -1002,7 +1005,7 @@
         //根据员studentid获取员工的详细信息，展示到对话框
         axios.post("/getStudentAllInfoByStudentid", studentid).then(res => {
 
-
+          debugger
           //部分为对当前评价人的预填充，后面会被覆盖。
           //另一部分为对表单隐藏数据的补充
           this.formEvaInfo0.username = sessionStorage.getItem("uname");
@@ -1066,6 +1069,20 @@
           this.formEvaInfo3.save3 = res.data.save3;
           this.formEvaInfo3.saveTime3 = res.data.saveTime3;
 
+          //部门被删除，则显示该部门被解散
+          if (res.data.studentEvaInfo0.deptname = null) {
+            this.formEvaInfo0.deptname = "部门已解散"
+          }
+          if (res.data.studentEvaInfo1.deptname = null) {
+            this.formEvaInfo1.deptname = "部门已解散"
+          }
+          if (res.data.studentEvaInfo2.deptname = null) {
+            this.formEvaInfo2.deptname = "部门已解散"
+          }
+          if (res.data.studentEvaInfo3.deptname = null) {
+            this.formEvaInfo3.deptname = "部门已解散"
+          };
+
 
           //根据入职后工作月份，来判断选项卡的开启禁用，以及是否可以编辑，
 
@@ -1076,7 +1093,7 @@
             this.disabled1 = true;
             this.disabled2 = true;
             this.disabled3 = true;
-            this.activeName ="school";
+            this.activeName = "school";
           } else if (this.workMonth < 12) {
             // 1 2 3年 选项卡禁用
             this.disabled0 = false;
@@ -1414,7 +1431,6 @@
     width: 100%;
     resize: none;
   }
-
 
 
 </style>
